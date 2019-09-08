@@ -20,9 +20,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Router setup
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api', apiRouter);
+
+
+// MongoDB setup
+var mongoose = require('mongoose');
+var mongoDB = require('./secret/mongoDBConnection');
+mongoose.connect(mongoDB, { useNewUrlParser: true });
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+console.log("Otherwise successfully connected to db");
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

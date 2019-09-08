@@ -5,15 +5,15 @@ const taskController = require('../controllers/taskController');
 const projectController = require('../controllers/projectController')
 
 /* Routes:
-    Test example: curl -X POST -H "Content-Type:application/json" http://localhost:3000/api/tasks -d '{"task:{"name":"An example task","id": "12345"}}'
+    Test example: 
+        curl -X POST -H "Content-Type:application/json" http://localhost:3000/api/tasks -d '{"task":{"id":1,"name":"I have something to ask of you?","description":"","priority":0,"completed":false}}'
     Create task: POST /tasks/
-    Get task: GET /tasks/:taskId
     Update task: PUT /tasks/:taskId
-    Delete task: DELETE /tasks/:taskId
+    Delete task: DELETE /tasks/:taskIdclear
 
-    Create project: POST /projects/
-    Get ALL projects: GET /projects/
-    Get a project: GET /projects/:projectId
+
+    Create project: POST /projects
+    Get ALL projects: GET /projects
     Update project: PUT /projects/:projectId
     Delete project: DELETE /projects/:projectId
 
@@ -23,9 +23,14 @@ const projectController = require('../controllers/projectController')
 
     Create project for user: POST /projects/user/:userid
     Get user's projects: GET /projects/user/:userid 
+
+    NOT SURE:
+    Get task: GET /tasks/:taskId
+    Get a project: GET /projects/:projectId
 */
 
 router.post("/tasks", taskController.createTask);
+router.get("/tasks", taskController.getAllTasks) // Only for example, don't use later
 router.put("/tasks/:taskId", taskController.updateTask);
 router.delete("/tasks/:taskId", taskController.deleteTask);
 
