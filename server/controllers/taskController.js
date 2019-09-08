@@ -10,12 +10,11 @@ function notImplemented(res){
 
 var Task = require('../models/task');
 
-
-
 exports.createTask = (req, res, next) => {
     console.log("Recieved create task request");
     var reqTask = req.body.task;
     var testDate = new Date().toISOString();
+    var testProjectId = "5d74c6f92a73857006c0dadd"; // id of "TestInbox"
 
     console.log("Adding task:", reqTask);
     var newTask = new Task(
@@ -23,6 +22,7 @@ exports.createTask = (req, res, next) => {
             name: reqTask.name,
             dueDate: testDate,
             completed: false,
+            project: testProjectId
         }
     );
 
@@ -35,7 +35,7 @@ exports.createTask = (req, res, next) => {
 
         return res.send(newTask);
     })
-    console.log("Successfully added");
+    console.log("Successfully added task");
 }
 
 exports.getAllTasks = (req, res, next) => {

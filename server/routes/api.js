@@ -6,7 +6,6 @@ const projectController = require('../controllers/projectController')
 
 /* Routes:
     Test example: 
-        curl -X POST -H "Content-Type:application/json" http://localhost:3000/api/tasks -d '{"task":{"id":1,"name":"I have something to ask of you?","description":"","priority":0,"completed":false}}'
     Create task: POST /tasks/
     Update task: PUT /tasks/:taskId
     Delete task: DELETE /tasks/:taskIdclear
@@ -36,7 +35,9 @@ router.delete("/tasks/:taskId", taskController.deleteTask);
 
 router.post("/projects", projectController.createProject);
 router.get("/projects", projectController.getAllProjects);
+router.get("/projects/:projectId", projectController.getProjectInfo);
 router.put("/projects/:projectId", projectController.updateProject);
 router.delete("/projects/:projectId", projectController.deleteProject);
 
 module.exports = router;
+
