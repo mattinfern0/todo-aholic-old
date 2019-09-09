@@ -1,5 +1,5 @@
 # Todo-List-Full-Stack
-# Description #
+## Description ##
 Added a backend to my To-Do app. 
 
 ## To-Do ##
