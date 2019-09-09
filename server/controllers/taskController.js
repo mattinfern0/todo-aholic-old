@@ -16,19 +16,21 @@ function onError(err, res, next){
 
 var Task = require('../models/task');
 
+// Body must be in form of {task: <taskObject>}
+// Response contains {newTask:<newTask>}
 exports.createTask = (req, res, next) => {
-    console.log("Recieved create task request");
     var reqTask = req.body.task;
     var testDate = new Date().toISOString();
-    var testProjectId = "5d74c6f92a73857006c0dadd"; // id of "TestInbox"
+    //var testProjectId = "5d74c6f92a73857006c0dadd"; // id of "TestInbox"
 
     console.log("Adding task:", reqTask);
     var newTask = new Task(
         {
             name: reqTask.name,
-            dueDate: testDate,
+            dueDate: reqTask.dueDate,
             completed: false,
-            project: testProjectId
+            project: reqTask.project,
+            description: reqTask.description,
         }
     );
 
@@ -38,10 +40,10 @@ exports.createTask = (req, res, next) => {
             res.send("Error");
             return next(err);
         }
-
-        return res.send(newTask);
+        console.log("Successfully added task");
+        return res.send({task: newTask});
     })
-    console.log("Successfully added task");
+    
 }
 
 exports.getAllTasks = (req, res, next) => {

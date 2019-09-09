@@ -1,36 +1,47 @@
 import React from 'react';
-import {Events, EventTypes} from '../../controllers/EventController';
-import {CurrentTaskList} from '../../controllers/InterfaceModel';
+import {Events, EventTypes, APIMessengerTypes} from '../../controllers/EventController';
 import moment from 'moment';
 
 class TaskElement extends React.Component{
+    /*
+      Props:
+        taskIndex
+        task
+    */
     constructor (props){
       super(props);
       this.state = {
         taskIndex: props.taskIndex, // <------ Not sure if this is needed
-        editing: false,
+        className: ""
       }
       this.onElementClick = this.onElementClick.bind(this);
       this.onDelete = this.onDelete.bind(this);
       this.onCheck = this.onCheck.bind(this);
+
+      this.onSelect = this.onSelect.bind(this);
+      this.onDeselect = this.onDeselect.bind(this);
     }
 
     onCheck(e){
-      var taskIndex = this.props.taskIndex;
-      Events.publish(EventTypes.editTask, {
-        index: taskIndex,
-        modifyFunc: this._toggleComplete,
-      });
+      var updatedTask = JSON.parse(JSON.stringify(this.props.task));
+      updatedTask.completed = !updatedTask.completed;
+      Events.publish(APIMessengerTypes.editTask, updatedTask);
     }
 
     onElementClick(e){
-      var taskIndex = this.props.taskIndex;
-      var currentTask = CurrentTaskList.getList()[taskIndex];
-      Events.publish(EventTypes.getTaskDetail, currentTask);
+      Events.publish(EventTypes.getTaskDetail, this.props.task);
     }
 
     onDelete(e){
-      Events.publish(EventTypes.removeTask, this.props.taskIndex);
+      Events.publish(APIMessengerTypes.deleteTask, this.props.task._id);
+    }
+
+    onSelect(e){
+      this.setState({className: "selected"})
+    }
+
+    onDeselect(e){
+      this.setState({className: ""})
     }
 
     _toggleComplete(task){
@@ -55,7 +66,7 @@ class TaskElement extends React.Component{
       var task = this.props.task;
   
       return (
-        <div onClick={this.onElementClick}>
+        <div onClick={this.onElementClick} className={this.state.className} onFocus={this.onSelect} onBlur={this.onDeselect}>
           <input 
             type="checkbox" 
             onChange={this.onCheck} 

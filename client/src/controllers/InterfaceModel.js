@@ -7,6 +7,7 @@ const CurrentTaskList = new ObserverList({
     editEvent: EventTypes.editTask,
     editFirstEvent: EventTypes.editTaskById,
     changeListEvent: EventTypes.changeProject,
+    removeFirstEvent: EventTypes.deleteTaskById,
 });
 
 const CurrentProjectList = new ObserverList({

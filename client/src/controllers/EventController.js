@@ -8,10 +8,21 @@ const EventTypes = Object.freeze({
     editTask: "editTask",
     editTaskById: "editTaskById",
     getTaskDetail: "getTaskDetail",
+    deleteTaskById: "deleteTaskById",
     addProject: "addProject",
     removeProject: "removeProject",
     changeProject: "changeProject",
 });
+
+const APIMessengerTypes = Object.freeze({
+    addTask: "apiAddTask",
+    deleteTask: "apiRemoveTask",
+    editTask: "apiEditTask",
+    
+    addProject: "apiAddProject",
+    removeProject: "apiRemoveProject",
+    changeProject: "apiChangeProject",
+})
 
 class Event{
     constructor(name){
@@ -38,7 +49,7 @@ class Event{
 }
 
 // Handle the list of Event objects
-var EventAggregator = (function(){
+const EventAggregator = (function(){
     var events = []
 
     var _getEvent = (name) => {
@@ -88,4 +99,4 @@ var EventAggregator = (function(){
     }
 })();
 
-export {EventAggregator as Events, EventTypes};
+export {EventAggregator as Events, EventTypes, APIMessengerTypes};

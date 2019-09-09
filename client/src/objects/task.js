@@ -19,6 +19,7 @@ class Task{
         this.description = description;
         this.priority = priority;
         this.completed = completed;
+        this.project = "";
     }
 
     toggleComplete(){
@@ -42,4 +43,4 @@ class Task{
     }
 }
 
-export {Task, Priority};
+//export {Task, Priority};

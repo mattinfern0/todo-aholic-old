@@ -36,12 +36,15 @@ class TaskDetailsView extends React.Component{
     }
 
     setCurrentTask(task){
-        this.setState({currentTask: task});
+        if (!this.state.editing){
+            this.setState({currentTask: task});
+        }
     }
 
     refresh(){
         if (this.state.currentTask != null){
-            this.setState({taskInfo: this.state.currentTask.clone(true)});
+            //this.setState({taskInfo: this.state.currentTask.clone(true)});
+            this.setState({taskInfo: JSON.parse(JSON.stringify(this.state.currentTask))}); // Clones the object using json
         } else {
             this.setState({taskInfo: null});
         }

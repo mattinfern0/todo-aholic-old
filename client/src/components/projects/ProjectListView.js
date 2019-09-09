@@ -1,5 +1,5 @@
 import React from 'react';
-import {Events, EventTypes} from '../../controllers/EventController';
+import {Events, EventTypes, APIMessengerTypes} from '../../controllers/EventController';
 import {CurrentProjectList, CurrentTaskList} from '../../controllers/InterfaceModel';
 import Inbox from '../../objects/InboxProject';
 
@@ -8,7 +8,8 @@ function ProjectElement(props){
         // Set CurrentTaskList's list to CurrentProjectList[i]
         var targetList = props.project.tasks;
         if (targetList !== CurrentTaskList.getList()){
-            Events.publish(EventTypes.changeProject, targetList);
+            //Events.publish(EventTypes.changeProject, targetList);
+            Events.publish(APIMessengerTypes.changeProject, "TESTID")
         }
     }
 

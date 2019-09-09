@@ -19,14 +19,16 @@ class TaskListView extends React.Component{
       Events.subscribe(EventTypes.editTask, this.refreshTasks);
       Events.subscribe(EventTypes.changeProject, this.refreshTasks);
       Events.subscribe(EventTypes.editTaskById, this.refreshTasks);
+      Events.subscribe(EventTypes.deleteTaskById, this.refreshTasks);
     }
 
-    componentWillMount(){
+    componentWillUnmount(){
       Events.unsubscribe(EventTypes.addTask, this.refreshTasks);
       Events.unsubscribe(EventTypes.removeTask, this.refreshTasks);
       Events.unsubscribe(EventTypes.editTask, this.refreshTasks);
       Events.unsubscribe(EventTypes.changeProject, this.refreshTasks);
       Events.unsubscribe(EventTypes.editTaskById, this.refreshTasks);
+      Events.unsubscribe(EventTypes.deleteTaskById, this.refreshTasks);
     }
   
     refreshTasks(){
@@ -42,7 +44,7 @@ class TaskListView extends React.Component{
 
       for (let i = viewList.length - 1; i >= 0; i--){
           let newElement = (
-            <li className="task-item" key={viewList[i].id}>
+            <li className="task-item" key={viewList[i]._id}>
               <TaskElement task={viewList[i]} taskIndex={i} />
             </li>);
           if (viewList[i].completed){

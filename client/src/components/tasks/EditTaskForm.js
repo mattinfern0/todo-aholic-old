@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import {Events, EventTypes} from '../../controllers/EventController'
+import {Events, APIMessengerTypes} from '../../controllers/EventController'
 import PlaceholderDateInput from '../misc/PlaceholderDateInput'
 
 class EditTaskForm extends React.Component{
@@ -25,17 +25,28 @@ class EditTaskForm extends React.Component{
 
     doSubmit(e){
         var dueDate = this.parseDateStr(this.state.dueDate);
+        
+
+        var updateTask = JSON.parse(JSON.stringify(this.props.initialTaskInfo));
+        updateTask.name = this.state.name;
+        updateTask.dueDate = dueDate;
+        updateTask.description = this.state.description;
+        console.log(updateTask);
+
+        /*
         var matchFunc = (thisTask) => {
             return thisTask.id === this.props.initialTaskInfo.id;
         }
-
         var modifyFunc = (task) => {
             task.name = this.state.name;
             task.dueDate = dueDate;
             task.description = this.state.description;
             return task;
         }
-        Events.publish(EventTypes.editTaskById,{matchFunc, modifyFunc});
+
+
+        Events.publish(EventTypes.editTaskById,{matchFunc, modifyFunc});*/
+        Events.publish(APIMessengerTypes.editTask, updateTask);
         this.props.revertFunc();
         e.preventDefault();
     }

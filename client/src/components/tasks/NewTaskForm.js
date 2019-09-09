@@ -1,8 +1,9 @@
 import React from 'react';
-import {Events, EventTypes} from '../../controllers/EventController';
+import {Events, APIMessengerTypes} from '../../controllers/EventController';
 import {Task} from '../../objects/task';
 import PlaceholderDateInput from '../misc/PlaceholderDateInput'
 import moment from 'moment';
+import ApiMessenger from '../../controllers/ApiMessenger'
 
 class NewTaskForm extends React.Component{
     constructor(props){
@@ -27,7 +28,8 @@ class NewTaskForm extends React.Component{
     createTask(e){
         var dueDate = this.parseDateStr(this.state.dueDate);
         var newTask = new Task(this.state.name, dueDate);
-        Events.publish(EventTypes.addTask, newTask);
+        //Events.publish(EventTypes.addTask, newTask);
+        Events.publish(APIMessengerTypes.addTask, newTask);
         this.resetForm();
         e.preventDefault();
     }
