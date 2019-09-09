@@ -7,6 +7,12 @@ function notImplemented(res){
     return res.send("Not implemented");
 }
 
+function onError(err, res, next){
+    console.log(err);
+    res.send("Error");
+    return next(err);
+}
+
 exports.createProject = (req, res, next) => {
     var reqProject = req.body.project;
 
@@ -18,9 +24,7 @@ exports.createProject = (req, res, next) => {
 
     newProject.save(function (err){
         if (err){
-            console.log("Error: ", err);
-            res.send("Error");
-            return next(err);
+            return onError(err, res, next);
         }
 
         return res.send(newProject);
@@ -32,9 +36,7 @@ exports.createProject = (req, res, next) => {
 exports.getAllProjects = (req, res, next) => {
     Project.find({}, function(err, allProjects){
         if (err){
-            console.log(err);
-            res.send("Error");
-            return next(err);
+            return onError(err, res, next);
         }
 
         res.send(allProjects);
@@ -52,9 +54,7 @@ exports.getProjectInfo = (req, res, next) => {
             }
         }, function (err, results){
             if (err){
-                console.log(err);
-                res.send("Error");
-                return next(err);
+                return onError(err, res, next);
             }
 
             res.send({info: results.info, tasks: results.tasks})
@@ -62,21 +62,39 @@ exports.getProjectInfo = (req, res, next) => {
     );
 }
 
-exports.updateProject = (req, res) => {
-    return notImplemented(res);
+exports.updateProject = (req, res, next) => {
+    var projectId = req.params.projectId;
+    var updatedProject = req.body.project;
+
+    console.log("Updating id: ", projectId);
+    console.log("The new project: ", updatedProject);
+
+    Project.findByIdAndUpdate(projectId, updatedProject, function(err, oldProject){
+        if (err){
+            return onError(err, res, next);
+        }
+
+        res.send({oldProject: oldProject});
+    });
 }
 
-exports.deleteProject = (req, res) => {
-    return notImplemented(res);
+exports.deleteProject = (req, res, next) => {
+    var projectId = req.params.projectId;
+    Project.findByIdAndDelete(projectId, function(err, deleted){
+        if (err){
+            return onError(err, res, next);
+        }
+
+        res.send("Success");
+    });
 }
 
 exports.getProjectTasks = (req, res, next) => {
     var projectId = req.params.projectId;
+    
     Task.find({'project': projectId}, function (err, results){
         if (err){
-            console.log(err);
-            res.send("Error");
-            return next(err);
+            return onError(err, res, next);
         }
 
         res.send(results);

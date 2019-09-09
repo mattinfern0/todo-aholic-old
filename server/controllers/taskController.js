@@ -3,10 +3,16 @@
 const tasks = [];
 tasks.push(new Task("What?"), (new Date()).toISOString(), "Meh");
 tasks.push(new Task("Hello there"), (new Date()).toISOString(), "Walking around");
-
+*/
 function notImplemented(res){
     return res.send("Not implemented");
-}*/
+}
+
+function onError(err, res, next){
+    console.log(err);
+    res.send("Error");
+    return next(err);
+}
 
 var Task = require('../models/task');
 
@@ -49,10 +55,26 @@ exports.getAllTasks = (req, res, next) => {
     });
 }
 
-exports.updateTask = (req, res) => {
-    return notImplemented(res);
+exports.updateTask = (req, res, next) => {
+    var taskId = req.params.taskId;
+    var updatedTask = req.body.task;
+
+    Task.findByIdAndUpdate(taskId, updatedTask, function(err, oldTask){
+        if (err){
+            return onError(err, res, next);
+        }
+
+        res.send({oldTask: oldTask});
+    });
 }
 
-exports.deleteTask = (req, res) => {
-    return notImplemented(res);
+exports.deleteTask = (req, res, next) => {
+    var taskId = req.params.taskId;
+    Task.findByIdAndDelete(taskId, function(err, deleted){
+        if (err){
+            return onError(err, res, next);
+        }
+
+        res.send("Success");
+    });
 }
