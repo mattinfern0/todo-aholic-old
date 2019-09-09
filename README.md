@@ -1,4 +1,5 @@
 # Todo-List-Full-Stack
+![Screenshot of UI](misc/screenshot-main.png)
 ## Description ##
 Added a backend to my To-Do app. 
 
