@@ -12,7 +12,10 @@ const CurrentTaskList = new ObserverList({
 
 const CurrentProjectList = new ObserverList({
     addEvent: EventTypes.addProject, 
-    removeEvent: EventTypes.removeProject
+    removeEvent: EventTypes.removeProject,
+    changeListEvent: EventTypes.changeProjectList,
 });
 
-export {CurrentTaskList, CurrentProjectList};
+const currentProject = {id: null};
+
+export {CurrentTaskList, CurrentProjectList, currentProject};

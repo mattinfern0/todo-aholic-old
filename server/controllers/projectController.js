@@ -8,8 +8,8 @@ function notImplemented(res){
 }
 
 function onError(err, res, next){
-    console.log(err);
-    res.send("Error");
+    //console.log("ERROR: ", err);
+    //res.send("Error");
     return next(err);
 }
 
@@ -39,12 +39,13 @@ exports.getAllProjects = (req, res, next) => {
             return onError(err, res, next);
         }
 
-        res.send(allProjects);
+        res.send({projects: allProjects});
     });
 }
-
+//
 exports.getProjectInfo = (req, res, next) => {
     var targetId = req.params.projectId
+    console.log("getting project info for id: ", targetId);
     async.parallel({
             info: function(callback){
                 Project.findById(targetId, callback);
@@ -56,7 +57,8 @@ exports.getProjectInfo = (req, res, next) => {
             if (err){
                 return onError(err, res, next);
             }
-
+            
+            console.log("getProjectInfo success");
             res.send({info: results.info, tasks: results.tasks})
         }
     );

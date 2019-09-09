@@ -18,7 +18,8 @@ import ApiMessenger from './controllers/ApiMessenger'
 //var startingProject = Inbox;
 //CurrentTaskList.setList(startingProject.tasks);
 //Events.publish(EventTypes.addTask, new Task("Example task", new Date().toISOString()));
-ApiMessenger.getProjectTasks("random")
+ApiMessenger.getProjectList();
+ApiMessenger.getProjectTasks("5d74c6f92a73857006c0dadd")
 
 ReactDOM.render(<App/>, document.getElementById('root'));
 

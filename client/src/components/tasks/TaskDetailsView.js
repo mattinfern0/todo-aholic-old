@@ -14,6 +14,7 @@ class TaskDetailsView extends React.Component{
         this.refresh = this.refresh.bind(this);
         this.setCurrentTask = this.setCurrentTask.bind(this);
         this.onProjectChange = this.onProjectChange.bind(this);
+        this.onDelete = this.onDelete.bind(this);
     }
 
     componentDidMount(){
@@ -21,12 +22,14 @@ class TaskDetailsView extends React.Component{
         Events.subscribe(EventTypes.editTaskById, this.refresh);
         Events.subscribe(EventTypes.getTaskDetail, this.setCurrentTask);
         Events.subscribe(EventTypes.changeProject, this.onProjectChange);
+        Events.subscribe(EventTypes.deleteTaskById, this.onDelete);
     }
 
     componentWillUnmount(){
         Events.unsubscribe(EventTypes.editTaskById, this.refresh);
         Events.unsubscribe(EventTypes.getTaskDetail, this.setCurrentTask);
         Events.unsubscribe(EventTypes.changeProject, this.onProjectChange);
+        Events.unsubscribe(EventTypes.deleteTaskById, this.onDelete);
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -38,6 +41,13 @@ class TaskDetailsView extends React.Component{
     setCurrentTask(task){
         if (!this.state.editing){
             this.setState({currentTask: task});
+        }
+    }
+
+    onDelete(matchFunc){
+        if (matchFunc(this.state.currentTask)){
+            this.setState({currentTask: null});
+            this.refresh();
         }
     }
 

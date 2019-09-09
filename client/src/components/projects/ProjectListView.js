@@ -6,11 +6,12 @@ import Inbox from '../../objects/InboxProject';
 function ProjectElement(props){
     const onProjectClick = (e) => {
         // Set CurrentTaskList's list to CurrentProjectList[i]
-        var targetList = props.project.tasks;
-        if (targetList !== CurrentTaskList.getList()){
+        //var targetList = props.project.tasks;
+        /*if (targetList !== CurrentTaskList.getList()){
             //Events.publish(EventTypes.changeProject, targetList);
-            Events.publish(APIMessengerTypes.changeProject, "TESTID")
-        }
+            
+        }*/
+        Events.publish(APIMessengerTypes.changeProject, props.project._id);
     }
 
     return (
@@ -34,10 +35,12 @@ class ProjectListView extends React.Component{
 
     componentDidMount(){
         Events.subscribe(EventTypes.addProject, this.refresh);
+        Events.subscribe(EventTypes.changeProjectList, this.refresh);
     }
 
     componentWillUnmount(){
         Events.unsubscribe(EventTypes.addProject, this.refresh);
+        Events.subscribe(EventTypes.changeProjectList, this.refresh);
     }
 
     refresh(){
@@ -49,7 +52,7 @@ class ProjectListView extends React.Component{
     render(){
         var projectElements = CurrentProjectList.getList().map((project) =>{
             return (
-                <li key={project.id}>
+                <li key={project._id}>
                     <ProjectElement project={project} />
                 </li>
             );

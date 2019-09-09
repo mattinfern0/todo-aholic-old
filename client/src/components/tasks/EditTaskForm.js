@@ -33,19 +33,6 @@ class EditTaskForm extends React.Component{
         updateTask.description = this.state.description;
         console.log(updateTask);
 
-        /*
-        var matchFunc = (thisTask) => {
-            return thisTask.id === this.props.initialTaskInfo.id;
-        }
-        var modifyFunc = (task) => {
-            task.name = this.state.name;
-            task.dueDate = dueDate;
-            task.description = this.state.description;
-            return task;
-        }
-
-
-        Events.publish(EventTypes.editTaskById,{matchFunc, modifyFunc});*/
         Events.publish(APIMessengerTypes.editTask, updateTask);
         this.props.revertFunc();
         e.preventDefault();

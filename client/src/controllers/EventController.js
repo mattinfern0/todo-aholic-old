@@ -12,6 +12,7 @@ const EventTypes = Object.freeze({
     addProject: "addProject",
     removeProject: "removeProject",
     changeProject: "changeProject",
+    changeProjectList: "changeProjectList"
 });
 
 const APIMessengerTypes = Object.freeze({
@@ -22,6 +23,7 @@ const APIMessengerTypes = Object.freeze({
     addProject: "apiAddProject",
     removeProject: "apiRemoveProject",
     changeProject: "apiChangeProject",
+    changeProjectList: "apiChangeProjectList"
 })
 
 class Event{

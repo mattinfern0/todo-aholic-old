@@ -1,4 +1,5 @@
 import {Events, EventTypes, APIMessengerTypes} from './EventController';
+import {currentProject} from './InterfaceModel'
 
 const backEndURL = "http://localhost:3001"
 
@@ -6,7 +7,8 @@ const ApiMessenger = (() => {
     const createTask = (taskObject) => {
         console.log("Sending create request to API");
 
-        taskObject.project =  "5d74c6f92a73857006c0dadd"; // For testing purposes
+       // taskObject.project =  "5d74c6f92a73857006c0dadd"; // For testing purposes
+        taskObject.project = currentProject.id;
         const addUrl = backEndURL + "/api/tasks";
         const theBody = {task: taskObject};
 
@@ -70,21 +72,40 @@ const ApiMessenger = (() => {
 
     }
 
+    const getProjectList = () => {
+        console.log("Getting all projects");
+
+        const url = backEndURL + "/api/projects";
+        fetch(url, {
+            method: 'GET'
+        })
+        .then(res => {
+            console.log("GET all projects response: ", res);
+            return res.json();
+        })
+        .then((data) => {
+            console.log("GET data: ", data);
+            console.log("The projects: ", data.projects)
+            Events.publish(EventTypes.changeProjectList, data.projects);
+        })
+    }
+
     const getProjectTasks = (projectId) => {
-        console.log("GETting project");
+        console.log("Getting taks for project: ", projectId);
         const testId = "5d74c6f92a73857006c0dadd";
 
-        const url = backEndURL + "/api/projects/" + testId;
+        const url = backEndURL + "/api/projects/" + projectId;
         fetch(url, {
             method: 'GET',
         })
         .then(res => {
-            console.log(res);
+            console.log("Get tasks response: ",res);
             return res.json();
         })
         .then((data) => {
             console.log("GET result:",data);
             console.log("The tasks: ", data.tasks);
+            currentProject.id = projectId;
             Events.publish(EventTypes.changeProject, data.tasks);
         });
     }
@@ -92,12 +113,15 @@ const ApiMessenger = (() => {
     Events.subscribe(APIMessengerTypes.addTask, createTask.bind(this));
     Events.subscribe(APIMessengerTypes.editTask, editTask.bind(this));
     Events.subscribe(APIMessengerTypes.deleteTask, deleteTask.bind(this));
+
+    Events.subscribe(APIMessengerTypes.changeProjectList, getProjectList.bind(this));
     Events.subscribe(APIMessengerTypes.changeProject, getProjectTasks.bind(this));
     
 
     return {
         createTask,
         getProjectTasks,
+        getProjectList,
     }
 })();
 

@@ -7,7 +7,7 @@ class TaskListView extends React.Component{
     constructor(props){
       super(props);
       this.state = {
-        viewList: CurrentTaskList.getList().slice() // Copy of project's tasks array for immutability principle?
+        viewList: CurrentTaskList.getList().slice(), // Copy of project's tasks array for immutability principle?
       }
 
       this.refreshTasks = this.refreshTasks.bind(this);
