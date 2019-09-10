@@ -1,71 +1,70 @@
 import React from 'react';
-import {Events, APIMessengerTypes} from '../../controllers/EventController';
-import {Task} from '../../objects/task';
-import PlaceholderDateInput from '../misc/PlaceholderDateInput'
 import moment from 'moment';
-import ApiMessenger from '../../controllers/ApiMessenger'
 
-class NewTaskForm extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            name: "",
-            dueDate: "",
-            dateInputType: "text"
-        }
-        this.createTask = this.createTask.bind(this);
-    }
+import { Events, APIMessengerTypes } from '../../controllers/EventController';
+import { Task } from '../../objects/task';
+import PlaceholderDateInput from '../misc/PlaceholderDateInput';
+import ApiMessenger from '../../controllers/ApiMessenger';
 
-    parseDateStr(dateStr){
-        var date = moment(dateStr, "YYYY-MM-DD");
-        if (date.isValid()){
-            return date.format();
-        } else {
-            return moment().format();
-        }
-    }
+function parseDateStr(dateStr) {
+  const date = moment(dateStr, 'YYYY-MM-DD');
+  if (date.isValid()) {
+    return date.format();
+  }
+  return moment().format();
+}
 
-    createTask(e){
-        var dueDate = this.parseDateStr(this.state.dueDate);
-        var newTask = new Task(this.state.name, dueDate);
-        //Events.publish(EventTypes.addTask, newTask);
-        Events.publish(APIMessengerTypes.addTask, newTask);
-        this.resetForm();
-        e.preventDefault();
-    }
+class NewTaskForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      dueDate: '',
+    };
+    this.createTask = this.createTask.bind(this);
+  }
 
-    resetForm(){
-        this.setState({
-            name: "",
-            dueDate: "",
-        })
-    }
+  createTask(e) {
+    const dueDate = parseDateStr(this.state.dueDate);
+    const newTask = new Task(this.state.name, dueDate);
+    // Events.publish(EventTypes.addTask, newTask);
+    Events.publish(APIMessengerTypes.addTask, newTask);
+    this.resetForm();
+    e.preventDefault();
+  }
 
-    render(){
-        return (
-            <form 
-                id={"new-task"} 
-                autoComplete="off" 
-                onSubmit={this.createTask}
-            >
-                <input id="new-task-name" 
-                    type={"text"} 
-                    placeholder={"What do you want to do?"}
-                    value={this.state.name} 
-                    onChange={(e) => this.setState({name: e.target.value})}
-                >
-                </input>
+  resetForm() {
+    this.setState({
+      name: '',
+      dueDate: '',
+    });
+  }
 
-                <PlaceholderDateInput
-                    class="new-task-date" 
-                    placeholder="Due Date"
-                    value={this.state.dueDate}
-                    onChange={(e) => this.setState({dueDate: e.target.value})}
-                />
-                <input type="submit" value="+"></input>
-            </form>
-        );
-    }
+  render() {
+    return (
+      <form
+        id="new-task"
+        autoComplete="off"
+        onSubmit={this.createTask}
+      >
+        <input
+          id="new-task-name"
+          type="text"
+          placeholder="What do you want to do?"
+          value={this.state.name}
+          onChange={(e) => this.setState({ name: e.target.value })}
+        />
+
+        <PlaceholderDateInput
+          class="new-task-date"
+          placeholder="Due Date"
+          value={this.state.dueDate}
+          onChange={(e) => this.setState({ dueDate: e.target.value })}
+        />
+        <input type="submit" value="+" />
+      </form>
+    );
+  }
 }
 
 export default NewTaskForm;

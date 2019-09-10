@@ -1,11 +1,11 @@
 const express = require('express');
+const taskController = require('../controllers/taskController');
+const projectController = require('../controllers/projectController');
+
 const router = express.Router();
 
-const taskController = require('../controllers/taskController');
-const projectController = require('../controllers/projectController')
-
 /* Routes:
-    Test example: 
+    Test example:
     Create task: POST /tasks/
     Update task: PUT /tasks/:taskId
     Delete task: DELETE /tasks/:taskIdclear
@@ -21,23 +21,22 @@ const projectController = require('../controllers/projectController')
     Get user: GET /users/:userId
 
     Create project for user: POST /projects/user/:userid
-    Get user's projects: GET /projects/user/:userid 
+    Get user's projects: GET /projects/user/:userid
 
     NOT SURE:
     Get task: GET /tasks/:taskId
     Get a project: GET /projects/:projectId
 */
 
-router.post("/tasks", taskController.createTask);
-router.get("/tasks", taskController.getAllTasks) // Only for example, don't use later
-router.put("/tasks/:taskId", taskController.updateTask);
-router.delete("/tasks/:taskId", taskController.deleteTask);
+router.post('/tasks', taskController.createTask);
+router.get('/tasks', taskController.getAllTasks); // Only for example, don't use later
+router.put('/tasks/:taskId', taskController.updateTask);
+router.delete('/tasks/:taskId', taskController.deleteTask);
 
-router.post("/projects", projectController.createProject);
-router.get("/projects", projectController.getAllProjects);
-router.get("/projects/:projectId", projectController.getProjectInfo);
-router.put("/projects/:projectId", projectController.updateProject);
-router.delete("/projects/:projectId", projectController.deleteProject);
+router.post('/projects', projectController.createProject);
+router.get('/projects', projectController.getAllProjects);
+router.get('/projects/:projectId', projectController.getProjectInfo);
+router.put('/projects/:projectId', projectController.updateProject);
+router.delete('/projects/:projectId', projectController.deleteProject);
 
 module.exports = router;
-
