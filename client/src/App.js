@@ -6,21 +6,21 @@ import NewTaskForm from './components/tasks/NewTaskForm';
 import ProjectListView from './components/projects/ProjectListView';
 import NewProjectForm from './components/projects/NewProjectForm';
 import TaskDetailsView from './components/tasks/TaskDetailsView';
+import ProjectHeader from './components/projects/ProjectHeader';
 
 
 function App(){
   return (
     <div id="app-container">
-      <header>
+      <header id="app-header">
         <h1>ToDo-aholic</h1>
       </header>
       <section id="content">
         <aside id="project-container">
-          <h2>Projects</h2>
           <ProjectListView />
-          <NewProjectForm />
         </aside>
         <section id="task-container">
+          <ProjectHeader />
           <NewTaskForm />
           <TaskListView />
         </section>

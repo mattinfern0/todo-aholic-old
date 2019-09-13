@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 
 const mongoose = require('mongoose');
 const async = require('async');
@@ -15,6 +16,7 @@ function onError(err, res, next) {
   return next(err);
 }
 
+
 exports.createProject = (req, res, next) => {
   const reqProject = req.body.project;
 
@@ -29,14 +31,14 @@ exports.createProject = (req, res, next) => {
       return onError(err, res, next);
     }
 
-    return res.send(newProject);
+    return res.send({ project: newProject });
   });
 
   console.log('Successfully added project');
 };
 
 exports.getAllProjects = (req, res, next) => {
-  Project.find({}, (err, allProjects) => {
+  Project.find({ name: { $ne: 'Inbox' } }, (err, allProjects) => {
     if (err) {
       return onError(err, res, next);
     }
@@ -47,22 +49,26 @@ exports.getAllProjects = (req, res, next) => {
 
 exports.getProjectInfo = (req, res, next) => {
   const targetId = req.params.projectId;
-  console.log('getting project info for id: ', targetId);
-  async.parallel({
-    info: (callback) => {
-      Project.findById(targetId, callback);
-    },
-    tasks: (callback) => {
-      Task.find({ project: mongoose.Types.ObjectId(targetId) }, callback);
-    },
-  }, (err, results) => {
-    if (err) {
-      return onError(err, res, next);
-    }
+  if (targetId === 'undefined') {
+    return res.status(400).send('Project id undefined');
+  } else {
+    console.log('getting project info for id: ', targetId);
+    async.parallel({
+      info: (callback) => {
+        Project.findById(targetId, callback);
+      },
+      tasks: (callback) => {
+        Task.find({ project: mongoose.Types.ObjectId(targetId) }, callback);
+      },
+    }, (err, results) => {
+      if (err) {
+        return onError(err, res, next);
+      }
 
-    console.log('getProjectInfo success');
-    res.send({ info: results.info, tasks: results.tasks });
-  });
+      console.log('getProjectInfo success');
+      res.send({ info: results.info, tasks: results.tasks });
+    });
+  }
 };
 
 exports.updateProject = (req, res, next) => {
@@ -83,6 +89,21 @@ exports.updateProject = (req, res, next) => {
 
 exports.deleteProject = (req, res, next) => {
   const projectId = req.params.projectId;
+  async.parallel({
+    infoResult: (callback) => {
+      Project.findByIdAndDelete(projectId, callback);
+    },
+    tasksResult: (callback) => {
+      Task.deleteMany({ project: mongoose.Types.ObjectId(projectId) }, callback);
+    },
+  }, (err) => {
+    if (err) {
+      return onError(err, res, next);
+    }
+
+    res.send('Success');
+  });
+  /*
   Project.findByIdAndDelete(projectId, (err) => {
     if (err) {
       return onError(err, res, next);
@@ -90,6 +111,7 @@ exports.deleteProject = (req, res, next) => {
 
     res.send('Success');
   });
+  Task.f */
 };
 
 exports.getProjectTasks = (req, res, next) => {
@@ -101,5 +123,23 @@ exports.getProjectTasks = (req, res, next) => {
     }
 
     res.send(results);
+  });
+};
+
+exports.getUserInbox = (req, res, next) => {
+  const userId = req.params.userId;
+
+  Project.findOne({ name: 'Inbox' }, (err, result) => {
+    if (err) {
+      return onError(err, res, next);
+    }
+
+    const inboxInfo = result;
+    Task.find({ project: mongoose.Types.ObjectId(inboxInfo._id) }, (error, tasksResult) => {
+      if (error) {
+        return onError(err, res, next);
+      }
+      res.send({ info: inboxInfo, tasks: tasksResult });
+    });
   });
 };

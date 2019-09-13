@@ -1,5 +1,5 @@
 import React from 'react';
-import {Events, EventTypes} from '../../controllers/EventController';
+import {Events, EventTypes, APIMessengerTypes} from '../../controllers/EventController';
 import {Project} from '../../objects/project';
 
 class NewProjectForm extends React.Component{
@@ -14,7 +14,7 @@ class NewProjectForm extends React.Component{
   createProject(e){
     if (this.state.projectName.length > 0){
       const newProject = new Project(this.state.projectName);
-      Events.publish(EventTypes.addProject, newProject);
+      Events.publish(APIMessengerTypes.addProject, newProject);
     }
 
     this.resetForm();

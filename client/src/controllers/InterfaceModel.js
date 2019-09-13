@@ -13,9 +13,10 @@ const CurrentTaskList = new ObserverList({
 const CurrentProjectList = new ObserverList({
   addEvent: EventTypes.addProject,
   removeEvent: EventTypes.removeProject,
+  removeFirstEvent: EventTypes.removeProjectById,
   changeListEvent: EventTypes.changeProjectList,
 });
 
-const currentProject = {id: null};
+const currentProject = {id: null, project: null };
 
 export {CurrentTaskList, CurrentProjectList, currentProject};

@@ -26,7 +26,7 @@ h2 {
     display: flex;
 }
 
-header {
+#app-header {
     padding-left: 2%;
     padding-top: 3px;
     padding-bottom: 3px;

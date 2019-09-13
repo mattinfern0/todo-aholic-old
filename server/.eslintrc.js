@@ -20,5 +20,6 @@ module.exports = {
     'consistent-return': 'off',
     'no-unused-vars': 'warn',
     'import/newline-after-import': 'off',
+    'no-else-return': 'off',
   },
 };
