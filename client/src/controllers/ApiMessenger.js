@@ -12,6 +12,18 @@ function processResponse(res){
 }
 
 const ApiMessenger = (() => {
+  const checkServerStatus = () => {
+    const url = `${backEndURL}/api`
+    return (
+      fetch(url, { method: 'GET' })
+        .then((res) => {
+          if (!res.ok){
+            throw new Error('Response not ok!');
+          }
+        })
+    );
+  };
+
   const createTask = (taskObject) => {
     const newTask = taskObject;
     newTask.project = currentProject.id;
@@ -181,6 +193,7 @@ const ApiMessenger = (() => {
   Events.subscribe(APIMessengerTypes.getInbox, getUserInbox.bind(this));
 
   return {
+    checkServerStatus,
     createTask,
     getProjectTasks,
     getProjectList,

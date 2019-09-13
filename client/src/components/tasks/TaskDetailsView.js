@@ -1,7 +1,7 @@
 /* eslint-disable react/sort-comp */
 import React from 'react';
 import moment from 'moment';
-import { Events, EventTypes } from '../../controllers/EventController';
+import { Events, EventTypes, APIMessengerTypes } from '../../controllers/EventController';
 import EditTaskForm from './EditTaskForm';
 
 class TaskDetailsView extends React.Component {
@@ -88,7 +88,6 @@ class TaskDetailsView extends React.Component {
           <div>
             <span><h2>{taskInfo.name}</h2></span>
             <button
-              id="edit-button"
               type="button"
               className="edit-button"
               onClick={(e) => this.setState({ editing: true })}
@@ -111,6 +110,13 @@ class TaskDetailsView extends React.Component {
               }
             </p>
           </div>
+          <button
+            type="button"
+            className="delete-button"
+            onClick={() => Events.publish(APIMessengerTypes.deleteTask, this.state.taskInfo._id)}
+          >
+            Delete
+          </button>
         </span>
       );
     }

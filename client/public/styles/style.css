@@ -135,6 +135,12 @@ input[type="date"]{
     transform: scale(1.5);
 }
 
+#details-container .delete-button{
+    margin-top: 5%;
+    margin-right: 3%;
+    float:right;
+}
+
 .list-element{
     border : none;
     background-color: transparent;

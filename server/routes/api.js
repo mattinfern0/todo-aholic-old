@@ -4,6 +4,10 @@ const projectController = require('../controllers/projectController');
 
 const router = express.Router();
 
+router.get('/', (req, res) => {
+  res.status(200).send('Server working!');
+});
+
 router.post('/tasks', taskController.createTask);
 router.put('/tasks/:taskId', taskController.updateTask);
 router.delete('/tasks/:taskId', taskController.deleteTask);

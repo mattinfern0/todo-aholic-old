@@ -87,7 +87,7 @@ class TaskElement extends React.Component{
           <button
             type="button"
             className="delete-button"
-            onClick={this.onDelete}
+            // onClick={this.onDelete}
           >
             Delete
           </button>
