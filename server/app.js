@@ -25,12 +25,9 @@ app.use('/api', apiRouter);
 
 
 // MongoDB setup
-
-const mongoDB = require('./secret/mongoDBConnection');
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-console.log("Otherwise successfully connected to db");
 
 
 // catch 404 and forward to error handler

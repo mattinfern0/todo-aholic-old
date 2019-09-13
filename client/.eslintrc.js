@@ -32,6 +32,7 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'no-plusplus': 'off',
     'import/prefer-default-export': 'warn',
+    'no-trailing-spaces': 'warn',
 
     'react/jsx-filename-extension': 'off',
     'react/destructuring-assignment': 'off',

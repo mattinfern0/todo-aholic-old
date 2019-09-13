@@ -90,6 +90,7 @@ class TaskDetailsView extends React.Component {
             <button
               id="edit-button"
               type="button"
+              className="edit-button"
               onClick={(e) => this.setState({ editing: true })}
             >
               Edit

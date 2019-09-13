@@ -3,11 +3,16 @@ import {currentProject, CurrentProjectList} from './InterfaceModel';
 
 const backEndURL = 'http://localhost:3001';
 
+function processResponse(res){
+  if (!res.ok){
+    console.log('Bad response: ', res);
+    throw new Error('Response not ok!');
+  }
+  return res.json();
+}
+
 const ApiMessenger = (() => {
   const createTask = (taskObject) => {
-    console.log('Sending create request to API');
-
-    // taskObject.project =  "5d74c6f92a73857006c0dadd"; // For testing purposes
     const newTask = taskObject;
     newTask.project = currentProject.id;
     const addUrl = `${backEndURL}/api/tasks`;
@@ -20,10 +25,13 @@ const ApiMessenger = (() => {
       },
       body: JSON.stringify(theBody),
     })
-      .then((res) => res.json())
+      .then((res) => processResponse(res))
       .then((data) => {
-        console.log('Add result:', data);
+        console.log('create task response: ', data);
         Events.publish(EventTypes.addTask, data.task);
+      }).catch((err) => {
+        console.log('Error creating task: ', err);
+        alert('Sorry! Something went wrong while creating your task!');
       });
   };
 
@@ -39,10 +47,9 @@ const ApiMessenger = (() => {
       },
       body: JSON.stringify(theBody),
     })
-      .then((res) => res.json())
+      .then((res) => processResponse(res))
       .then((data) => {
-        console.log('PUT result:', data);
-
+        console.log('edit task response: ', data);
         const matchFunc = (thisTask) => thisTask._id === updatedTask._id;
 
         const modifyFunc = (task) => {
@@ -51,25 +58,32 @@ const ApiMessenger = (() => {
         };
 
         Events.publish(EventTypes.editTaskById, {matchFunc, modifyFunc});
+      }).catch((err) => {
+        console.log('Error editing task: ', err);
+        alert('Sorry, something went wrong while modifying your task!');
       });
   };
 
   const deleteTask = (taskId) => {
-    console.log('Deleting task: ', taskId);
-
     const url = `${backEndURL}/api/tasks/${taskId}`;
     fetch(url, {
       method: 'DELETE',
     }).then((res) => {
+      if (!res.ok){
+        console.log('Response not ok: ', res);
+        throw new Error('Res not ok');
+      }
       console.log('DELETE result: ', res);
       const matchFunc = (thisTask) => thisTask._id === taskId;
 
       Events.publish(EventTypes.deleteTaskById, matchFunc);
+    }).catch((err) => {
+      console.log('delete task error: ', err);
+      alert('Sorry! Something went wrong while deleting this task!');
     });
   };
 
   const createProject = (newProject) => {
-    console.log('Sending create project to API');
     const addUrl = `${backEndURL}/api/projects`;
     const theBody = {project: newProject};
 
@@ -79,90 +93,82 @@ const ApiMessenger = (() => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(theBody),
-    })
-      .then((res) => res.json())
+    }).then((res) => processResponse(res))
       .then((data) => {
-        console.log('Add result:', data);
+        console.log('Create project res:', data);
         Events.publish(EventTypes.addProject, data.project);
+      }).catch((err) => {
+        console.log('create project error: ', err);
+        alert('Sorry! Something went wrong while creating your project!');
       });
   };
 
   const getProjectList = () => {
-    console.log('Getting all projects');
-
     const url = `${backEndURL}/api/projects`;
     fetch(url, {
       method: 'GET',
-    })
-      .then((res) => {
-        console.log('GET all projects response: ', res);
-        return res.json();
-      })
-      .then((data) => {
-        console.log('GET data: ', data);
-        console.log('The projects: ', data.projects);
-        Events.publish(EventTypes.changeProjectList, data.projects);
-      });
+    }).then((res) => {
+      return processResponse(res);
+    }).then((data) => {
+      Events.publish(EventTypes.changeProjectList, data.projects);
+    }).catch((err) => {
+      console.log('get all projects error: ', err);
+      alert('Sorry! Something went wrong while getting your projects!');
+    });
   };
 
   const getProjectTasks = (projectId) => {
-    console.log('Getting taks for project: ', projectId);
-
     const url = `${backEndURL}/api/projects/${projectId}`;
     fetch(url, {
       method: 'GET',
     })
-      .then((res) => {
-        console.log('Get tasks response: ', res);
-        return res.json();
-      })
+      .then((res) => processResponse(res))
       .then((data) => {
-        console.log('GET result:', data);
-        console.log('The tasks: ', data.tasks);
         currentProject.id = projectId;
         currentProject.project = data.info;
         Events.publish(EventTypes.changeProject, data.tasks);
+      }).catch((err) => {
+        console.log('get project\'s tasks error: ', err);
+        alert('Sorry! Something went wrong while getting this project\'s tasks!');
       });
   };
 
   const getUserInbox = (userId) => {
-    console.log('Getting user inbox');
-
     const url = `${backEndURL}/api/projects/user/${userId}/inbox`;
     fetch(url, {
       method: 'GET',
     })
-      .then((res) => {
-        console.log('GET inbox response: ', res);
-        return res.json();
-      })
+      .then((res) => processResponse(res))
       .then((data) => {
-        console.log('GET data: ', data);
-        console.log('Inbox: ', data.info);
         currentProject.id = data.info._id;
         currentProject.project = data.info;
-        console.log("currentProject: ", currentProject.project);
         Events.publish(EventTypes.changeProject, data.tasks);
+      }).catch((err) => {
+        console.log('Error getting user inbox');
+        alert('Sorry, something went wrong while getting your inbox!');
       });
   };
 
   const deleteProject = (projectId) => {
-    console.log('Deleting project: ', projectId);
-
     const url = `${backEndURL}/api/projects/${projectId}`;
     fetch(url, {
       method: 'DELETE',
     }).then((res) => {
-      console.log('DELETE result: ', res);
+      if (!res.ok){
+        console.log('Response not ok: ', res);
+        throw new Error('Response not ok!');
+      }
       const matchFunc = (thisProject) => thisProject._id === projectId;
 
       CurrentProjectList.removeFirst(matchFunc);
 
       Events.publish(EventTypes.deleteProjectById, matchFunc);
       getUserInbox('testUser');
+    }).catch((err) => {
+      console.log('Error deleting project', err);
+      alert('Sorry! Something went wrong while deleting this project!');
     });
   };
-
 
   Events.subscribe(APIMessengerTypes.addTask, createTask.bind(this));
   Events.subscribe(APIMessengerTypes.editTask, editTask.bind(this));

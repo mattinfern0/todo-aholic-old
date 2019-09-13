@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 
 const mongoose = require('mongoose');
 const async = require('async');
@@ -11,8 +10,8 @@ function notImplemented(res) {
 }
 
 function onError(err, res, next) {
-  console.log('ERROR: ', err);
-  res.send('Error');
+  //console.log('ERROR: ', err);
+  //res.send('Error');
   return next(err);
 }
 
@@ -50,8 +49,8 @@ exports.getAllProjects = (req, res, next) => {
 exports.getProjectInfo = (req, res, next) => {
   const targetId = req.params.projectId;
   if (targetId === 'undefined') {
-    return res.status(400).send('Project id undefined');
-  } else {
+    //res.status(400).send('Project id undefined');
+  } //else {
     console.log('getting project info for id: ', targetId);
     async.parallel({
       info: (callback) => {
@@ -65,18 +64,14 @@ exports.getProjectInfo = (req, res, next) => {
         return onError(err, res, next);
       }
 
-      console.log('getProjectInfo success');
       res.send({ info: results.info, tasks: results.tasks });
     });
-  }
+  //}
 };
 
 exports.updateProject = (req, res, next) => {
   const projectId = req.params.projectId;
   const updatedProject = req.body.project;
-
-  console.log('Updating id: ', projectId);
-  console.log('The new project: ', updatedProject);
 
   Project.findByIdAndUpdate(projectId, updatedProject, (err, oldProject) => {
     if (err) {
@@ -103,15 +98,6 @@ exports.deleteProject = (req, res, next) => {
 
     res.send('Success');
   });
-  /*
-  Project.findByIdAndDelete(projectId, (err) => {
-    if (err) {
-      return onError(err, res, next);
-    }
-
-    res.send('Success');
-  });
-  Task.f */
 };
 
 exports.getProjectTasks = (req, res, next) => {

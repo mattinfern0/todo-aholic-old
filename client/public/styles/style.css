@@ -91,10 +91,6 @@ input[type="text"], input[type="submit"], button, .task-item {
     font-size: 14pt;
 }
 
-input[type="submit"]{
-    font-weight: bolder;
-}
-
 input[type="checkbox"]{
     margin-right: 2%;
     transform: scale(1.5)
@@ -130,11 +126,13 @@ input[type="date"]{
     font-size: 14pt; 
 }
 
-input[type="submit"]{
+.add-button{
     background-color: transparent;
     border: none;
+    font-weight: bolder;
     font-size: 20pt;
     color: rgb(255, 86, 86);
+    transform: scale(1.5);
 }
 
 .list-element{

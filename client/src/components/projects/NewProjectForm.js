@@ -41,7 +41,11 @@ class NewProjectForm extends React.Component{
           value={this.state.projectName}
           id="new-project-name"
         />
-        <input type="submit" value="+" />
+        <input 
+          type="submit"
+          value="+"
+          className="add-button"
+        />
       </form>
     );
   }

@@ -23,7 +23,7 @@ class ProjectListView extends React.Component{
     super(props);
     this.state = {
       viewList: CurrentProjectList.getList().slice(),
-      editing: false,
+      showAddForm: false,
     };
     this.refresh = this.refresh.bind(this);
   }
@@ -41,7 +41,6 @@ class ProjectListView extends React.Component{
   }
 
   refresh(){
-    console.log("Project view refreshing");
     this.setState({
       viewList: CurrentProjectList.getList().slice(),
     });
@@ -60,16 +59,21 @@ class ProjectListView extends React.Component{
           <h2>Projects</h2>
           <button
             type="button"
-            onClick={() => this.setState((prevState) => ({editing: !prevState.editing}))}
+            className="add-button"
+            onClick={() => this.setState((prevState) => ({showAddForm: !prevState.showAddForm}))}
           >
-          Edit
+          +
           </button>
         </span>
-        <div id="inbox-project" className="project-element" onClick={() => Events.publish(APIMessengerTypes.getInbox, 'testUser')}>
+        <div 
+          id="inbox-project"
+          className="project-element"
+          onClick={() => Events.publish(APIMessengerTypes.getInbox, 'testUser')}
+        >
           Inbox
         </div>
         <ul id="project-list">{projectElements}</ul>
-        {this.state.editing
+        {this.state.showAddForm
           && <NewProjectForm />
         }
       </div>

@@ -57,11 +57,9 @@ class ObserverList{
     const index = args.index;
     const modifyFunc = args.modifyFunc; // modifyFunc must return the modified element
     this.items[index] = modifyFunc(this.items[index]);
-    console.log('Edited');
   }
 
   editFirst(args){
-    console.log('editFirstArgs: ', args);
     const matchFunc = args.matchFunc;
     const modifyFunc = args.modifyFunc;
     for (let i = 0; i < this.items.length; i++){

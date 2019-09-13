@@ -31,13 +31,16 @@ class ProjectHeader extends React.Component {
             <span>
               <button
                 type="button"
+                className="edit-button"
                 onClick={() => this.setState((prevState) => ({editing: prevState.editing}))}
               >
                 Edit
               </button>
-              <button 
+              <button
                 type="button"
-                onClick={() => Events.publish(APIMessengerTypes.removeProject, this.state.project._id)}
+                className="delete-button"
+                onClick={() => Events.publish(APIMessengerTypes.removeProject,
+                  this.state.project._id)}
               >
                 Delete
               </button>

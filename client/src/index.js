@@ -9,8 +9,6 @@ import ApiMessenger from './controllers/ApiMessenger';
 // Setup defaults
 ApiMessenger.getUserInbox('testUser');
 ApiMessenger.getProjectList();
-// ApiMessenger.getProjectTasks('5d74c6f92a73857006c0dadd');
-
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
