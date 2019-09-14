@@ -84,13 +84,6 @@ class TaskElement extends React.Component{
           <span className={TaskElement._isToday(task.dueDate) ? 'important' : ''}>
             {TaskElement._getUIDate(task.dueDate)}
           </span>
-          <button
-            type="button"
-            className="delete-button"
-            // onClick={this.onDelete}
-          >
-            Delete
-          </button>
         </span>
       </div>
     );

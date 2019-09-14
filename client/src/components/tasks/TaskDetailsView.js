@@ -86,14 +86,12 @@ class TaskDetailsView extends React.Component {
       return (
         <span>
           <div>
-            <span><h2>{taskInfo.name}</h2></span>
+            <span><h2>{taskInfo.name ? taskInfo.name : 'No Name'}</h2></span>
             <button
               type="button"
-              className="edit-button"
+              className="edit-button task-right"
               onClick={(e) => this.setState({ editing: true })}
-            >
-              Edit
-            </button>
+            />
 
             <div>
               <h3>
@@ -114,9 +112,7 @@ class TaskDetailsView extends React.Component {
             type="button"
             className="delete-button"
             onClick={() => Events.publish(APIMessengerTypes.deleteTask, this.state.taskInfo._id)}
-          >
-            Delete
-          </button>
+          />
         </span>
       );
     }

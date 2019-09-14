@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import {currentProject} from '../../controllers/InterfaceModel';
 import {Events, EventTypes, APIMessengerTypes} from '../../controllers/EventController';
@@ -24,26 +25,22 @@ class ProjectHeader extends React.Component {
     return (
       <header>
         <span>
-          <h2>{this.state.project ? this.state.project.name : ''}</h2>
+          <h5>{this.state.project ? this.state.project.name : ''}</h5>
         </span>
         {this.state.project && this.state.project.name !== 'Inbox'
           && (
-            <span>
+            <span className="task-right">
               <button
                 type="button"
                 className="edit-button"
                 onClick={() => this.setState((prevState) => ({editing: prevState.editing}))}
-              >
-                Edit
-              </button>
+              />
               <button
                 type="button"
                 className="delete-button"
                 onClick={() => Events.publish(APIMessengerTypes.removeProject,
                   this.state.project._id)}
-              >
-                Delete
-              </button>
+              />
             </span>
           )
         }

@@ -45,6 +45,7 @@ class EditTaskForm extends React.Component {
             id="edit-task-name"
             type="text"
             value={this.state.name}
+            placeholder="Name"
             onChange={(e) => this.setState({ name: e.target.value })}
           />
 

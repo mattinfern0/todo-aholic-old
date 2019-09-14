@@ -13,7 +13,7 @@ function processResponse(res){
 
 const ApiMessenger = (() => {
   const checkServerStatus = () => {
-    const url = `${backEndURL}/api`
+    const url = `${backEndURL}/api`;
     return (
       fetch(url, { method: 'GET' })
         .then((res) => {
@@ -119,14 +119,13 @@ const ApiMessenger = (() => {
     const url = `${backEndURL}/api/projects`;
     fetch(url, {
       method: 'GET',
-    }).then((res) => {
-      return processResponse(res);
-    }).then((data) => {
-      Events.publish(EventTypes.changeProjectList, data.projects);
-    }).catch((err) => {
-      console.log('get all projects error: ', err);
-      alert('Sorry! Something went wrong while getting your projects!');
-    });
+    }).then((res) => processResponse(res))
+      .then((data) => {
+        Events.publish(EventTypes.changeProjectList, data.projects);
+      }).catch((err) => {
+        console.log('get all projects error: ', err);
+        alert('Sorry! Something went wrong while getting your projects!');
+      });
   };
 
   const getProjectTasks = (projectId) => {

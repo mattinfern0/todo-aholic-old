@@ -23,7 +23,6 @@ class ProjectListView extends React.Component{
     super(props);
     this.state = {
       viewList: CurrentProjectList.getList().slice(),
-      showAddForm: false,
     };
     this.refresh = this.refresh.bind(this);
   }
@@ -57,15 +56,8 @@ class ProjectListView extends React.Component{
       <div>
         <span>
           <h2>Projects</h2>
-          <button
-            type="button"
-            className="add-button"
-            onClick={() => this.setState((prevState) => ({showAddForm: !prevState.showAddForm}))}
-          >
-          +
-          </button>
         </span>
-        <div 
+        <div
           id="inbox-project"
           className="project-element"
           onClick={() => Events.publish(APIMessengerTypes.getInbox, 'testUser')}
@@ -73,9 +65,7 @@ class ProjectListView extends React.Component{
           Inbox
         </div>
         <ul id="project-list">{projectElements}</ul>
-        {this.state.showAddForm
-          && <NewProjectForm />
-        }
+        <NewProjectForm />
       </div>
     );
   }

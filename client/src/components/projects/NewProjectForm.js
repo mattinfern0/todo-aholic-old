@@ -6,6 +6,7 @@ class NewProjectForm extends React.Component{
   constructor(props){
     super(props);
     this.state = {
+      showForm: false,
       projectName: '',
     };
     this.createProject = this.createProject.bind(this);
@@ -18,6 +19,7 @@ class NewProjectForm extends React.Component{
     }
 
     this.resetForm();
+    this.setState((prevState) => ({showForm: !prevState.showForm}));
     e.preventDefault();
   }
 
@@ -29,24 +31,37 @@ class NewProjectForm extends React.Component{
 
   render(){
     return (
-      <form
-        id="new-project"
-        autoComplete="off"
-        onSubmit={this.createProject}
-      >
-        <input
-          onChange={(e) => this.setState({projectName: e.target.value})}
-          type="text"
-          placeholder="Project Name"
-          value={this.state.projectName}
-          id="new-project-name"
-        />
-        <input 
-          type="submit"
-          value="+"
-          className="add-button"
-        />
-      </form>
+      <div id="new-project-form-container">
+        {!this.state.showForm
+        && (
+          <span onClick={() => this.setState((prevState) => ({showForm: !prevState.showForm}))}>
+            New Project
+          </span>
+        )
+        }
+        {this.state.showForm
+        && (
+          <form
+            id="new-project"
+            autoComplete="off"
+            onSubmit={this.createProject}
+          >
+            <input
+              onChange={(e) => this.setState({projectName: e.target.value})}
+              type="text"
+              placeholder="Project Name"
+              value={this.state.projectName}
+              id="new-project-name"
+            />
+            <input
+              type="submit"
+              value="+"
+              className="add-button"
+            />
+          </form>
+        )
+        }
+      </div>
     );
   }
 }
