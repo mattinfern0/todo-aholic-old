@@ -1,14 +1,19 @@
 # Todo-List-Full-Stack
 ![Screenshot of UI](misc/screenshot-main.png)
 ## Description ##
-Added a backend to my To-Do app. 
+A full-stack ToDo app using a React.js front-end and an Express REST API back-end. UI inspired by the TickTick app.
+
+## Features ##
+* Create tasks
+* Add a due date and description for a task
+* Organize tasks into projects
+
 
 ## To-Do ##
-* Edit and Delete Tasks
 * Clean up css file
 * User Authentication?
 
-## Tech Used ##
+## Technolgoies Used ##
 #### Front-End ####
 * React.js
 
