@@ -1,12 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable consistent-return */
-/* eslint-disable prefer-destructuring */
-/* var Task = require('../testDB/task')
-
-const tasks = [];
-tasks.push(new Task("What?"), (new Date()).toISOString(), "Meh");
-tasks.push(new Task("Hello there"), (new Date()).toISOString(), "Walking around");
-*/
 function notImplemented(res) {
   return res.send('Not implemented');
 }
@@ -22,7 +13,6 @@ const Task = require('../models/task');
 // Response contains {newTask:<newTask>}
 exports.createTask = (req, res, next) => {
   const reqTask = req.body.task;
-  const testDate = new Date().toISOString();
 
   console.log('Adding task:', reqTask);
   const newTask = new Task(

@@ -1,24 +1,17 @@
 const express = require('express');
-const taskController = require('../controllers/taskController');
-const projectController = require('../controllers/projectController');
-
+const tasksRouter = require('./tasks');
+const projectsRouter = require('./projects');
+const usersRouter = require('./users');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.status(200).send('Server working!');
+  res.json({
+    message: 'Api working!',
+  });
 });
 
-router.post('/tasks', taskController.createTask);
-router.put('/tasks/:taskId', taskController.updateTask);
-router.delete('/tasks/:taskId', taskController.deleteTask);
-
-router.post('/projects', projectController.createProject);
-router.get('/projects', projectController.getAllProjects);
-router.get('/projects/:projectId', projectController.getProjectInfo);
-router.put('/projects/:projectId', projectController.updateProject);
-router.delete('/projects/:projectId', projectController.deleteProject);
-
-router.get('/projects/user/:user');
-router.get('/projects/user/:user/inbox', projectController.getUserInbox);
+router.use('/tasks', tasksRouter);
+router.use('/projects', projectsRouter);
+router.use('/users', usersRouter);
 
 module.exports = router;

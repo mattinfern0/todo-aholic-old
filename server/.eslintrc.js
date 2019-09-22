@@ -23,5 +23,6 @@ module.exports = {
     'no-else-return': 'off',
     'no-trailing-spaces': 'warn',
     'no-underscore-dangle': 'off',
+    'no-shadow': 'off',
   },
 };
