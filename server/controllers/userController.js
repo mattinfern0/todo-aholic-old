@@ -35,6 +35,7 @@ function createMockUser() {
 // createMockUser();
 
 exports.loginUser = (req, res, next) => {
+  console.log(req.body);
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err) {
       return res.status(400).json({
@@ -42,7 +43,8 @@ exports.loginUser = (req, res, next) => {
         user,
       });
     } else if (!user) {
-      return res.status(400).json({
+      console.log("User was not found");
+      return res.status(404).json({
         message: 'This user was not found.',
         user,
       });
@@ -54,8 +56,11 @@ exports.loginUser = (req, res, next) => {
         res.send(err);
       }
 
+      // Send user's id only for security purposes
+      const idOnly = { _id: user._id };
+
       const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET);
-      return res.json({ user, token });
+      return res.json({ user: idOnly, token });
     });
   })(req, res, next);
 };

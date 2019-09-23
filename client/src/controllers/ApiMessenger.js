@@ -145,7 +145,8 @@ const ApiMessenger = (() => {
   };
 
   const getUserInbox = (userId) => {
-    const url = `${backEndURL}/api/projects/user/${userId}/inbox`;
+    const mockUserId = '5d881c3cc84a2c09fb98c54a';
+    const url = `${backEndURL}/api/projects/user/${mockUserId}/inbox`;
     fetch(url, {
       method: 'GET',
     })
@@ -181,6 +182,30 @@ const ApiMessenger = (() => {
     });
   };
 
+  const login = (credentials) => {
+    const url = `${backEndURL}/api/users/login`;
+    const theBody = { username: credentials.username, password: credentials.password };
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(theBody),
+    })
+      .then((res) => processResponse(res))
+      .then((resBody) => {
+        // Store access token in local storage
+        console.log("Success: ", resBody);
+        localStorage.setItem('accessToken', resBody.token);
+        localStorage.setItem('currentUser', JSON.stringify(resBody.user));
+        console.log("Token: ", localStorage.getItem('accessToken'));
+      })
+      .catch((err) => {
+        console.log('Error logging in: ', err);
+        alert('Sorry! Something went wrong while logging in!');
+      });
+  };
+
   Events.subscribe(APIMessengerTypes.addTask, createTask.bind(this));
   Events.subscribe(APIMessengerTypes.editTask, editTask.bind(this));
   Events.subscribe(APIMessengerTypes.deleteTask, deleteTask.bind(this));
@@ -190,6 +215,8 @@ const ApiMessenger = (() => {
   Events.subscribe(APIMessengerTypes.changeProject, getProjectTasks.bind(this));
   Events.subscribe(APIMessengerTypes.removeProject, deleteProject.bind(this));
   Events.subscribe(APIMessengerTypes.getInbox, getUserInbox.bind(this));
+
+  Events.subscribe(APIMessengerTypes.login, login.bind(this));
 
   return {
     checkServerStatus,

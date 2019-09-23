@@ -17,7 +17,8 @@ function onError(err, res, next) {
 
 
 exports.createProject = (req, res, next) => {
-  const mockOwnerId = "5d881c3cc84a2c09fb98c54a";
+  const mockOwnerId = 'd881c3cc84a2c09fb98c54a';
+  const userId = req.body.userId;
   const reqProject = req.body.project;
 
   const newProject = new Project(
@@ -118,18 +119,38 @@ exports.getProjectTasks = (req, res, next) => {
 exports.getUserInbox = (req, res, next) => {
   const userId = req.params.userId;
 
-  Project.findOne({ name: 'Inbox' }, (err, result) => {
+  Project.findOne({ name: 'Inbox', owner: mongoose.Types.ObjectId(userId) }, (err, result) => {
     if (err) {
       return onError(err, res, next);
     }
 
-    const inboxInfo = result;
-    Task.find({ project: mongoose.Types.ObjectId(inboxInfo._id) }, (error, tasksResult) => {
-      if (error) {
-        return onError(err, res, next);
-      }
-      res.send({ info: inboxInfo, tasks: tasksResult });
-    });
+    console.log(result);
+    // Create a new inbox for the user if it doesn't exist, otherwise send current one
+    if (!result) {
+      console.log("This user's inbox doesn't exist. Creating new one");
+      const newInbox = new Project (
+        {
+          name: 'Inbox',
+          owner: userId,
+        },
+      );
+
+      newInbox.save((err) => {
+        if (err) {
+          return onError(err, res, next);
+        }
+
+        return res.send({ info: newInbox, tasks: [] });
+      });
+    } else {
+      const inboxInfo = result;
+      Task.find({ project: mongoose.Types.ObjectId(inboxInfo._id) }, (error, tasksResult) => {
+        if (error) {
+          return onError(err, res, next);
+        }
+        res.send({ info: inboxInfo, tasks: tasksResult });
+      });
+    }
   });
 };
 

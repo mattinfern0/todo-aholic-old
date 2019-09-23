@@ -28,6 +28,8 @@ const APIMessengerTypes = Object.freeze({
   changeProjectList: 'apiChangeProjectList',
 
   getInbox: 'apiGetInbox',
+
+  login: 'apiLogin',
 });
 
 class Event{
