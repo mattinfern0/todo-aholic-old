@@ -64,3 +64,8 @@ exports.loginUser = (req, res, next) => {
 exports.createUser = (req, res, next) => {
   return notImplemented(res);
 };
+
+// eslint-disable-next-line arrow-body-style
+exports.logoutUser = (req, res, next) => {
+  return notImplemented(res);
+};

@@ -4,9 +4,7 @@ const passportJWT = require('passport-jwt');
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
-const mongoose = require('mongoose');
 const User = require('../models/user');
-
 
 const theStrategy = new JWTStrategy(
   {

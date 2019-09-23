@@ -10,14 +10,14 @@ function notImplemented(res) {
 }
 
 function onError(err, res, next) {
-  // console.log('ERROR: ', err);
+  console.log('ERROR: ', err);
   // res.send('Error');
   return next(err);
 }
 
 
 exports.createProject = (req, res, next) => {
-  const mockOwnerId = "5d872f1c8f3db50e63d5f0b5";
+  const mockOwnerId = "5d881c3cc84a2c09fb98c54a";
   const reqProject = req.body.project;
 
   const newProject = new Project(
@@ -130,5 +130,17 @@ exports.getUserInbox = (req, res, next) => {
       }
       res.send({ info: inboxInfo, tasks: tasksResult });
     });
+  });
+};
+
+exports.getUserProjects = (req, res, next) => {
+  const userId = req.params.userId;
+  console.log("User id:", userId);
+  Project.find({ owner: mongoose.Types.ObjectId(userId) }, (err, projects) => {
+    if (err) {
+      return onError(err, res, next);
+    }
+
+    return res.send({ projects });
   });
 };
