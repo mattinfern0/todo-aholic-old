@@ -17,11 +17,13 @@ function onError(err, res, next) {
 
 
 exports.createProject = (req, res, next) => {
+  const mockOwnerId = "5d872f1c8f3db50e63d5f0b5";
   const reqProject = req.body.project;
 
   const newProject = new Project(
     {
       name: reqProject.name,
+      owner: mockOwnerId,
     },
   );
 
@@ -39,6 +41,7 @@ exports.createProject = (req, res, next) => {
 exports.getAllProjects = (req, res, next) => {
   Project.find({ name: { $ne: 'Inbox' } }, (err, allProjects) => {
     if (err) {
+      console.log('error while finding projects');
       return onError(err, res, next);
     }
 

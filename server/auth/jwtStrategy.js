@@ -14,10 +14,12 @@ const theStrategy = new JWTStrategy(
     secretOrKey: process.env.JWT_SECRET,
   },
   (jwtPayload, cb) => {
-    User.findById({ id: mongoose.Types.ObjectId(jwtPayload._id) }, (user, err) => {
+    User.findById(jwtPayload._id, (err, user) => {
       if (err) {
-        throw (err);
+        console.log("error while validating");
+        return cb(err);
       }
+
       return cb(null, user);
     })
       .catch((err) => cb(err));

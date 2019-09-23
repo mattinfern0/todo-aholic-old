@@ -11,6 +11,6 @@ router.put('/:projectId', projectController.updateProject);
 router.delete('/:projectId', projectController.deleteProject);
 
 router.get('/user/:user');
-router.get('/user/:user/inbox', passport.authenticate('jwt', { session: false }), projectController.getAllProjects);
-
+router.get('/user/:user/inbox', projectController.getUserInbox);
+router.get('/user/:user/testAuth', passport.authenticate('jwt', { session: false }), projectController.getAllProjects);
 module.exports = router;

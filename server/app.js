@@ -1,22 +1,27 @@
+/* eslint-disable import/order */
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+
+const app = express();
+// app.use(bodyParser.json());
+
 const logger = require('morgan');
 const mongoose = require('mongoose');
+
+const apiRouter = require('./routes/api');
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 // Passport strategy setup
 require('./auth/localStrategy');
 require('./auth/jwtStrategy');
-
-const apiRouter = require('./routes/api');
-
-const app = express();
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 
 // Router setup
 app.use('/api', apiRouter);
@@ -41,11 +46,13 @@ app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
+
+  console.log("Random error:", err);
   res.status(err.status || 500);
   res.json({
     message: 'Something went wrong on the server',
   });
+  next();
 });
 
 module.exports = app;

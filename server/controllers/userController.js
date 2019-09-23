@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const bcrypt = require('bcryptjs');
 const User = require('../models/user'); // For testing purposes
 
 function notImplemented(res) {
@@ -8,17 +9,26 @@ function notImplemented(res) {
 
 
 function createMockUser() {
-  const mockUser = new User(
-    {
-      username: 'Johnny Appleseed',
-      password: "12345"
-    },
-  );
+  const mockName = 'Leeroy Jenkins';
+  const mockPassword = '12345';
 
-  mockUser.save((err) => {
+  bcrypt.hash(mockPassword, 10, (err, hashedPassword) => {
     if (err) {
-      console.log("Error creating mock user: ", err);
+      console.log('Error hashing mock passwd');
+      return;
     }
+    const mockUser = new User(
+      {
+        username: mockName,
+        password: hashedPassword,
+      },
+    );
+  
+    mockUser.save((err) => {
+      if (err) {
+        console.log("Error creating mock user: ", err);
+      }
+    });
   });
 }
 
@@ -44,7 +54,7 @@ exports.loginUser = (req, res, next) => {
         res.send(err);
       }
 
-      const token = jwt.sign(user, process.env.JWT_SECRET);
+      const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET);
       return res.json({ user, token });
     });
   })(req, res, next);
