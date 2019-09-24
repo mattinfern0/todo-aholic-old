@@ -10,8 +10,11 @@ A full-stack ToDo app using a React.js front-end and an Express REST API back-en
 
 
 ## To-Do ##
-* Clean up css file
-* User Authentication?
+* Clean up/redo the css
+
+## Potential Plans ##
+* Rewrite the React.app using Redux or a Flux Library
+* Shared projects
 
 ## Technolgoies Used ##
 #### Front-End ####
