@@ -1,4 +1,6 @@
 const express = require('express');
+const passport = require('passport');
+
 const tasksRouter = require('./tasks');
 const projectsRouter = require('./projects');
 const usersRouter = require('./users');
@@ -11,8 +13,8 @@ router.get('/', (req, res) => {
   });
 });
 
-router.use('/tasks', tasksRouter);
-router.use('/projects', projectsRouter);
+router.use('/tasks', passport.authenticate('jwt', { session: false }), tasksRouter);
+router.use('/projects', passport.authenticate('jwt', { session: false }), projectsRouter);
 router.use('/users', usersRouter);
 
 module.exports = router;

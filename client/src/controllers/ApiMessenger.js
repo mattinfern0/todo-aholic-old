@@ -34,6 +34,7 @@ const ApiMessenger = (() => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
       body: JSON.stringify(theBody),
     })
@@ -56,6 +57,7 @@ const ApiMessenger = (() => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
       body: JSON.stringify(theBody),
     })
@@ -80,6 +82,9 @@ const ApiMessenger = (() => {
     const url = `${backEndURL}/api/tasks/${taskId}`;
     fetch(url, {
       method: 'DELETE',
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
     }).then((res) => {
       if (!res.ok){
         console.log('Response not ok: ', res);
@@ -104,6 +109,7 @@ const ApiMessenger = (() => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
       body: JSON.stringify(theBody),
     }).then((res) => processResponse(res))
@@ -139,6 +145,9 @@ const ApiMessenger = (() => {
     const url = `${backEndURL}/api/projects/${projectId}`;
     fetch(url, {
       method: 'GET',
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
     })
       .then((res) => processResponse(res))
       .then((data) => {
@@ -159,6 +168,9 @@ const ApiMessenger = (() => {
     const url = `${backEndURL}/api/projects/user/${userId}/inbox`;
     fetch(url, {
       method: 'GET',
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
     })
       .then((res) => processResponse(res))
       .then((data) => {
@@ -176,6 +188,9 @@ const ApiMessenger = (() => {
     const url = `${backEndURL}/api/projects/${projectId}`;
     fetch(url, {
       method: 'DELETE',
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
     }).then((res) => {
       if (!res.ok){
         console.log('Response not ok: ', res);
