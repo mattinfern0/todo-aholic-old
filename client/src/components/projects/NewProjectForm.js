@@ -1,6 +1,5 @@
 import React from 'react';
-import {Events, EventTypes, APIMessengerTypes} from '../../controllers/EventController';
-import {Project} from '../../objects/project';
+import {Events, APIMessengerTypes} from '../../controllers/EventController';
 
 class NewProjectForm extends React.Component{
   constructor(props){
@@ -15,8 +14,12 @@ class NewProjectForm extends React.Component{
   createProject(e){
     if (this.state.projectName.length > 0){
       const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      const newProject = new Project(this.state.projectName, currentUser._id);
-      Events.publish(APIMessengerTypes.addProject, newProject);
+      const newProjectInfo = {
+        name: this.state.projectName,
+        owner: currentUser._id,
+      };
+
+      Events.publish(APIMessengerTypes.addProject, newProjectInfo);
     }
 
     this.resetForm();

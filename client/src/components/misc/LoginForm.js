@@ -1,5 +1,7 @@
 import React from 'react';
-import {APIMessengerTypes, Events} from '../../controllers/EventController';
+import {Redirect} from 'react-router-dom';
+import {EventTypes, APIMessengerTypes, Events} from '../../controllers/EventController';
+
 
 class LoginForm extends React.Component {
   constructor(props){
@@ -7,8 +9,18 @@ class LoginForm extends React.Component {
     this.state = {
       username: '',
       password: '',
+      loggedIn: false,
     };
     this.doLogin = this.doLogin.bind(this);
+    this.changeLoggedInStatus = this.changeLoggedInStatus.bind(this);
+  }
+
+  componentDidMount(){
+    Events.subscribe(EventTypes.login, this.changeLoggedInStatus);
+  }
+
+  changeLoggedInStatus() {
+    this.setState({ loggedIn: true });
   }
 
   doLogin(e) {
@@ -22,10 +34,14 @@ class LoginForm extends React.Component {
   }
 
   render() {
+    if (this.state.loggedIn) {
+      return <Redirect to="/" />;
+    }
+
     return (
-      <div>
+      <div id="login-container">
         <h3>Log In</h3>
-        <form id="login-form" onSubmit={this.doLogin}>
+        <form onSubmit={this.doLogin}>
           <input
             type="text"
             value={this.state.username}

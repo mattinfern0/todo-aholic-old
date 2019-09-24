@@ -4,33 +4,13 @@ const Priority = Object.freeze({
 });
 
 class Task{
-  constructor(name, dueDate, description = '', priority = Priority.TRIVIAL, completed = false, id = null){
+  constructor(name, dueDate, description = '', priority = Priority.TRIVIAL, completed = false){
     this.name = name;
     this.dueDate = dueDate; // Expect dueDate to already be a Date object
     this.description = description;
     this.priority = priority;
     this.completed = completed;
     this.project = '';
-  }
-
-  toggleComplete(){
-    this.completed = !this.completed;
-  }
-
-  clone(cloneId = false){
-    const newTask = new Task(
-      this.name,
-      this.dueDate,
-      this.description,
-      this.priority,
-      this.completed,
-    );
-
-    if (cloneId){
-      newTask.id = this.id;
-    }
-
-    return newTask;
   }
 }
 

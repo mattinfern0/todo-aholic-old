@@ -15,7 +15,6 @@ function onError(err, res, next) {
   return next(err);
 }
 
-
 exports.createProject = (req, res, next) => {
   const reqProject = req.body.project;
 

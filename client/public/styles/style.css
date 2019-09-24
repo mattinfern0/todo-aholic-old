@@ -269,3 +269,16 @@ aside, #task-container {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+
+#app-container {
+    background-color: white;
+}
+
+#root {
+    background-color: rgb(51, 51, 51);
+}
+
+#login-container h3 {
+    color: white;
+}

@@ -1,7 +1,6 @@
 import React from 'react';
 import {Events, EventTypes, APIMessengerTypes} from '../../controllers/EventController';
-import {CurrentProjectList, CurrentTaskList} from '../../controllers/InterfaceModel';
-import Inbox from '../../objects/InboxProject';
+import {CurrentProjectList} from '../../controllers/InterfaceModel';
 import NewProjectForm from './NewProjectForm';
 
 function ProjectElement(props){
@@ -31,6 +30,8 @@ class ProjectListView extends React.Component{
     Events.subscribe(EventTypes.addProject, this.refresh);
     Events.subscribe(EventTypes.changeProjectList, this.refresh);
     Events.subscribe(EventTypes.deleteProjectById, this.refresh);
+
+    
   }
 
   componentWillUnmount(){

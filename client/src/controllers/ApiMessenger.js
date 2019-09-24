@@ -151,9 +151,12 @@ const ApiMessenger = (() => {
       });
   };
 
-  const getUserInbox = (userId) => {
-    const mockUserId = '5d881c3cc84a2c09fb98c54a';
-    const url = `${backEndURL}/api/projects/user/${mockUserId}/inbox`;
+  const getUserInbox = () => {
+    // const mockUserId = '5d881c3cc84a2c09fb98c54a';
+    console.log(localStorage.getItem('currentUser'));
+    const userId = JSON.parse(localStorage.getItem('currentUser'))._id;
+
+    const url = `${backEndURL}/api/projects/user/${userId}/inbox`;
     fetch(url, {
       method: 'GET',
     })
@@ -167,6 +170,7 @@ const ApiMessenger = (() => {
         alert('Sorry, something went wrong while getting your inbox!');
       });
   };
+  
 
   const deleteProject = (projectId) => {
     const url = `${backEndURL}/api/projects/${projectId}`;
@@ -206,6 +210,7 @@ const ApiMessenger = (() => {
         localStorage.setItem('accessToken', resBody.token);
         localStorage.setItem('currentUser', JSON.stringify(resBody.user));
         console.log("Token: ", localStorage.getItem('accessToken'));
+        Events.publish(EventTypes.login);
       })
       .catch((err) => {
         console.log('Error logging in: ', err);

@@ -15,6 +15,8 @@ const EventTypes = Object.freeze({
   deleteProjectById: 'removeProjectById',
   changeProject: 'changeProject',
   changeProjectList: 'changeProjectList',
+
+  login: 'login',
 });
 
 const APIMessengerTypes = Object.freeze({
