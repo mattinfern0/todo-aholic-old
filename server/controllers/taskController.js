@@ -15,6 +15,7 @@ exports.createTask = (req, res, next) => {
   const reqTask = req.body.task;
 
   console.log('Adding task:', reqTask);
+  console.log("Task project", typeof reqTask.project, reqTask.project);
   const newTask = new Task(
     {
       name: reqTask.name,

@@ -36,6 +36,7 @@ class TaskListView extends React.Component{
     this.setState({
       viewList: CurrentTaskList.getList().slice(),
     });
+    console.log(this.state.viewList);
   }
 
   render(){

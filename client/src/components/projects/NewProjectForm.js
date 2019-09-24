@@ -14,7 +14,8 @@ class NewProjectForm extends React.Component{
 
   createProject(e){
     if (this.state.projectName.length > 0){
-      const newProject = new Project(this.state.projectName);
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      const newProject = new Project(this.state.projectName, currentUser._id);
       Events.publish(APIMessengerTypes.addProject, newProject);
     }
 

@@ -3,10 +3,12 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
-// app.use(bodyParser.json());
+app.use(cors({
+  origin: process.env.ALLOWED_ORIGIN,
+}));
 
 const logger = require('morgan');
 const mongoose = require('mongoose');
@@ -15,7 +17,6 @@ const apiRouter = require('./routes/api');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 

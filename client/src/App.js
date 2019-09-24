@@ -1,5 +1,5 @@
+/* eslint-disable import/first */
 import React from 'react';
-// import './App.css';
 
 import TaskListView from './components/tasks/TaskListView';
 import NewTaskForm from './components/tasks/NewTaskForm';

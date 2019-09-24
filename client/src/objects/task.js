@@ -5,15 +5,6 @@ const Priority = Object.freeze({
 
 class Task{
   constructor(name, dueDate, description = '', priority = Priority.TRIVIAL, completed = false, id = null){
-    if (id === null){
-      if (!Task.idTemp){
-        Task.idTemp = 0;
-      }
-      Task.idTemp++;
-      this.id = Task.idTemp;
-    } else {
-      this.id = id;
-    }
     this.name = name;
     this.dueDate = dueDate; // Expect dueDate to already be a Date object
     this.description = description;

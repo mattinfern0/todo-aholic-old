@@ -17,14 +17,12 @@ function onError(err, res, next) {
 
 
 exports.createProject = (req, res, next) => {
-  const mockOwnerId = 'd881c3cc84a2c09fb98c54a';
-  const userId = req.body.userId;
   const reqProject = req.body.project;
 
   const newProject = new Project(
     {
       name: reqProject.name,
-      owner: mockOwnerId,
+      owner: reqProject.owner,
     },
   );
 
@@ -157,8 +155,9 @@ exports.getUserInbox = (req, res, next) => {
 exports.getUserProjects = (req, res, next) => {
   const userId = req.params.userId;
   console.log("User id:", userId);
-  Project.find({ owner: mongoose.Types.ObjectId(userId) }, (err, projects) => {
+  Project.find({ owner: mongoose.Types.ObjectId(userId), name: { $ne: 'Inbox' } }, (err, projects) => {
     if (err) {
+      console.log('There was an error');
       return onError(err, res, next);
     }
 

@@ -2,11 +2,9 @@
 import React from 'react';
 import {Route, Redirect} from 'react-router-dom';
 
-const isAuth = false;
-
 // eslint-disable-next-line no-undef
 const PrivateRoute = ({component: Component, ...args }) => (
-  <Route 
+  <Route
     {...args} 
     render={(props) => {
       if (localStorage.getItem('accessToken')) {

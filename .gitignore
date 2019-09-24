@@ -5,6 +5,7 @@
 **/.pnp
 **/secret
 **/.env
+**/.env.local
 .pnp.js
 
 # testing

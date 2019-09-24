@@ -1,7 +1,7 @@
 import {Events, EventTypes, APIMessengerTypes} from './EventController';
 import {currentProject, CurrentProjectList} from './InterfaceModel';
 
-const backEndURL = 'http://localhost:3001';
+const backEndURL = process.env.REACT_APP_BACKEND_URL;
 
 function processResponse(res){
   if (!res.ok){
@@ -98,6 +98,7 @@ const ApiMessenger = (() => {
   const createProject = (newProject) => {
     const addUrl = `${backEndURL}/api/projects`;
     const theBody = {project: newProject};
+    console.log(theBody);
 
     fetch(addUrl, {
       method: 'POST',
@@ -116,9 +117,15 @@ const ApiMessenger = (() => {
   };
 
   const getProjectList = () => {
-    const url = `${backEndURL}/api/projects`;
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const url = `${backEndURL}/api/projects/user/${currentUser._id}`;
+    console.log(url);
+
     fetch(url, {
       method: 'GET',
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
     }).then((res) => processResponse(res))
       .then((data) => {
         Events.publish(EventTypes.changeProjectList, data.projects);

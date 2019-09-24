@@ -9,9 +9,9 @@ const TaskSchema = new Schema(
   {
     name: { type: String, required: true },
     dueDate: { type: String, required: true },
-    completed: { type: Boolean, required: true },
+    completed: { type: Boolean, default: false, required: true },
     project: { type: Schema.Types.ObjectId, ref: 'Project', required: true },
-    description: { type: String, required: true },
+    description: { type: String, default: '', required: true },
   },
 );
 
