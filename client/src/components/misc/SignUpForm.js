@@ -1,6 +1,6 @@
 import React from 'react';
 import {Redirect, Link} from 'react-router-dom';
-import {EventTypes, APIMessengerTypes, Events} from '../../controllers/EventController';
+import ApiMessenger from '../../controllers/ApiMessenger';
 
 
 class SignUpForm extends React.Component {
@@ -10,35 +10,62 @@ class SignUpForm extends React.Component {
       username: '',
       password: '',
       confirmPassword: '',
-      errorMessage: '',
-      loggedIn: false,
+      errorMessages: [],
+      success: false,
     };
     this.doSignUp = this.doSignUp.bind(this);
-    this.changeStatus = this.changeStatus.bind(this);
   }
 
   componentDidMount(){
     // Events.subscribe(EventTypes.login, this.changeLoggedInStatus);
   }
 
-  changeStatus() {
-    this.setState({ loggedIn: true });
-  }
-
   doSignUp(e) {
+    const username = this.state.username;
+    const password = this.state.password;
+    const password2 = this.state.confirmPassword;
+    
+    if (password2 !== password) {
+      this.setState({ errorMessages: [{msg: 'Passwords don\'t match'}] });
+      return e.preventDefault();
+    }
+
     // Code to Validate & sanitize credentials
 
-    /* const credentials = {
-      username: this.state.username,
-      password: this.state.password,
+    const credentials = {
+      username,
+      password,
     };
 
-    Events.publish(APIMessengerTypes.login, credentials); */
+    ApiMessenger.signup(credentials)
+      .then(() => {
+        console.log('Successfully signed up');
+        this.setState({
+          success: true,
+        });
+      })
+      .catch((err) => {
+        console.log('Error signing up', err);
+        if (err instanceof Response){
+          return err.json();
+        }
+      })
+      .then((data) => {
+        if (!data){
+          return;
+        }
+        this.setState({errorMessages: []});
+        if (data.errors) {
+          this.setState({errorMessages: data.errors });
+        }
+      });
+        
+    
     e.preventDefault();
   }
 
   render() {
-    if (this.state.loggedIn) {
+    if (this.state.success) {
       return <Redirect to="/login" />;
     }
 
@@ -69,12 +96,14 @@ class SignUpForm extends React.Component {
           />
           <input type="submit" value="Sign Up" />
         </form>
+        
+        <span>
+          <h3>{this.state.errorMessages.length > 0 && this.state.errorMessages[0].msg}</h3>
+        </span>
+
         <span>
           {'Already have an account? '}
           <Link to="/login">Log In</Link>
-        </span>
-        <span>
-          <h3>{this.state.errorMessage}</h3>
         </span>
       </div>
     );

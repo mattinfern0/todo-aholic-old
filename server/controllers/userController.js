@@ -3,14 +3,13 @@ const passport = require('passport');
 const bcrypt = require('bcryptjs');
 
 const async = require('async');
-const { body,validationResult } = require('express-validator/check');
-const { sanitizeBody } = require('express-validator/filter');
+const { body, validationResult, sanitizeBody } = require('express-validator');
 
 const User = require('../models/user'); // For testing purposes
 
 
 function notImplemented(res) {
-  return res.json({ message: 'Not implemented' });
+  return res.status(501).json({ message: 'Not implemented' });
 }
 
 
@@ -73,46 +72,57 @@ exports.loginUser = (req, res, next) => {
 
 // eslint-disable-next-line arrow-body-style
 exports.createUser = [
-  body('username', 'Username must be at least 5 characters').isLength({ min: 1 }).trim(),
+  body('username', 'Username must be at least 5 characters').isLength({ min: 5 }).trim(),
   body('password', 'Password must be at least 8 characters').isLength({ min: 8 }).trim(),
 
   sanitizeBody('*').escape(),
   (req, res, next) => {
     const errors = validationResult(req);
 
-    if (errors) {
-      return res.status(401).json({ errors });
+    if (!errors.isEmpty()) {
+      console.log('There were errors in request');
+      return res.status(400).json(errors);
     }
 
     async.waterfall([
       (callback) => {
         User.findOne({ username: req.body.username }, callback);
       },
-      (err, user, callback) => {
+      (user, callback) => {
         if (user) {
-          callback(new Error('User already exists'));
+          return callback(new Error('User already exists'));
         }
+        callback();
       },
     ], (err) => {
-      if (err.message === 'User already exists') {
-        return res.status(409).json({ message: 'Username is already taken' });
-      }  
-
-      const newUser = new User({
-        username: req.body.username,
-        password: req.body.password,
-      });
-
-      newUser.save((err) => {
-        if (err) {
-          return res.status(500).json({ message: 'Error while saving new user in db' });
+      if (err) {
+        console.log('User already exists');
+        if (err.message === 'User already exists') {
+          return res.status(409).json({ errors: [{ msg: 'Username is already taken' }] });
         }
+      }
 
-        return res.status(201).json({ newUser });
+      bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+        if (err) {
+          return res.status(500).json({ message: 'Error hashing password' });
+        }
+        const newUser = new User({
+          username: req.body.username,
+          password: hashedPassword,
+        });
+
+        newUser.save((err) => {
+          if (err) {
+            console.log('Error saving');
+            return res.status(500).json({ message: 'Error while saving new user in db' });
+          }
+
+          console.log('Success created new user');
+          return res.status(201).json({ newUser });
+        });
       });
     });
   },
-
 ];
 
 // eslint-disable-next-line arrow-body-style

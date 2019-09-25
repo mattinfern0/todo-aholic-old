@@ -30,7 +30,7 @@ exports.createProject = (req, res, next) => {
       return onError(err, res, next);
     }
 
-    return res.send({ project: newProject });
+    return res.status(201).send({ project: newProject });
   });
 
   console.log('Successfully added project');
@@ -51,7 +51,7 @@ exports.getProjectInfo = (req, res, next) => {
   const targetId = req.params.projectId;
   if (targetId === 'undefined') {
     // res.status(400).send('Project id undefined');
-  } // else {
+  }
   console.log('getting project info for id: ', targetId);
   async.parallel({
     info: (callback) => {
@@ -98,7 +98,7 @@ exports.deleteProject = (req, res, next) => {
       return onError(err, res, next);
     }
 
-    res.json({ message: `Successfully deleted project ${projectId}` });
+    res.status(204).json({ message: `Successfully deleted project ${projectId}` });
   });
 };
 

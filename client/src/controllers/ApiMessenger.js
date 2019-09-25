@@ -232,6 +232,24 @@ const ApiMessenger = (() => {
       });
   };
 
+  const signup = (credentials) => {
+    const url = `${backEndURL}/api/users`;
+    return (
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      })
+        .then((res) => {
+          if (!res.ok){
+            throw (res);
+          }
+        })
+    );
+  };
+
   Events.subscribe(APIMessengerTypes.addTask, createTask.bind(this));
   Events.subscribe(APIMessengerTypes.editTask, editTask.bind(this));
   Events.subscribe(APIMessengerTypes.deleteTask, deleteTask.bind(this));
@@ -251,6 +269,7 @@ const ApiMessenger = (() => {
     getProjectList,
     deleteProject,
     getUserInbox,
+    signup,
   };
 })();
 
