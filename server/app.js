@@ -48,7 +48,7 @@ app.use((err, req, res, next) => {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
 
-  console.log("Random error:", err);
+  console.log('Random error:', err);
   res.status(err.status || 500);
   res.json({
     message: 'Something went wrong on the server',

@@ -52,28 +52,4 @@ class App extends React.Component {
   }
 }
 
-/*
-function App(){
-  return (
-    <div id="app-container">
-      <header id="app-header">
-        <h1>ToDo-aholic</h1>
-      </header>
-      <section id="content">
-        <aside id="project-container">
-          <ProjectListView />
-        </aside>
-        <section id="task-container">
-          <ProjectHeader />
-          <NewTaskForm />
-          <TaskListView />
-        </section>
-        <aside id="details-container">
-          <TaskDetailsView />
-        </aside>
-      </section>
-    </div>
-  );
-} */
-
 export default App;

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Redirect} from 'react-router-dom';
+import {Redirect, Link} from 'react-router-dom';
 import {EventTypes, APIMessengerTypes, Events} from '../../controllers/EventController';
 
 
@@ -39,8 +39,8 @@ class LoginForm extends React.Component {
     }
 
     return (
-      <div id="login-container">
-        <h3>Log In</h3>
+      <div id="login-container" className="user-form-container">
+        <h4>Log In</h4>
         <form onSubmit={this.doLogin}>
           <input
             type="text"
@@ -58,6 +58,10 @@ class LoginForm extends React.Component {
           />
           <input type="submit" value="Log In" />
         </form>
+        <span>
+          {"Don't have an account? "}
+          <Link to="/signup">Sign Up</Link>
+        </span>
       </div>
     );
   }

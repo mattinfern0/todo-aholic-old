@@ -17,6 +17,7 @@ const EventTypes = Object.freeze({
   changeProjectList: 'changeProjectList',
 
   login: 'login',
+  checkServerStatus: 'checkServerStatus',
 });
 
 const APIMessengerTypes = Object.freeze({
@@ -32,6 +33,7 @@ const APIMessengerTypes = Object.freeze({
   getInbox: 'apiGetInbox',
 
   login: 'apiLogin',
+  checkServerStatus: 'apiCheckServerStatus',
 });
 
 class Event{

@@ -161,7 +161,6 @@ const ApiMessenger = (() => {
   };
 
   const getUserInbox = () => {
-    // const mockUserId = '5d881c3cc84a2c09fb98c54a';
     console.log(localStorage.getItem('currentUser'));
     const userId = JSON.parse(localStorage.getItem('currentUser'))._id;
 

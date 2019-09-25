@@ -90,6 +90,7 @@ exports.deleteProject = (req, res, next) => {
       Project.findByIdAndDelete(projectId, callback);
     },
     tasksResult: (callback) => {
+      // Delete the tasks associated with that project
       Task.deleteMany({ project: mongoose.Types.ObjectId(projectId) }, callback);
     },
   }, (err) => {
@@ -97,7 +98,7 @@ exports.deleteProject = (req, res, next) => {
       return onError(err, res, next);
     }
 
-    res.send('Success');
+    res.json({ message: `Successfully deleted project ${projectId}` });
   });
 };
 
@@ -120,12 +121,10 @@ exports.getUserInbox = (req, res, next) => {
     if (err) {
       return onError(err, res, next);
     }
-
-    console.log(result);
     // Create a new inbox for the user if it doesn't exist, otherwise send current one
     if (!result) {
       console.log("This user's inbox doesn't exist. Creating new one");
-      const newInbox = new Project (
+      const newInbox = new Project(
         {
           name: 'Inbox',
           owner: userId,
@@ -153,10 +152,8 @@ exports.getUserInbox = (req, res, next) => {
 
 exports.getUserProjects = (req, res, next) => {
   const userId = req.params.userId;
-  console.log("User id:", userId);
   Project.find({ owner: mongoose.Types.ObjectId(userId), name: { $ne: 'Inbox' } }, (err, projects) => {
     if (err) {
-      console.log('There was an error');
       return onError(err, res, next);
     }
 

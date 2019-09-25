@@ -15,7 +15,7 @@ exports.createTask = (req, res, next) => {
   const reqTask = req.body.task;
 
   console.log('Adding task:', reqTask);
-  console.log("Task project", typeof reqTask.project, reqTask.project);
+  console.log('Task project', typeof reqTask.project, reqTask.project);
   const newTask = new Task(
     {
       name: reqTask.name,
@@ -68,6 +68,6 @@ exports.deleteTask = (req, res, next) => {
       return onError(err, res, next);
     }
 
-    res.send('Success');
+    res.json({ message: `Successfully deleted task ${taskId}` });
   });
 };
