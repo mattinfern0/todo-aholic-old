@@ -1,5 +1,6 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
+import {EventTypes, Events} from '../../controllers/EventController';
 
 class LogoutButton extends React.Component {
   constructor(props){
@@ -8,6 +9,14 @@ class LogoutButton extends React.Component {
       loggingOut: false,
     };
     this.onLogout = this.onLogout.bind(this);
+  }
+
+  componentDidMount(){
+    Events.subscribe(EventTypes.logout, this.onLogout);
+  }
+
+  componentWillUnmount(){
+    Events.unsubscribe(EventTypes.logout, this.onLogout);
   }
 
   onLogout(){

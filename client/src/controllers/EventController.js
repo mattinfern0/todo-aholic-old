@@ -18,6 +18,7 @@ const EventTypes = Object.freeze({
 
   login: 'login',
   checkServerStatus: 'checkServerStatus',
+  logout: 'logout',
 });
 
 const APIMessengerTypes = Object.freeze({

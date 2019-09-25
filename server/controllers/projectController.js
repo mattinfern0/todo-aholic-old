@@ -5,16 +5,6 @@ const async = require('async');
 const Project = require('../models/project');
 const Task = require('../models/task');
 
-function notImplemented(res) {
-  return res.send('Not implemented');
-}
-
-function onError(err, res, next) {
-  console.log('ERROR: ', err);
-  // res.send('Error');
-  return next(err);
-}
-
 exports.createProject = (req, res, next) => {
   const reqProject = req.body.project;
 
@@ -27,32 +17,19 @@ exports.createProject = (req, res, next) => {
 
   newProject.save((err) => {
     if (err) {
-      return onError(err, res, next);
+      return next(err);
     }
 
+    console.log('Successfully added project');
     return res.status(201).send({ project: newProject });
-  });
-
-  console.log('Successfully added project');
-};
-
-exports.getAllProjects = (req, res, next) => {
-  Project.find({ name: { $ne: 'Inbox' } }, (err, allProjects) => {
-    if (err) {
-      console.log('error while finding projects');
-      return onError(err, res, next);
-    }
-
-    res.send({ projects: allProjects });
   });
 };
 
 exports.getProjectInfo = (req, res, next) => {
   const targetId = req.params.projectId;
-  if (targetId === 'undefined') {
-    // res.status(400).send('Project id undefined');
+  if (!mongoose.Types.ObjectId.isValid(targetId)) {
+    return res.status(400).json({ message: 'Invalid project ID' });
   }
-  console.log('getting project info for id: ', targetId);
   async.parallel({
     info: (callback) => {
       Project.findById(targetId, callback);
@@ -62,21 +39,24 @@ exports.getProjectInfo = (req, res, next) => {
     },
   }, (err, results) => {
     if (err) {
-      return onError(err, res, next);
+      return next(err);
     }
 
     res.send({ info: results.info, tasks: results.tasks });
   });
-// }
 };
 
 exports.updateProject = (req, res, next) => {
   const projectId = req.params.projectId;
   const updatedProject = req.body.project;
 
+  if (!mongoose.Types.ObjectId.isValid(projectId)) {
+    return res.status(400).json({ message: 'Invalid project ID' });
+  }
+
   Project.findByIdAndUpdate(projectId, updatedProject, (err, oldProject) => {
     if (err) {
-      return onError(err, res, next);
+      return next(err);
     }
 
     res.send({ oldProject });
@@ -85,6 +65,10 @@ exports.updateProject = (req, res, next) => {
 
 exports.deleteProject = (req, res, next) => {
   const projectId = req.params.projectId;
+  if (!mongoose.Types.ObjectId.isValid(projectId)) {
+    return res.status(400).json({ message: 'Invalid project ID' });
+  }
+
   async.parallel({
     infoResult: (callback) => {
       Project.findByIdAndDelete(projectId, callback);
@@ -95,7 +79,7 @@ exports.deleteProject = (req, res, next) => {
     },
   }, (err) => {
     if (err) {
-      return onError(err, res, next);
+      return next(err);
     }
 
     res.status(204).json({ message: `Successfully deleted project ${projectId}` });
@@ -105,9 +89,13 @@ exports.deleteProject = (req, res, next) => {
 exports.getProjectTasks = (req, res, next) => {
   const projectId = req.params.projectId;
 
+  if (!mongoose.Types.ObjectId.isValid(projectId)) {
+    return res.status(400).json({ message: 'Invalid project ID' });
+  }
+
   Task.find({ project: projectId }, (err, results) => {
     if (err) {
-      return onError(err, res, next);
+      return next(err);
     }
 
     res.send(results);
@@ -117,9 +105,13 @@ exports.getProjectTasks = (req, res, next) => {
 exports.getUserInbox = (req, res, next) => {
   const userId = req.params.userId;
 
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: 'Invalid user ID' });
+  }
+
   Project.findOne({ name: 'Inbox', owner: mongoose.Types.ObjectId(userId) }, (err, result) => {
     if (err) {
-      return onError(err, res, next);
+      return next(err);
     }
     // Create a new inbox for the user if it doesn't exist, otherwise send current one
     if (!result) {
@@ -133,7 +125,7 @@ exports.getUserInbox = (req, res, next) => {
 
       newInbox.save((err) => {
         if (err) {
-          return onError(err, res, next);
+          return next(err);
         }
 
         return res.send({ info: newInbox, tasks: [] });
@@ -142,7 +134,7 @@ exports.getUserInbox = (req, res, next) => {
       const inboxInfo = result;
       Task.find({ project: mongoose.Types.ObjectId(inboxInfo._id) }, (error, tasksResult) => {
         if (error) {
-          return onError(err, res, next);
+          return next(err);
         }
         res.send({ info: inboxInfo, tasks: tasksResult });
       });
@@ -152,9 +144,13 @@ exports.getUserInbox = (req, res, next) => {
 
 exports.getUserProjects = (req, res, next) => {
   const userId = req.params.userId;
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: 'Invalid user ID' });
+  }
+
   Project.find({ owner: mongoose.Types.ObjectId(userId), name: { $ne: 'Inbox' } }, (err, projects) => {
     if (err) {
-      return onError(err, res, next);
+      return next(err);
     }
 
     return res.send({ projects });

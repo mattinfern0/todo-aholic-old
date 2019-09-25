@@ -1,21 +1,11 @@
-function notImplemented(res) {
-  return res.send('Not implemented');
-}
-
-function onError(err, res, next) {
-  res.send('Error');
-  return next(err);
-}
-
+const mongoose = require('mongoose');
 const Task = require('../models/task');
+
 
 // Body must be in form of {task: <taskObject>}
 // Response contains {newTask:<newTask>}
 exports.createTask = (req, res, next) => {
   const reqTask = req.body.task;
-
-  console.log('Adding task:', reqTask);
-  console.log('Task project', typeof reqTask.project, reqTask.project);
   const newTask = new Task(
     {
       name: reqTask.name,
@@ -28,19 +18,19 @@ exports.createTask = (req, res, next) => {
 
   newTask.save((err) => {
     if (err) {
-      console.log('Error: ', err);
-      res.send('Error');
+      if (err.name === 'ValidationError') {
+        return res.status(400).json({ message: err.message });
+      }
       return next(err);
     }
     console.log('Successfully added task');
-    return res.send({ task: newTask });
+    return res.status(201).send({ task: newTask });
   });
 };
 
 exports.getAllTasks = (req, res, next) => {
   Task.find({}, (err, allTasks) => {
     if (err) {
-      console.log('Error: ', err);
       return next(err);
     }
 
@@ -52,22 +42,28 @@ exports.updateTask = (req, res, next) => {
   const taskId = req.params.taskId;
   const updatedTask = req.body.task;
 
-  Task.findByIdAndUpdate(taskId, updatedTask, (err, oldTask) => {
-    if (err) {
-      return onError(err, res, next);
-    }
-
-    res.send({ oldTask });
-  });
+  if (mongoose.Types.ObjectId.isValid(taskId)) {
+    Task.findByIdAndUpdate(taskId, updatedTask, (err, oldTask) => {
+      if (err) {
+        return next(err);
+      }
+      res.send({ oldTask });
+    });
+  } else {
+    res.status(400).json({ message: 'Invalid task ID' });
+  }
 };
 
 exports.deleteTask = (req, res, next) => {
   const taskId = req.params.taskId;
-  Task.findByIdAndDelete(taskId, (err) => {
-    if (err) {
-      return onError(err, res, next);
-    }
-
-    res.json({ message: `Successfully deleted task ${taskId}` });
-  });
+  if (mongoose.Types.ObjectId.isValid(taskId)) {
+    Task.findByIdAndDelete(taskId, (err) => {
+      if (err) {
+        return next(err);
+      }
+      res.json({ message: `Successfully deleted task ${taskId}` });
+    });
+  } else {
+    res.status(400).json({ message: 'Invalid task ID' });
+  }
 };

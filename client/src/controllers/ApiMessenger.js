@@ -1,12 +1,15 @@
+import Cookies from 'universal-cookie';
 import {Events, EventTypes, APIMessengerTypes} from './EventController';
 import {currentProject, CurrentProjectList} from './InterfaceModel';
 
+const cookies = new Cookies();
 const backEndURL = process.env.REACT_APP_BACKEND_URL;
 
 function processResponse(res){
   if (!res.ok){
     console.log('Bad response: ', res);
-    throw new Error('Response not ok!');
+
+    throw new Error(res.status);
   }
   return res.json();
 }
@@ -18,7 +21,7 @@ const ApiMessenger = (() => {
       fetch(url, { method: 'GET' })
         .then((res) => {
           if (!res.ok){
-            throw new Error('Response not ok!');
+            throw new Error(res.status);
           }
         })
     );
@@ -43,6 +46,10 @@ const ApiMessenger = (() => {
         console.log('create task response: ', data);
         Events.publish(EventTypes.addTask, data.task);
       }).catch((err) => {
+        if (err.message === '401') {
+          alert('An error occured. Please log back in');
+          return Events.publish(EventTypes.logout);
+        }
         console.log('Error creating task: ', err);
         alert('Sorry! Something went wrong while creating your task!');
       });
@@ -73,6 +80,10 @@ const ApiMessenger = (() => {
 
         Events.publish(EventTypes.editTaskById, {matchFunc, modifyFunc});
       }).catch((err) => {
+        if (err.message === '401') {
+          alert('An error occured. Please log back in');
+          return Events.publish(EventTypes.logout);
+        }
         console.log('Error editing task: ', err);
         alert('Sorry, something went wrong while modifying your task!');
       });
@@ -95,6 +106,11 @@ const ApiMessenger = (() => {
 
       Events.publish(EventTypes.deleteTaskById, matchFunc);
     }).catch((err) => {
+      if (err.message === '401') {
+        alert('An error occured. Please log back in');
+        return Events.publish(EventTypes.logout);
+      }
+
       console.log('delete task error: ', err);
       alert('Sorry! Something went wrong while deleting this task!');
     });
@@ -117,6 +133,11 @@ const ApiMessenger = (() => {
         console.log('Create project res:', data);
         Events.publish(EventTypes.addProject, data.project);
       }).catch((err) => {
+        if (err.message === '401') {
+          alert('An error occured. Please log back in');
+          return Events.publish(EventTypes.logout);
+        }
+
         console.log('create project error: ', err);
         alert('Sorry! Something went wrong while creating your project!');
       });
@@ -136,6 +157,11 @@ const ApiMessenger = (() => {
       .then((data) => {
         Events.publish(EventTypes.changeProjectList, data.projects);
       }).catch((err) => {
+        if (err.message === '401') {
+          alert('An error occured. Please log back in');
+          return Events.publish(EventTypes.logout);
+        }
+
         console.log('get all projects error: ', err);
         alert('Sorry! Something went wrong while getting your projects!');
       });
@@ -155,13 +181,17 @@ const ApiMessenger = (() => {
         currentProject.project = data.info;
         Events.publish(EventTypes.changeProject, data.tasks);
       }).catch((err) => {
+        if (err.message === '401') {
+          alert('An error occured. Please log back in');
+          return Events.publish(EventTypes.logout);
+        }
+
         console.log('get project\'s tasks error: ', err);
         alert('Sorry! Something went wrong while getting this project\'s tasks!');
       });
   };
 
   const getUserInbox = () => {
-    console.log(localStorage.getItem('currentUser'));
     const userId = JSON.parse(localStorage.getItem('currentUser'))._id;
 
     const url = `${backEndURL}/api/projects/user/${userId}/inbox`;
@@ -177,6 +207,11 @@ const ApiMessenger = (() => {
         currentProject.project = data.info;
         Events.publish(EventTypes.changeProject, data.tasks);
       }).catch((err) => {
+        if (err.message === '401') {
+          alert('An error occured. Please log back in');
+          return Events.publish(EventTypes.logout);
+        }
+        
         console.log('Error getting user inbox');
         alert('Sorry, something went wrong while getting your inbox!');
       });
@@ -202,6 +237,10 @@ const ApiMessenger = (() => {
       Events.publish(EventTypes.deleteProjectById, matchFunc);
       getUserInbox('testUser');
     }).catch((err) => {
+      if (err.message === '401') {
+        alert('An error occured. Please log back in');
+        return Events.publish(EventTypes.logout);
+      }
       console.log('Error deleting project', err);
       alert('Sorry! Something went wrong while deleting this project!');
     });
@@ -220,7 +259,6 @@ const ApiMessenger = (() => {
       .then((res) => processResponse(res))
       .then((resBody) => {
         // Store access token in local storage
-        console.log("Success: ", resBody);
         localStorage.setItem('accessToken', resBody.token);
         localStorage.setItem('currentUser', JSON.stringify(resBody.user));
         console.log("Token: ", localStorage.getItem('accessToken'));
