@@ -4,6 +4,7 @@
 A full-stack ToDo app using a React.js front-end and an Express REST API back-end. UI inspired by the TickTick app.
 
 ## Features ##
+Users can:
 * Create tasks
 * Add a due date and description for a task
 * Organize tasks into projects
@@ -23,6 +24,8 @@ A full-stack ToDo app using a React.js front-end and an Express REST API back-en
 #### Back-End ####
 * Node.js + Express
 * Mongoose + MongoDB
+* passport.js
+* json Web Tokens
 
 #### Misc ####
 * Moment.js for formatting dates
