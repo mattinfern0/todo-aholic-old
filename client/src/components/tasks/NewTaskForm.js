@@ -1,9 +1,9 @@
 import React from 'react';
 import moment from 'moment';
 
-import { Events, APIMessengerTypes } from '../../controllers/EventController';
+import {Events} from '../../controllers/EventController';
 import PlaceholderDateInput from '../misc/PlaceholderDateInput';
-import ApiMessenger from '../../controllers/ApiMessenger';
+import ApiEvents from '../../event_types/apiEvents';
 
 function parseDateStr(dateStr) {
   const date = moment(dateStr, 'YYYY-MM-DD');
@@ -29,9 +29,8 @@ class NewTaskForm extends React.Component {
       name: this.state.name,
       dueDate,
     };
-    // const newTask = new Task(this.state.name, dueDate);
 
-    Events.publish(APIMessengerTypes.addTask, newTaskInfo);
+    Events.publish(ApiEvents.addTask, newTaskInfo);
     this.resetForm();
     e.preventDefault();
   }

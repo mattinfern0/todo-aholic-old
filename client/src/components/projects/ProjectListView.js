@@ -1,11 +1,13 @@
 import React from 'react';
-import {Events, EventTypes, APIMessengerTypes} from '../../controllers/EventController';
+import {Events} from '../../controllers/EventController';
 import {CurrentProjectList} from '../../controllers/InterfaceModel';
 import NewProjectForm from './NewProjectForm';
+import ApiEvents from '../../event_types/apiEvents';
+import ProjectEvents from '../../event_types/projectEvents';
 
 function ProjectElement(props){
   const onProjectClick = (e) => {
-    Events.publish(APIMessengerTypes.changeProject, props.project._id);
+    Events.publish(ApiEvents.changeProject, props.project._id);
   };
 
   return (
@@ -27,17 +29,13 @@ class ProjectListView extends React.Component{
   }
 
   componentDidMount(){
-    Events.subscribe(EventTypes.addProject, this.refresh);
-    Events.subscribe(EventTypes.changeProjectList, this.refresh);
-    Events.subscribe(EventTypes.deleteProjectById, this.refresh);
-    Events.subscribe(EventTypes.editProjectById, this.refresh);
+    Events.subscribe(ProjectEvents.projectListChanged, this.refresh);
+    Events.subscribe(ProjectEvents.projectChanged, this.refresh);
   }
 
   componentWillUnmount(){
-    Events.unsubscribe(EventTypes.addProject, this.refresh);
-    Events.unsubscribe(EventTypes.changeProjectList, this.refresh);
-    Events.unsubscribe(EventTypes.deleteProjectById, this.refresh);
-    Events.unsubscribe(EventTypes.editProjectById, this.refresh);
+    Events.unsubscribe(ProjectEvents.projectListChanged, this.refresh);
+    Events.unsubscribe(ProjectEvents.projectChanged, this.refresh);
   }
 
   refresh(){
@@ -61,7 +59,7 @@ class ProjectListView extends React.Component{
         <div
           id="inbox-project"
           className="project-element"
-          onClick={() => Events.publish(APIMessengerTypes.getInbox, 'testUser')}
+          onClick={() => Events.publish(ApiEvents.getInbox, 'testUser')}
         >
           Inbox
         </div>

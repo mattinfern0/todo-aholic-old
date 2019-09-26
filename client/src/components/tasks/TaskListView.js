@@ -1,7 +1,8 @@
 import React from 'react';
-import {Events, EventTypes} from '../../controllers/EventController';
+import {Events} from '../../controllers/EventController';
 import TaskElement from './TaskElement';
 import {CurrentTaskList} from '../../controllers/InterfaceModel';
+import TaskEvents from '../../event_types/taskEvents';
 
 class TaskListView extends React.Component{
   constructor(props){
@@ -15,21 +16,13 @@ class TaskListView extends React.Component{
   }
 
   componentDidMount(){
-    Events.subscribe(EventTypes.addTask, this.refreshTasks);
-    Events.subscribe(EventTypes.removeTask, this.refreshTasks);
-    Events.subscribe(EventTypes.editTask, this.refreshTasks);
-    Events.subscribe(EventTypes.changeProject, this.refreshTasks);
-    Events.subscribe(EventTypes.editTaskById, this.refreshTasks);
-    Events.subscribe(EventTypes.deleteTaskById, this.refreshTasks);
+    Events.subscribe(TaskEvents.taskListChanged, this.refreshTasks);
+    Events.subscribe(TaskEvents.taskChanged, this.refreshTasks);
   }
 
   componentWillUnmount(){
-    Events.unsubscribe(EventTypes.addTask, this.refreshTasks);
-    Events.unsubscribe(EventTypes.removeTask, this.refreshTasks);
-    Events.unsubscribe(EventTypes.editTask, this.refreshTasks);
-    Events.unsubscribe(EventTypes.changeProject, this.refreshTasks);
-    Events.unsubscribe(EventTypes.editTaskById, this.refreshTasks);
-    Events.unsubscribe(EventTypes.deleteTaskById, this.refreshTasks);
+    Events.unsubscribe(TaskEvents.taskListChanged, this.refreshTasks);
+    Events.unsubscribe(TaskEvents.taskChanged, this.refreshTasks);
   }
 
   refreshTasks(){

@@ -1,5 +1,6 @@
 import React from 'react';
-import {Events, APIMessengerTypes} from '../../controllers/EventController';
+import {Events} from '../../controllers/EventController';
+import ApiEvents from '../../event_types/apiEvents';
 
 class NewProjectForm extends React.Component{
   constructor(props){
@@ -19,7 +20,7 @@ class NewProjectForm extends React.Component{
         owner: currentUser._id,
       };
 
-      Events.publish(APIMessengerTypes.addProject, newProjectInfo);
+      Events.publish(ApiEvents.addProject, newProjectInfo);
     }
 
     this.resetForm();

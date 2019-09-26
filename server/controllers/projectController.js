@@ -20,7 +20,6 @@ exports.createProject = (req, res, next) => {
       return next(err);
     }
 
-    console.log('Successfully added project');
     return res.status(201).send({ project: newProject });
   });
 };

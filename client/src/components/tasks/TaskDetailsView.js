@@ -1,7 +1,11 @@
 /* eslint-disable react/sort-comp */
 import React from 'react';
 import moment from 'moment';
-import { Events, EventTypes, APIMessengerTypes } from '../../controllers/EventController';
+import { Events } from '../../controllers/EventController';
+import TaskEvents from '../../event_types/taskEvents';
+import ProjectEvents from '../../event_types/projectEvents';
+import ApiEvents from '../../event_types/apiEvents';
+
 import EditTaskForm from './EditTaskForm';
 
 class TaskDetailsView extends React.Component {
@@ -19,11 +23,11 @@ class TaskDetailsView extends React.Component {
   }
 
   componentDidMount() {
-    // Place subscriptions here according to the docs
-    Events.subscribe(EventTypes.editTaskById, this.refresh);
-    Events.subscribe(EventTypes.getTaskDetail, this.setCurrentTask);
-    Events.subscribe(EventTypes.changeProject, this.onProjectChange);
-    Events.subscribe(EventTypes.deleteTaskById, this.onDelete);
+    Events.subscribe(TaskEvents.getTaskDetail, this.setCurrentTask);
+    Events.subscribe(TaskEvents.deleteTaskById, this.onDelete);
+
+    Events.subscribe(TaskEvents.taskChanged, this.refresh);
+    Events.subscribe(ProjectEvents.projectChanged, this.onProjectChange);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -33,10 +37,11 @@ class TaskDetailsView extends React.Component {
   }
 
   componentWillUnmount() {
-    Events.unsubscribe(EventTypes.editTaskById, this.refresh);
-    Events.unsubscribe(EventTypes.getTaskDetail, this.setCurrentTask);
-    Events.unsubscribe(EventTypes.changeProject, this.onProjectChange);
-    Events.unsubscribe(EventTypes.deleteTaskById, this.onDelete);
+    Events.unsubscribe(TaskEvents.getTaskDetail, this.setCurrentTask);
+    Events.unsubscribe(TaskEvents.deleteTaskById, this.onDelete);
+
+    Events.unsubscribe(TaskEvents.taskChanged, this.refresh);
+    Events.unsubscribe(ProjectEvents.projectChanged, this.onProjectChange);
   }
 
   setCurrentTask(task) {
@@ -54,8 +59,6 @@ class TaskDetailsView extends React.Component {
 
   refresh() {
     if (this.state.currentTask != null) {
-      // this.setState({taskInfo: this.state.currentTask.clone(true)});
-
       // Clones the object using json
       this.setState((prevState) => ({
         taskInfo: JSON.parse(JSON.stringify(prevState.currentTask)),
@@ -111,7 +114,7 @@ class TaskDetailsView extends React.Component {
           <button
             type="button"
             className="delete-button"
-            onClick={() => Events.publish(APIMessengerTypes.deleteTask, this.state.taskInfo._id)}
+            onClick={() => Events.publish(ApiEvents.deleteTask, this.state.taskInfo._id)}
           />
         </span>
       );

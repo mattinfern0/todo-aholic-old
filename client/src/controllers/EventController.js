@@ -1,44 +1,5 @@
 // Followed the publish-subscribe model shown in http://aspiringcraftsman.com/2011/12/08/solid-javascript-single-responsibility-principle/
 
-/* Maps an event (the name string) to a list of handlers to run
-   whenever the event "occurs" */
-const EventTypes = Object.freeze({
-  addTask: 'addTask',
-  removeTask: 'removeTask',
-  editTask: 'editTask',
-  editTaskById: 'editTaskById',
-  getTaskDetail: 'getTaskDetail',
-  deleteTaskById: 'deleteTaskById',
-
-  addProject: 'addProject',
-  editProjectById: 'editProjectById',
-  removeProject: 'removeProject',
-  deleteProjectById: 'removeProjectById',
-  changeProject: 'changeProject',
-  changeProjectList: 'changeProjectList',
-
-  login: 'login',
-  checkServerStatus: 'checkServerStatus',
-  logout: 'logout',
-});
-
-const APIMessengerTypes = Object.freeze({
-  addTask: 'apiAddTask',
-  deleteTask: 'apiRemoveTask',
-  editTask: 'apiEditTask',
-
-  addProject: 'apiAddProject',
-  editProject: 'apiEditProject',
-  removeProject: 'apiRemoveProject',
-  changeProject: 'apiChangeProject',
-  changeProjectList: 'apiChangeProjectList',
-
-  getInbox: 'apiGetInbox',
-
-  login: 'apiLogin',
-  checkServerStatus: 'apiCheckServerStatus',
-});
-
 class Event{
   constructor(name){
     this.name = name;
@@ -114,4 +75,4 @@ const EventAggregator = (() => {
   };
 })();
 
-export {EventAggregator as Events, EventTypes, APIMessengerTypes};
+export {EventAggregator as Events};

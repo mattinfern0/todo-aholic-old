@@ -3,7 +3,9 @@
 import React from 'react';
 import moment from 'moment';
 
-import {Events, EventTypes, APIMessengerTypes} from '../../controllers/EventController';
+import {Events } from '../../controllers/EventController';
+import ApiEvents from '../../event_types/apiEvents';
+import TaskEvents from '../../event_types/taskEvents';
 
 class TaskElement extends React.Component{
   /*
@@ -27,15 +29,15 @@ class TaskElement extends React.Component{
   onCheck(e){
     const updatedTask = JSON.parse(JSON.stringify(this.props.task));
     updatedTask.completed = !updatedTask.completed;
-    Events.publish(APIMessengerTypes.editTask, updatedTask);
+    Events.publish(ApiEvents.editTask, updatedTask);
   }
 
   onElementClick(e){
-    Events.publish(EventTypes.getTaskDetail, this.props.task);
+    Events.publish(TaskEvents.getTaskDetail, this.props.task);
   }
 
   onDelete(e){
-    Events.publish(APIMessengerTypes.deleteTask, this.props.task._id);
+    Events.publish(ApiEvents.deleteTask, this.props.task._id);
   }
 
   onSelect(e){

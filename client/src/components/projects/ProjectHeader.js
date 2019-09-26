@@ -1,8 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import {currentProject} from '../../controllers/InterfaceModel';
-import {Events, EventTypes, APIMessengerTypes} from '../../controllers/EventController';
+import {Events} from '../../controllers/EventController';
 import EditProjectForm from './EditProjectForm';
+import ApiEvents from '../../event_types/apiEvents';
+import ProjectEvents from '../../event_types/projectEvents';
 
 class ProjectHeader extends React.Component {
   constructor(props) {
@@ -15,13 +17,13 @@ class ProjectHeader extends React.Component {
   }
 
   componentDidMount(){
-    Events.subscribe(EventTypes.changeProject, this.refresh);
-    Events.subscribe(EventTypes.editProjectById, this.refresh);
+    Events.subscribe(ProjectEvents.projectChanged, this.refresh);
+    Events.subscribe(ProjectEvents.changeProject, this.refresh);
   }
 
   componentWillUnmount() {
-    Events.unsubscribe(EventTypes.changeProject, this.refresh);
-    Events.unsubscribe(EventTypes.editProjectById, this.refresh);
+    Events.unsubscribe(ProjectEvents.changeProject, this.refresh);
+    Events.unsubscribe(ProjectEvents.projectChanged, this.refresh);
   }
 
   refresh(){
@@ -53,7 +55,7 @@ class ProjectHeader extends React.Component {
               <button
                 type="button"
                 className="delete-button"
-                onClick={() => Events.publish(APIMessengerTypes.removeProject,
+                onClick={() => Events.publish(ApiEvents.removeProject,
                   this.state.project._id)}
               />
             </span>

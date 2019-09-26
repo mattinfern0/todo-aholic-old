@@ -23,7 +23,6 @@ exports.createTask = (req, res, next) => {
       }
       return next(err);
     }
-    console.log('Successfully added task');
     return res.status(201).send({ task: newTask });
   });
 };

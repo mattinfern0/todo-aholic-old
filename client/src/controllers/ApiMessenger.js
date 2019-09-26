@@ -1,6 +1,11 @@
 import Cookies from 'universal-cookie';
-import {Events, EventTypes, APIMessengerTypes} from './EventController';
+import {Events} from './EventController';
 import {currentProject, CurrentProjectList} from './InterfaceModel';
+
+import ApiEvents from '../event_types/apiEvents';
+import ProjectEvents from '../event_types/projectEvents';
+import TaskEvents from '../event_types/taskEvents';
+import MiscEvents from '../event_types/miscEvents';
 
 const cookies = new Cookies();
 const backEndURL = process.env.REACT_APP_BACKEND_URL;
@@ -43,11 +48,11 @@ const ApiMessenger = (() => {
     })
       .then((res) => processResponse(res))
       .then((data) => {
-        Events.publish(EventTypes.addTask, data.task);
+        Events.publish(TaskEvents.addTask, data.task);
       }).catch((err) => {
         if (err.message === '401') {
           alert('An error occured. Please log back in');
-          return Events.publish(EventTypes.logout);
+          return Events.publish(MiscEvents.logout);
         }
         console.log('Error creating task: ', err);
         alert('Sorry! Something went wrong while creating your task!');
@@ -77,11 +82,11 @@ const ApiMessenger = (() => {
           return newTask;
         };
 
-        Events.publish(EventTypes.editTaskById, {matchFunc, modifyFunc});
+        Events.publish(TaskEvents.editTaskById, {matchFunc, modifyFunc});
       }).catch((err) => {
         if (err.message === '401') {
           alert('An error occured. Please log back in');
-          return Events.publish(EventTypes.logout);
+          return Events.publish(MiscEvents.logout);
         }
         console.log('Error editing task: ', err);
         alert('Sorry, something went wrong while modifying your task!');
@@ -103,11 +108,11 @@ const ApiMessenger = (() => {
       console.log('DELETE result: ', res);
       const matchFunc = (thisTask) => thisTask._id === taskId;
 
-      Events.publish(EventTypes.deleteTaskById, matchFunc);
+      Events.publish(TaskEvents.deleteTaskById, matchFunc);
     }).catch((err) => {
       if (err.message === '401') {
         alert('An error occured. Please log back in');
-        return Events.publish(EventTypes.logout);
+        return Events.publish(MiscEvents.logout);
       }
 
       console.log('delete task error: ', err);
@@ -129,11 +134,11 @@ const ApiMessenger = (() => {
     }).then((res) => processResponse(res))
       .then((data) => {
         console.log('Create project res:', data);
-        Events.publish(EventTypes.addProject, data.project);
+        Events.publish(ProjectEvents.addProject, data.project);
       }).catch((err) => {
         if (err.message === '401') {
           alert('An error occured. Please log back in');
-          return Events.publish(EventTypes.logout);
+          return Events.publish(MiscEvents.logout);
         }
 
         console.log('create project error: ', err);
@@ -152,11 +157,11 @@ const ApiMessenger = (() => {
       },
     }).then((res) => processResponse(res))
       .then((data) => {
-        Events.publish(EventTypes.changeProjectList, data.projects);
+        Events.publish(ProjectEvents.changeProjectList, data.projects);
       }).catch((err) => {
         if (err.message === '401') {
           alert('An error occured. Please log back in');
-          return Events.publish(EventTypes.logout);
+          return Events.publish(MiscEvents.logout);
         }
 
         console.log('get all projects error: ', err);
@@ -176,11 +181,11 @@ const ApiMessenger = (() => {
       .then((data) => {
         currentProject.id = projectId;
         currentProject.project = data.info;
-        Events.publish(EventTypes.changeProject, data.tasks);
+        Events.publish(ProjectEvents.changeProject, data.tasks);
       }).catch((err) => {
         if (err.message === '401') {
           alert('An error occured. Please log back in');
-          return Events.publish(EventTypes.logout);
+          return Events.publish(MiscEvents.logout);
         }
 
         console.log('get project\'s tasks error: ', err);
@@ -202,11 +207,12 @@ const ApiMessenger = (() => {
       .then((data) => {
         currentProject.id = data.info._id;
         currentProject.project = data.info;
-        Events.publish(EventTypes.changeProject, data.tasks);
+        console.log('Sending change project to inbox event');
+        Events.publish(ProjectEvents.changeProject, data.tasks);
       }).catch((err) => {
         if (err.message === '401') {
           alert('An error occured. Please log back in');
-          return Events.publish(EventTypes.logout);
+          return Events.publish(MiscEvents.logout);
         }
         
         console.log('Error getting user inbox');
@@ -239,11 +245,11 @@ const ApiMessenger = (() => {
         return newProject;
       };
 
-      Events.publish(EventTypes.editProjectById, {matchFunc, modifyFunc});
+      Events.publish(ProjectEvents.editProjectById, {matchFunc, modifyFunc});
     }).catch((err) => {
       if (err.message === '401') {
         alert('An error occured. Please log back in');
-        return Events.publish(EventTypes.logout);
+        return Events.publish(MiscEvents.logout);
       }
       console.log('Error editing project', err);
       alert('Sorry! Something went wrong while editing this project!');
@@ -266,12 +272,12 @@ const ApiMessenger = (() => {
 
       CurrentProjectList.removeFirst(matchFunc);
 
-      Events.publish(EventTypes.deleteProjectById, matchFunc);
+      Events.publish(ProjectEvents.deleteProjectById, matchFunc);
       getUserInbox('testUser');
     }).catch((err) => {
       if (err.message === '401') {
         alert('An error occured. Please log back in');
-        return Events.publish(EventTypes.logout);
+        return Events.publish(MiscEvents.logout);
       }
       console.log('Error deleting project', err);
       alert('Sorry! Something went wrong while deleting this project!');
@@ -293,7 +299,7 @@ const ApiMessenger = (() => {
         // Store access token in local storage
         localStorage.setItem('accessToken', resBody.token);
         localStorage.setItem('currentUser', JSON.stringify(resBody.user));
-        Events.publish(EventTypes.login);
+        Events.publish(MiscEvents.login);
       })
       .catch((err) => {
         console.log('Error logging in: ', err);
@@ -319,18 +325,18 @@ const ApiMessenger = (() => {
     );
   };
 
-  Events.subscribe(APIMessengerTypes.addTask, createTask.bind(this));
-  Events.subscribe(APIMessengerTypes.editTask, editTask.bind(this));
-  Events.subscribe(APIMessengerTypes.deleteTask, deleteTask.bind(this));
+  Events.subscribe(ApiEvents.addTask, createTask.bind(this));
+  Events.subscribe(ApiEvents.editTask, editTask.bind(this));
+  Events.subscribe(ApiEvents.deleteTask, deleteTask.bind(this));
 
-  Events.subscribe(APIMessengerTypes.addProject, createProject.bind(this));
-  Events.subscribe(APIMessengerTypes.editProject, editProject.bind(this));
-  Events.subscribe(APIMessengerTypes.changeProjectList, getProjectList.bind(this));
-  Events.subscribe(APIMessengerTypes.changeProject, getProjectTasks.bind(this));
-  Events.subscribe(APIMessengerTypes.removeProject, deleteProject.bind(this));
-  Events.subscribe(APIMessengerTypes.getInbox, getUserInbox.bind(this));
+  Events.subscribe(ApiEvents.addProject, createProject.bind(this));
+  Events.subscribe(ApiEvents.editProject, editProject.bind(this));
+  Events.subscribe(ApiEvents.changeProjectList, getProjectList.bind(this));
+  Events.subscribe(ApiEvents.changeProject, getProjectTasks.bind(this));
+  Events.subscribe(ApiEvents.removeProject, deleteProject.bind(this));
+  Events.subscribe(ApiEvents.getInbox, getUserInbox.bind(this));
 
-  Events.subscribe(APIMessengerTypes.login, login.bind(this));
+  Events.subscribe(ApiEvents.login, login.bind(this));
 
   return {
     checkServerStatus,

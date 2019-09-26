@@ -1,21 +1,25 @@
-import {ObserverList} from '../objects/observerList';
-import {EventTypes} from './EventController';
+import ObserverList from '../objects/observerList';
+import ProjectEvents from '../event_types/projectEvents';
+import TaskEvents from '../event_types/taskEvents';
 
 const CurrentTaskList = new ObserverList({
-  addEvent: EventTypes.addTask,
-  removeEvent: EventTypes.removeTask,
-  editEvent: EventTypes.editTask,
-  editFirstEvent: EventTypes.editTaskById,
-  changeListEvent: EventTypes.changeProject,
-  removeFirstEvent: EventTypes.deleteTaskById,
+  addEvent: TaskEvents.addTask,
+  editFirstEvent: TaskEvents.editTaskById,
+  changeListEvent: ProjectEvents.changeProject,
+  removeFirstEvent: TaskEvents.deleteTaskById,
+
+  listChangedEvent: TaskEvents.taskListChanged,
+  itemChangedEvent: TaskEvents.taskChanged,
 });
 
 const CurrentProjectList = new ObserverList({
-  addEvent: EventTypes.addProject,
-  editFirstEvent: EventTypes.editProjectById,
-  removeEvent: EventTypes.removeProject,
-  removeFirstEvent: EventTypes.removeProjectById,
-  changeListEvent: EventTypes.changeProjectList,
+  addEvent: ProjectEvents.addProject,
+  editFirstEvent: ProjectEvents.editProjectById,
+  removeFirstEvent: ProjectEvents.removeProjectById,
+  changeListEvent: ProjectEvents.changeProjectList,
+
+  listChangedEvent: ProjectEvents.projectListChanged,
+  itemChangedEvent: ProjectEvents.projectChanged,
 });
 
 const currentProject = {id: null, project: null };

@@ -12,7 +12,6 @@ exports.loginUser = (req, res, next) => {
     if (err) {
       return next(err);
     } else if (!user) {
-      console.log("User was not found");
       return res.status(404).json({
         message: 'This user was not found.',
       });
@@ -41,7 +40,6 @@ exports.createUser = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      console.log('There were errors in request');
       return res.status(400).json(errors);
     }
 
@@ -58,7 +56,6 @@ exports.createUser = [
     ], (err) => {
       if (err) {
         if (err.message === 'User already exists') {
-          console.log('User already exists');
           return res.status(409).json({ errors: [{ msg: 'Username is already taken' }] });
         }
       }
@@ -78,7 +75,6 @@ exports.createUser = [
             next(err);
           }
 
-          console.log('Successfuly created new user');
           return res.status(201).json({ newUser });
         });
       });

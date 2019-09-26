@@ -10,14 +10,11 @@ class ObserverList{
   }
 
   _registerEventHandlers(eventArgs){
+    this.listChangedEvent = eventArgs.listChangedEvent;
+    this.itemChangedEvent = eventArgs.itemChangedEvent;
     /* Have to use .bind(this) to bind 'this' keyword
         to the instance or else it'll be undefined */
     Events.subscribe(eventArgs.addEvent, this.add.bind(this));
-    Events.subscribe(eventArgs.removeEvent, this.removeAtIndex.bind(this));
-
-    if (eventArgs.editEvent){
-      Events.subscribe(eventArgs.editEvent, this.editAtIndex.bind(this));
-    }
 
     if (eventArgs.editFirstEvent){
       Events.subscribe(eventArgs.editFirstEvent, this.editFirst.bind(this));
@@ -34,29 +31,23 @@ class ObserverList{
 
   add(item){
     this.items.push(item);
+
+    Events.publish(this.listChangedEvent);
   }
 
   removeFirst(testFunc){
     for (let i = 0; i < this.items.length; i++){
       if (testFunc(this.items[i])){
         this.removeAtIndex(i);
+
+        Events.publish(this.listChangedEvent);
         return;
       }
     }
   }
 
-  removeAtIndex(index){
-    this.items.splice(index, 1);
-  }
-
   getList(){
     return this.items;
-  }
-
-  editAtIndex(args){
-    const index = args.index;
-    const modifyFunc = args.modifyFunc; // modifyFunc must return the modified element
-    this.items[index] = modifyFunc(this.items[index]);
   }
 
   editFirst(args){
@@ -65,6 +56,8 @@ class ObserverList{
     for (let i = 0; i < this.items.length; i++){
       if (matchFunc(this.items[i])){
         this.items[i] = modifyFunc(this.items[i]);
+
+        Events.publish(this.itemChangedEvent);
         return;
       }
     }
@@ -72,6 +65,7 @@ class ObserverList{
 
   setList(newList){
     this.items = newList;
+    Events.publish(this.listChangedEvent);
   }
 
   printList(){
@@ -79,4 +73,4 @@ class ObserverList{
   }
 }
 
-export {ObserverList};
+export default ObserverList;

@@ -5,12 +5,12 @@ import React from 'react';
 import TaskListView from './components/tasks/TaskListView';
 import NewTaskForm from './components/tasks/NewTaskForm';
 import ProjectListView from './components/projects/ProjectListView';
-import NewProjectForm from './components/projects/NewProjectForm';
 import TaskDetailsView from './components/tasks/TaskDetailsView';
 import ProjectHeader from './components/projects/ProjectHeader';
 import LogoutButton from './components/misc/LogoutButton';
 
-import {Events, APIMessengerTypes} from './controllers/EventController';
+import {Events} from './controllers/EventController';
+import ApiEvents from './event_types/apiEvents';
 
 class App extends React.Component {
   constructor(props){
@@ -18,8 +18,8 @@ class App extends React.Component {
   }
 
   componentDidMount(){
-    Events.publish(APIMessengerTypes.getInbox);
-    Events.publish(APIMessengerTypes.changeProjectList);
+    Events.publish(ApiEvents.getInbox);
+    Events.publish(ApiEvents.changeProjectList);
   }
 
   render() {

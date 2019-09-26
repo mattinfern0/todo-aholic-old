@@ -1,7 +1,8 @@
 import React from 'react';
 import moment from 'moment';
-import { Events, APIMessengerTypes } from '../../controllers/EventController';
+import { Events } from '../../controllers/EventController';
 import PlaceholderDateInput from '../misc/PlaceholderDateInput';
+import ApiEvents from '../../event_types/apiEvents';
 
 class EditTaskForm extends React.Component {
   constructor(props) {
@@ -31,8 +32,8 @@ class EditTaskForm extends React.Component {
     updateTask.dueDate = dueDate;
     updateTask.description = this.state.description;
 
-    Events.publish(APIMessengerTypes.editTask, updateTask);
     this.props.revertFunc();
+    Events.publish(ApiEvents.editTask, updateTask);
     e.preventDefault();
   }
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import {Events, APIMessengerTypes} from '../../controllers/EventController';
+import {Events} from '../../controllers/EventController';
+import ApiEvents from '../../event_types/apiEvents';
 
 // Props:
 // initialProjectInfo, revertFunc
@@ -18,7 +19,7 @@ class EditProjectForm extends React.Component {
       _id: this.props.initialProjectInfo._id,
     };
 
-    Events.publish(APIMessengerTypes.editProject, editedProject);
+    Events.publish(ApiEvents.editProject, editedProject);
     this.props.revertFunc();
     e.preventDefault();
   }

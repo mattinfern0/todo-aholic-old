@@ -1,6 +1,8 @@
 import React from 'react';
 import {Redirect, Link} from 'react-router-dom';
-import {EventTypes, APIMessengerTypes, Events} from '../../controllers/EventController';
+import {Events} from '../../controllers/EventController';
+import MiscEvents from '../../event_types/miscEvents';
+import ApiEvents from '../../event_types/apiEvents';
 
 
 class LoginForm extends React.Component {
@@ -16,7 +18,7 @@ class LoginForm extends React.Component {
   }
 
   componentDidMount(){
-    Events.subscribe(EventTypes.login, this.changeLoggedInStatus);
+    Events.subscribe(MiscEvents.login, this.changeLoggedInStatus);
   }
 
   changeLoggedInStatus() {
@@ -29,7 +31,7 @@ class LoginForm extends React.Component {
       password: this.state.password,
     };
 
-    Events.publish(APIMessengerTypes.login, credentials);
+    Events.publish(ApiEvents.login, credentials);
     e.preventDefault();
   }
 
