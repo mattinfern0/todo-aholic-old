@@ -15,7 +15,7 @@ class EditProjectForm extends React.Component {
   editProject(e) {
     const editedProject = {
       name: this.state.projectName,
-      _id: this.props.currentProject._id,
+      _id: this.props.initialProjectInfo._id,
     };
 
     Events.publish(APIMessengerTypes.editProject, editedProject);
@@ -25,7 +25,7 @@ class EditProjectForm extends React.Component {
 
   render() {
     return (
-      <form autoComplete="off">
+      <form autoComplete="off" onSubmit={this.editProject}>
         <input
           type="text"
           value={this.state.projectName}

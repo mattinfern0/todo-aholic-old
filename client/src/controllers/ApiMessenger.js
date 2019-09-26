@@ -43,7 +43,6 @@ const ApiMessenger = (() => {
     })
       .then((res) => processResponse(res))
       .then((data) => {
-        console.log('create task response: ', data);
         Events.publish(EventTypes.addTask, data.task);
       }).catch((err) => {
         if (err.message === '401') {
@@ -59,7 +58,7 @@ const ApiMessenger = (() => {
     const taskId = updatedTask._id;
     const url = `${backEndURL}/api/tasks/${taskId}`;
     const theBody = {task: updatedTask};
-
+    console.log("edit task body", theBody);
     fetch(url, {
       method: 'PUT',
       headers: {
@@ -119,7 +118,6 @@ const ApiMessenger = (() => {
   const createProject = (newProject) => {
     const addUrl = `${backEndURL}/api/projects`;
     const theBody = {project: newProject};
-    console.log(theBody);
 
     fetch(addUrl, {
       method: 'POST',
@@ -146,7 +144,6 @@ const ApiMessenger = (() => {
   const getProjectList = () => {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const url = `${backEndURL}/api/projects/user/${currentUser._id}`;
-    console.log(url);
 
     fetch(url, {
       method: 'GET',
@@ -219,15 +216,16 @@ const ApiMessenger = (() => {
 
   const editProject = (newProjectInfo) => {
     const url = `${backEndURL}/api/projects/${newProjectInfo._id}`;
+    const theBody = {
+      project: newProjectInfo,
+    };
     fetch(url, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
-      body: {
-        project: JSON.stringify(newProjectInfo),
-      },
+      body: JSON.stringify(theBody),
 
     }).then((res) => {
       if (!res.ok){
@@ -295,7 +293,6 @@ const ApiMessenger = (() => {
         // Store access token in local storage
         localStorage.setItem('accessToken', resBody.token);
         localStorage.setItem('currentUser', JSON.stringify(resBody.user));
-        console.log("Token: ", localStorage.getItem('accessToken'));
         Events.publish(EventTypes.login);
       })
       .catch((err) => {
