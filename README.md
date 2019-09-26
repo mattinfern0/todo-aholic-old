@@ -2,6 +2,9 @@
 ![Screenshot of UI](misc/screenshot-main.png)
 ## Description ##
 A full-stack ToDo app using a React.js front-end and an Express REST API back-end. UI inspired by the TickTick app.
+### Previous Versions:
+* [Front-End, Vanilla JS](https://github.com/mattinfern0/Todo-List-Front-End)
+* [Front-End, React.js](https://github.com/mattinfern0/Todo-List-React)
 
 ## Features ##
 Users can:
