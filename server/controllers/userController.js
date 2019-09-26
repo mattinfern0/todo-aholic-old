@@ -26,7 +26,7 @@ exports.loginUser = (req, res, next) => {
       // Send user's id only for security purposes
       const idOnly = { _id: user._id };
 
-      const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '60s' });
+      const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '3 days' });
       return res.json({ user: idOnly, token });
     });
   })(req, res, next);
