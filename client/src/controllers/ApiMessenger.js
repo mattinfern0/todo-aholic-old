@@ -216,7 +216,41 @@ const ApiMessenger = (() => {
         alert('Sorry, something went wrong while getting your inbox!');
       });
   };
-  
+
+  const editProject = (newProjectInfo) => {
+    const url = `${backEndURL}/api/projects/${newProjectInfo._id}`;
+    fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      body: {
+        project: JSON.stringify(newProjectInfo),
+      },
+
+    }).then((res) => {
+      if (!res.ok){
+        console.log('Response not ok: ', res);
+        throw new Error(res.status);
+      }
+
+      const matchFunc = (thisProject) => thisProject._id === newProjectInfo._id;
+      const modifyFunc = (project) => {
+        const newProject = JSON.parse(JSON.stringify(newProjectInfo));
+        return newProject;
+      };
+
+      Events.publish(EventTypes.editProjectById, {matchFunc, modifyFunc});
+    }).catch((err) => {
+      if (err.message === '401') {
+        alert('An error occured. Please log back in');
+        return Events.publish(EventTypes.logout);
+      }
+      console.log('Error editing project', err);
+      alert('Sorry! Something went wrong while editing this project!');
+    });
+  };
 
   const deleteProject = (projectId) => {
     const url = `${backEndURL}/api/projects/${projectId}`;
@@ -293,6 +327,7 @@ const ApiMessenger = (() => {
   Events.subscribe(APIMessengerTypes.deleteTask, deleteTask.bind(this));
 
   Events.subscribe(APIMessengerTypes.addProject, createProject.bind(this));
+  Events.subscribe(APIMessengerTypes.editProject, editProject.bind(this));
   Events.subscribe(APIMessengerTypes.changeProjectList, getProjectList.bind(this));
   Events.subscribe(APIMessengerTypes.changeProject, getProjectTasks.bind(this));
   Events.subscribe(APIMessengerTypes.removeProject, deleteProject.bind(this));

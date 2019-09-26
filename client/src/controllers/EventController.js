@@ -11,6 +11,7 @@ const EventTypes = Object.freeze({
   deleteTaskById: 'deleteTaskById',
 
   addProject: 'addProject',
+  editProjectById: 'editProjectById',
   removeProject: 'removeProject',
   deleteProjectById: 'removeProjectById',
   changeProject: 'changeProject',
@@ -27,6 +28,7 @@ const APIMessengerTypes = Object.freeze({
   editTask: 'apiEditTask',
 
   addProject: 'apiAddProject',
+  editProject: 'apiEditProject',
   removeProject: 'apiRemoveProject',
   changeProject: 'apiChangeProject',
   changeProjectList: 'apiChangeProjectList',

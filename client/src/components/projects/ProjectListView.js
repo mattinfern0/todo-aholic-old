@@ -30,14 +30,14 @@ class ProjectListView extends React.Component{
     Events.subscribe(EventTypes.addProject, this.refresh);
     Events.subscribe(EventTypes.changeProjectList, this.refresh);
     Events.subscribe(EventTypes.deleteProjectById, this.refresh);
-
-    
+    Events.subscribe(EventTypes.editProjectById, this.refresh);
   }
 
   componentWillUnmount(){
     Events.unsubscribe(EventTypes.addProject, this.refresh);
     Events.unsubscribe(EventTypes.changeProjectList, this.refresh);
     Events.unsubscribe(EventTypes.deleteProjectById, this.refresh);
+    Events.unsubscribe(EventTypes.editProjectById, this.refresh);
   }
 
   refresh(){

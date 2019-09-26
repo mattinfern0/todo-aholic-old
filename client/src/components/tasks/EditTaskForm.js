@@ -30,7 +30,6 @@ class EditTaskForm extends React.Component {
     updateTask.name = this.state.name;
     updateTask.dueDate = dueDate;
     updateTask.description = this.state.description;
-    console.log(updateTask);
 
     Events.publish(APIMessengerTypes.editTask, updateTask);
     this.props.revertFunc();

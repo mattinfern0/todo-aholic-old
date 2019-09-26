@@ -2,6 +2,7 @@
 import React from 'react';
 import {currentProject} from '../../controllers/InterfaceModel';
 import {Events, EventTypes, APIMessengerTypes} from '../../controllers/EventController';
+import EditProjectForm from './EditProjectForm';
 
 class ProjectHeader extends React.Component {
   constructor(props) {
@@ -15,6 +16,12 @@ class ProjectHeader extends React.Component {
 
   componentDidMount(){
     Events.subscribe(EventTypes.changeProject, this.refresh);
+    Events.subscribe(EventTypes.editProjectById, this.refresh);
+  }
+
+  componentWillUnmount() {
+    Events.unsubscribe(EventTypes.changeProject, this.refresh);
+    Events.unsubscribe(EventTypes.editProjectById, this.refresh);
   }
 
   refresh(){
@@ -22,6 +29,14 @@ class ProjectHeader extends React.Component {
   }
 
   render() {
+    if (this.state.editing) {
+      return (
+        <EditProjectForm 
+          revertFunc={() => this.setState({ editing: false})}
+          initialProjectInfo={this.state.project}
+        />
+      );
+    }
     return (
       <header>
         <span>
@@ -33,7 +48,7 @@ class ProjectHeader extends React.Component {
               <button
                 type="button"
                 className="edit-button"
-                onClick={() => this.setState((prevState) => ({editing: prevState.editing}))}
+                onClick={() => this.setState({editing: true })}
               />
               <button
                 type="button"
