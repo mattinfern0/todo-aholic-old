@@ -38,7 +38,7 @@ class ObserverList{
   removeFirst(testFunc){
     for (let i = 0; i < this.items.length; i++){
       if (testFunc(this.items[i])){
-        this.removeAtIndex(i);
+        this.items.splice(i, 1);
 
         Events.publish(this.listChangedEvent);
         return;
