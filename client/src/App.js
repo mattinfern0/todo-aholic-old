@@ -26,13 +26,11 @@ class App extends React.Component {
     return (
       <div id="app-container">
         <header id="app-header">
-          <span>
+          <span id="logo">
             <h1>ToDo-aholic</h1>
           </span>
 
-          <span className="task-right">
-            <LogoutButton />
-          </span>
+          <LogoutButton />
         </header>
         <section id="content">
           <aside id="project-container">
