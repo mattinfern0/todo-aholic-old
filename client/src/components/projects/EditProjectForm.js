@@ -28,6 +28,7 @@ class EditProjectForm extends React.Component {
     return (
       <form autoComplete="off" onSubmit={this.editProject}>
         <input
+          className="input-name"
           type="text"
           value={this.state.projectName}
           onChange={(e) => this.setState({ projectName: e.target.value })}

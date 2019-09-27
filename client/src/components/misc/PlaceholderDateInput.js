@@ -4,7 +4,7 @@ import React from 'react';
 // changes to type date when focused on
 
 /* Props:
-    class
+    className
     placeholder
     initalValue
     onChange
@@ -20,7 +20,7 @@ class PlaceholderDateInput extends React.Component{
   render(){
     return (
       <input
-        className={this.props.class}
+        className={this.props.className}
         type={this.state.type}
         value={this.props.value}
         onChange={this.props.onChange}

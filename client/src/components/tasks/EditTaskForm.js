@@ -42,7 +42,7 @@ class EditTaskForm extends React.Component {
       <form autoComplete="off" onSubmit={this.doSubmit}>
         <div>
           <input
-            id="edit-task-name"
+            className="input-name"
             type="text"
             value={this.state.name}
             placeholder="Name"
@@ -50,7 +50,7 @@ class EditTaskForm extends React.Component {
           />
 
           <PlaceholderDateInput
-            class="new-task-date"
+            className="input-date"
             placeholder="Due Date"
             value={this.state.dueDate}
             onChange={(e) => this.setState({ dueDate: e.target.value })}

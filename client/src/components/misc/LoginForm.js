@@ -42,7 +42,7 @@ class LoginForm extends React.Component {
 
     return (
       <div id="login-container" className="user-form-container">
-        <h4>Log In</h4>
+        <h2>Log In</h2>
         <form onSubmit={this.doLogin}>
           <input
             type="text"

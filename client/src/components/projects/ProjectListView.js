@@ -53,9 +53,7 @@ class ProjectListView extends React.Component{
 
     return (
       <div>
-        <span>
-          <h2>Projects</h2>
-        </span>
+        <h2>Projects</h2>
         <div
           id="inbox-project"
           className="project-element"
@@ -63,7 +61,9 @@ class ProjectListView extends React.Component{
         >
           Inbox
         </div>
+        <hr />
         <ul id="project-list">{projectElements}</ul>
+        <hr />
         <NewProjectForm />
       </div>
     );

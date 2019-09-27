@@ -51,7 +51,7 @@ class TaskListView extends React.Component{
 
     if (onGoing.length === 0 && completed.length === 0){
       return (
-        <h4>Add Some Tasks!</h4>
+        <h3>Add Some Tasks!</h3>
       );
     } else {
       return (
@@ -60,7 +60,7 @@ class TaskListView extends React.Component{
             && <ul id="ongoing" className="task-list">{onGoing}</ul>
           }
           {completed.length > 0 // Separated because i don't want to wrap them in a container tag
-            && <h4>Completed</h4>
+            && <h3>Completed</h3>
           }
           {completed.length > 0
             && <ul id="completed" className="task-list">{completed}</ul>

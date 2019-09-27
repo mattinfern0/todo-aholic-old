@@ -56,7 +56,7 @@ class NewProjectForm extends React.Component{
               type="text"
               placeholder="Project Name"
               value={this.state.projectName}
-              id="new-project-name"
+              className="input-name"
             />
             <input
               type="submit"

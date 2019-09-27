@@ -88,20 +88,17 @@ class TaskDetailsView extends React.Component {
     } else {
       return (
         <span>
-          <div>
-            <span><h2>{taskInfo.name ? taskInfo.name : 'No Name'}</h2></span>
+          <header>
+            <h2>{taskInfo.name ? taskInfo.name : 'No Name'}</h2>
             <button
               type="button"
-              className="edit-button task-right"
+              className="button-edit align-right"
               onClick={(e) => this.setState({ editing: true })}
             />
-
-            <div>
-              <h3>
-                Due: {moment(taskInfo.dueDate).format('MMMM D')}
-              </h3>
-            </div>
-          </div>
+          </header>
+          <p>
+            Due: {moment(taskInfo.dueDate).format('MMMM D')}
+          </p>
           <div className="description">
             <p>
               {
@@ -113,7 +110,7 @@ class TaskDetailsView extends React.Component {
           </div>
           <button
             type="button"
-            className="delete-button"
+            className="button-delete align-right"
             onClick={() => Events.publish(ApiEvents.deleteTask, this.state.taskInfo._id)}
           />
         </span>

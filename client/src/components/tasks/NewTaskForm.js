@@ -50,7 +50,7 @@ class NewTaskForm extends React.Component {
         onSubmit={this.createTask}
       >
         <input
-          id="new-task-name"
+          className="input-name"
           type="text"
           placeholder="What do you want to do?"
           value={this.state.name}
@@ -58,7 +58,7 @@ class NewTaskForm extends React.Component {
         />
 
         <PlaceholderDateInput
-          class="new-task-date"
+          className="input-date"
           placeholder="Due Date"
           value={this.state.dueDate}
           onChange={(e) => this.setState({ dueDate: e.target.value })}

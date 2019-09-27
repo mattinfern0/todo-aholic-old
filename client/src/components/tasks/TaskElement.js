@@ -82,7 +82,7 @@ class TaskElement extends React.Component{
           checked={task.completed}
         />
         <span>{task.name}</span>
-        <span className="task-right">
+        <span className="align-right">
           <span className={TaskElement._isToday(task.dueDate) ? 'important' : ''}>
             {TaskElement._getUIDate(task.dueDate)}
           </span>

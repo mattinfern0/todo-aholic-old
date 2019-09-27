@@ -24,7 +24,7 @@ class SignUpForm extends React.Component {
     const username = this.state.username;
     const password = this.state.password;
     const password2 = this.state.confirmPassword;
-    
+
     if (password2 !== password) {
       this.setState({ errorMessages: [{msg: 'Passwords don\'t match'}] });
       return e.preventDefault();
@@ -59,8 +59,6 @@ class SignUpForm extends React.Component {
           this.setState({errorMessages: data.errors });
         }
       });
-        
-    
     e.preventDefault();
   }
 
@@ -71,7 +69,7 @@ class SignUpForm extends React.Component {
 
     return (
       <div id="signin-container" className="user-form-container">
-        <h4>Sign Up</h4>
+        <h2>Sign Up</h2>
         <form onSubmit={this.doSignUp}>
           <input
             type="text"
@@ -96,7 +94,7 @@ class SignUpForm extends React.Component {
           />
           <input type="submit" value="Sign Up" />
         </form>
-        
+
         <span>
           <h3>{this.state.errorMessages.length > 0 && this.state.errorMessages[0].msg}</h3>
         </span>

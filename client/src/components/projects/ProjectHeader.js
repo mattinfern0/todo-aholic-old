@@ -41,20 +41,18 @@ class ProjectHeader extends React.Component {
     }
     return (
       <header>
-        <span>
-          <h5>{this.state.project ? this.state.project.name : ''}</h5>
-        </span>
+        <h2>{this.state.project ? this.state.project.name : ''}</h2>
         {this.state.project && this.state.project.name !== 'Inbox'
           && (
-            <span className="task-right">
+            <span className="align-right">
               <button
                 type="button"
-                className="edit-button"
+                className="button-edit"
                 onClick={() => this.setState({editing: true })}
               />
               <button
                 type="button"
-                className="delete-button"
+                className="button-delete"
                 onClick={() => Events.publish(ApiEvents.removeProject,
                   this.state.project._id)}
               />
