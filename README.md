@@ -12,10 +12,6 @@ Users can:
 * Add a due date and description for a task
 * Organize tasks into projects
 
-
-## To-Do ##
-* Clean up/redo the css
-
 ## Potential Plans ##
 * Rewrite the React.app using Redux or a Flux Library
 * Shared projects
