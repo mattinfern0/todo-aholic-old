@@ -61,7 +61,7 @@ class NewProjectForm extends React.Component{
             <input
               type="submit"
               value="+"
-              className="add-button"
+              className="button-add"
             />
           </form>
         )

@@ -64,7 +64,7 @@ class NewTaskForm extends React.Component {
           onChange={(e) => this.setState({ dueDate: e.target.value })}
         />
         <input
-          className="add-button"
+          className="button-add"
           type="submit"
           value="+"
         />

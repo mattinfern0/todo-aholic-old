@@ -32,7 +32,7 @@ class LogoutButton extends React.Component {
 
     return (
       <button
-        className="logout-button align-right"
+        className="button-logout align-right"
         type="button"
         onClick={this.onLogout}
       >

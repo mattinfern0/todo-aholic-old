@@ -1,5 +1,5 @@
 /* Accent color for the app */
-.user-form-container h2, .project-element:hover, #ongoing .important {
+.user-form-container h2, .project-element:hover, #ongoing .important, .button-add {
     color: rgb(255, 86, 86);
 }
 
@@ -60,6 +60,12 @@ input, button {
     background-color: #F4F4F4;
 }
 
+input[type="checkbox"]{
+    transform: scale(1.5);
+    margin-right: 20px;
+    box-sizing: content-box; 
+}
+
 .input-name {
     width: 50%;
 }
@@ -69,7 +75,12 @@ input, button {
 }
 
 .button-add {
-
+    background-color: transparent;
+    border: none;
+    font-weight: bold;
+    font-size: 16pt;
+    transform: scale(1.5);
+    margin-left: 5px;
 }
 
 .button-edit {
@@ -102,6 +113,11 @@ input, button {
     font-weight: bolder;
 }
 
+#app-header .button-logout {
+    margin-top: 5px;
+    margin-right: 5px;
+} 
+
 #logo {
     display: inline-block;
 }
@@ -127,11 +143,20 @@ input, button {
     margin-bottom: 10px;
 }
 
+#project-container li {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .project-element, #project-container span {
     font-size: 16pt;
 }
 
 #inbox-project {
+    font-weight: bold;
+}
+
+#new-project-form-container span {
     font-weight: bold;
 }
 
