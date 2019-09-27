@@ -1,11 +1,9 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import moment from 'moment';
 
-import {Events } from '../../controllers/EventController';
-import ApiEvents from '../../event_types/apiEvents';
-import TaskEvents from '../../event_types/taskEvents';
+import {Events } from '../../../controllers/EventController';
+import ApiEvents from '../../../event_types/apiEvents';
+import TaskEvents from '../../../event_types/taskEvents';
 
 class TaskElement extends React.Component{
   /*

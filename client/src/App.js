@@ -2,11 +2,11 @@
 /* eslint-disable import/first */
 import React from 'react';
 
-import TaskListView from './components/tasks/TaskListView';
-import NewTaskForm from './components/tasks/NewTaskForm';
-import ProjectListView from './components/projects/ProjectListView';
-import TaskDetailsView from './components/tasks/TaskDetailsView';
-import ProjectHeader from './components/projects/ProjectHeader';
+import TaskListView from './components/app_view/tasks_view/TaskListView';
+import NewTaskForm from './components/app_view/tasks_view/NewTaskForm';
+import ProjectListView from './components/app_view/projects_view/ProjectListView';
+import TaskDetailsView from './components/app_view/details_view/TaskDetailsView';
+import ProjectHeader from './components/app_view/tasks_view/ProjectHeader';
 import LogoutButton from './components/misc/LogoutButton';
 
 import {Events} from './controllers/EventController';

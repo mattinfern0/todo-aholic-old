@@ -1,8 +1,8 @@
 import React from 'react';
 import moment from 'moment';
-import { Events } from '../../controllers/EventController';
-import PlaceholderDateInput from '../misc/PlaceholderDateInput';
-import ApiEvents from '../../event_types/apiEvents';
+import { Events } from '../../../controllers/EventController';
+import PlaceholderDateInput from '../../misc/PlaceholderDateInput';
+import ApiEvents from '../../../event_types/apiEvents';
 
 class EditTaskForm extends React.Component {
   constructor(props) {

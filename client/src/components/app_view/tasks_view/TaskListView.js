@@ -1,8 +1,8 @@
 import React from 'react';
-import {Events} from '../../controllers/EventController';
+import {Events} from '../../../controllers/EventController';
 import TaskElement from './TaskElement';
-import {CurrentTaskList} from '../../controllers/InterfaceModel';
-import TaskEvents from '../../event_types/taskEvents';
+import {CurrentTaskList} from '../../../controllers/InterfaceModel';
+import TaskEvents from '../../../event_types/taskEvents';
 
 class TaskListView extends React.Component{
   constructor(props){

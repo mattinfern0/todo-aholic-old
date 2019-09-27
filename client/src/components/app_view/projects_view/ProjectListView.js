@@ -1,9 +1,9 @@
 import React from 'react';
-import {Events} from '../../controllers/EventController';
-import {CurrentProjectList} from '../../controllers/InterfaceModel';
+import {Events} from '../../../controllers/EventController';
+import {CurrentProjectList} from '../../../controllers/InterfaceModel';
 import NewProjectForm from './NewProjectForm';
-import ApiEvents from '../../event_types/apiEvents';
-import ProjectEvents from '../../event_types/projectEvents';
+import ApiEvents from '../../../event_types/apiEvents';
+import ProjectEvents from '../../../event_types/projectEvents';
 
 function ProjectElement(props){
   const onProjectClick = (e) => {

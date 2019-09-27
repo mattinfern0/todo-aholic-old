@@ -1,6 +1,6 @@
 import React from 'react';
-import {Events} from '../../controllers/EventController';
-import ApiEvents from '../../event_types/apiEvents';
+import {Events} from '../../../controllers/EventController';
+import ApiEvents from '../../../event_types/apiEvents';
 
 class NewProjectForm extends React.Component{
   constructor(props){

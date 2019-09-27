@@ -1,10 +1,10 @@
 /* eslint-disable react/sort-comp */
 import React from 'react';
 import moment from 'moment';
-import { Events } from '../../controllers/EventController';
-import TaskEvents from '../../event_types/taskEvents';
-import ProjectEvents from '../../event_types/projectEvents';
-import ApiEvents from '../../event_types/apiEvents';
+import { Events } from '../../../controllers/EventController';
+import TaskEvents from '../../../event_types/taskEvents';
+import ProjectEvents from '../../../event_types/projectEvents';
+import ApiEvents from '../../../event_types/apiEvents';
 
 import EditTaskForm from './EditTaskForm';
 
