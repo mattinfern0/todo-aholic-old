@@ -1,5 +1,5 @@
 /* Accent color for the app */
-.user-form-container h2, .project-element:hover, #ongoing .important, .button-add {
+.user-form-container h2, .project-element:hover, #ongoing .important, .button-add, .app-drop-down-button {
     color: rgb(255, 86, 86);
 }
 
@@ -37,8 +37,16 @@ a:link, a:visited {
 }
 
 /* Drop Down Menu */
-.app-drop-down-button {
-    
+button.app-drop-down-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 20pt;
+    font-weight: bolder;
+    background-color: white;
+    border: 1px solid grey;
+    font-family: 'Raleway', sans-serif;
 }
 
 .drop-down {
@@ -54,16 +62,22 @@ a:link, a:visited {
     padding: 0;
     position: relative;
     display: block;
+    background-color: #5e5e5e;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
 .drop-down li {
     display: block;
-    background-color: lightgray;
     padding: 10px;    
 }
 
 .drop-down li:hover {
-    background-color: rgb(190, 190, 190);
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.drop-down li a {
+    color: white;
 }
 
 /* Headings */

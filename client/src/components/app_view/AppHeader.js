@@ -3,13 +3,15 @@ import { Link } from 'react-router-dom';
 import DropDownContainer from '../misc/DropDownContainer';
 
 function AppDropDownButton(props) {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
   return (
     <button
       type="button"
       onClick={props.onClick}
       className="app-drop-down-button"
     >
-      V
+      {currentUser.username[0]}
     </button>
   );
 }
