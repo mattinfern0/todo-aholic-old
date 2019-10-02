@@ -11,6 +11,13 @@ const User = require('../models/user');
 const TOKEN_LIFETIME = '3 days';
 const SALT_LENGTH = 10;
 
+// Creates object mimicking the errors object sent by express-validator
+function createErrorsObject(message) {
+  const errors = [];
+  errors.push({ msg: message });
+  return errors;
+}
+
 exports.loginUser = (req, res, next) => {
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err) {
@@ -102,19 +109,21 @@ exports.updateUser = [
 
     const userId = req.params.userId;
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ message: 'Invalid user ID' });
+      return res.status(400).json({ errors: createErrorsObject('Invalid userId') });
     }
 
     User.findById(userId, (err, theUser) => {
       if (err) {
         return next(err);
+      } else if (!theUser) {
+        return res.status(404).json({ errors: createErrorsObject('User not found') });
       }
 
       bcrypt.compare(req.body.oldPassword, theUser.password, (err, result) => {
         if (err) {
           return next(err);
         } else if (!result) {
-          return res.status(400).json({ message: 'Old password is incorrect' });
+          return res.status(400).json({ errors: createErrorsObject('Old password is incorrect') });
         }
 
         bcrypt.hash(req.body.newPassword, SALT_LENGTH, (err, hashedPassword) => {
