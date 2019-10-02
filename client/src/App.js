@@ -2,12 +2,13 @@
 /* eslint-disable import/first */
 import React from 'react';
 
+import AppHeader from './components/app_view/AppHeader';
 import TaskListView from './components/app_view/tasks_view/TaskListView';
 import NewTaskForm from './components/app_view/tasks_view/NewTaskForm';
 import ProjectListView from './components/app_view/projects_view/ProjectListView';
 import TaskDetailsView from './components/app_view/details_view/TaskDetailsView';
 import ProjectHeader from './components/app_view/tasks_view/ProjectHeader';
-import LogoutButton from './components/misc/LogoutButton';
+import UnauthorizedListener from './components/misc/UnauthorizedListener';
 
 import {Events} from './controllers/EventController';
 import ApiEvents from './event_types/apiEvents';
@@ -25,13 +26,9 @@ class App extends React.Component {
   render() {
     return (
       <div id="app-container">
-        <header id="app-header">
-          <span id="logo">
-            <h1>ToDo-aholic</h1>
-          </span>
-
-          <LogoutButton />
-        </header>
+        <UnauthorizedListener />
+        
+        <AppHeader />
         <section id="content">
           <aside id="project-container">
             <ProjectListView />

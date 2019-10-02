@@ -1,10 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+
 import PrivateRoute from './components/misc/PrivateRoute';
 import LoginForm from './components/misc/LoginForm';
 import SignUpForm from './components/misc/SignUpForm';
 import App from './App';
+import Logout from './components/misc/Logout';
 import ApiMessenger from './controllers/ApiMessenger';
+import SettingsView from './components/app_view/settings_view/SettingsView';
 
 class MainRouter extends React.Component {
   constructor(props) {
@@ -30,9 +33,12 @@ class MainRouter extends React.Component {
     }
     return (
       <Router>
-        <PrivateRoute path="/" component={App} />
+        <PrivateRoute exact path="/" component={App} />
+        <PrivateRoute path="/settings" component={SettingsView} />
         <Route path="/login" component={LoginForm} />
         <Route path="/signup" component={SignUpForm} />
+        <Route path="/logout" component={Logout} />
+        
       </Router>
     );
   }
