@@ -8,6 +8,9 @@ const { body, validationResult, sanitizeBody } = require('express-validator');
 
 const User = require('../models/user');
 
+const TOKEN_LIFETIME = '3 days';
+const SALT_LENGTH = 10;
+
 exports.loginUser = (req, res, next) => {
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err) {
@@ -25,7 +28,7 @@ exports.loginUser = (req, res, next) => {
 
       const noPassword = { _id: user._id, username: user.username };
 
-      const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '3 days' });
+      const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: TOKEN_LIFETIME });
       return res.json({ user: noPassword, token });
     });
   })(req, res, next);
@@ -60,7 +63,7 @@ exports.createUser = [
         }
       }
 
-      bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+      bcrypt.hash(req.body.password, SALT_LENGTH, (err, hashedPassword) => {
         if (err) {
           next(err);
         }
@@ -114,7 +117,7 @@ exports.updateUser = [
           return res.status(400).json({ message: 'Old password is incorrect' });
         }
 
-        bcrypt.hash(req.body.newPassword, 10, (err, hashedPassword) => {
+        bcrypt.hash(req.body.newPassword, SALT_LENGTH, (err, hashedPassword) => {
           if (err) {
             return next(err);
           }
@@ -128,7 +131,10 @@ exports.updateUser = [
               return next(err);
             }
 
-            const updatedToken = jwt.sign(updatedUser.toJSON(), process.env.JWT_SECRET, { expiresIn: '3 days' });
+            const updatedToken = jwt.sign(updatedUser.toJSON(),
+              process.env.JWT_SECRET,
+              { expiresIn: TOKEN_LIFETIME });
+
             return res.status(200).json({ token: updatedToken });
           });
         });
