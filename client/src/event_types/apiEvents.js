@@ -14,6 +14,7 @@ const ApiEvents = Object.freeze({
   login: 'apiLogin',
   checkServerStatus: 'apiCheckServerStatus',
   changePassword: 'apiChangePassword',
+  deleteAccount: 'apiDeleteAccount',
 });
 
 export default ApiEvents;

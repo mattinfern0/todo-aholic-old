@@ -361,6 +361,22 @@ const ApiMessenger = (() => {
       });
   };
 
+  const deleteAccount = () => {
+    const userId = getCurrentUser()._id;
+    const url = `${backEndURL}/api/users/${userId}`;
+
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        authorization: `Bearer ${getToken()}`,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        Events.publish(MiscEvents.deleteAccountAttempt, !res.ok);
+      });
+  };
+
   Events.subscribe(ApiEvents.addTask, createTask.bind(this));
   Events.subscribe(ApiEvents.editTask, editTask.bind(this));
   Events.subscribe(ApiEvents.deleteTask, deleteTask.bind(this));
@@ -374,6 +390,7 @@ const ApiMessenger = (() => {
 
   Events.subscribe(ApiEvents.login, login.bind(this));
   Events.subscribe(ApiEvents.changePassword, changePassword);
+  Events.subscribe(ApiEvents.deleteAccount, deleteAccount.bind(this));
 
   return {
     checkServerStatus,

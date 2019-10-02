@@ -5,6 +5,7 @@ const MiscEvents = Object.freeze({
   logout: 'logout',
 
   changePasswordAttempt: 'changePasswordAttempt',
+  deleteAccountAttempt: 'deleteAccountAttempt',
 });
 
 export default MiscEvents;

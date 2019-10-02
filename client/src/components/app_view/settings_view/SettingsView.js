@@ -4,6 +4,7 @@ import React from 'react';
 import AppHeader from '../AppHeader';
 import UnauthorizedListener from '../../misc/UnauthorizedListener';
 import NewPasswordForm from './NewPasswordForm';
+import DeleteAccount from './DeleteAccount';
 
 class SettingsView extends React.Component {
   constructor(props) {
@@ -24,7 +25,7 @@ class SettingsView extends React.Component {
           <h2>Your Account</h2>
           <h3>{`Username: ${currentUser.username}`}</h3>
           <NewPasswordForm />
-          <button type="button">Delete Account</button>
+          <DeleteAccount />
         </div>      
       </div>
     );
