@@ -328,6 +328,40 @@ const ApiMessenger = (() => {
     );
   };
 
+  const changePassword = (formData) => {
+    const currentUserId = JSON.parse(localStorage.getItem('currentUser'))._id;
+    const url = `${backEndURL}/api/users/${currentUserId}`;
+    const theBody = {
+      ...formData,
+      _id: currentUserId,
+    };
+
+    return fetch(url, {
+      method: 'PUT',
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(theBody),
+    })
+      .then((res) => {
+        res.json()
+          .then((data) => {
+            if (!res.ok){
+              if (data.errors){
+                const errorMessages = data.errors.map((v) => v.msg);
+                Events.publish(MiscEvents.changePasswordAttempt, errorMessages);
+              } else {
+                Events.publish(MiscEvents.changePasswordAttempt, ['Unknown error']);
+              }
+            } else {
+              localStorage.setItem('accessToken', data.token);
+              Events.publish(MiscEvents.changePasswordAttempt, null);
+            }
+          });
+      });
+  };
+
   Events.subscribe(ApiEvents.addTask, createTask.bind(this));
   Events.subscribe(ApiEvents.editTask, editTask.bind(this));
   Events.subscribe(ApiEvents.deleteTask, deleteTask.bind(this));
@@ -340,6 +374,7 @@ const ApiMessenger = (() => {
   Events.subscribe(ApiEvents.getInbox, getUserInbox.bind(this));
 
   Events.subscribe(ApiEvents.login, login.bind(this));
+  Events.subscribe(ApiEvents.changePassword, changePassword);
 
   return {
     checkServerStatus,
@@ -349,6 +384,7 @@ const ApiMessenger = (() => {
     deleteProject,
     getUserInbox,
     signup,
+    changePassword,
   };
 })();
 

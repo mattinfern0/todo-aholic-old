@@ -3,6 +3,8 @@ const MiscEvents = Object.freeze({
   loginFailed: 'loginFailed',
   checkServerStatus: 'checkServerStatus',
   logout: 'logout',
+
+  changePasswordAttempt: 'changePasswordAttempt',
 });
 
 export default MiscEvents;

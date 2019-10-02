@@ -13,6 +13,7 @@ const ApiEvents = Object.freeze({
 
   login: 'apiLogin',
   checkServerStatus: 'apiCheckServerStatus',
+  changePassword: 'apiChangePassword',
 });
 
 export default ApiEvents;

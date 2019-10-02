@@ -30,8 +30,6 @@ class SignUpForm extends React.Component {
       return e.preventDefault();
     }
 
-    // Code to Validate & sanitize credentials
-
     const credentials = {
       username,
       password,
