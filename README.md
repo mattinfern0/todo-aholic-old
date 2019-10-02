@@ -1,5 +1,5 @@
 # ToDo-aholic
-![Screenshot of UI](misc/screenshot-app.png)
+![Screenshot of UI](misc/screenshot-3.png)
 ## Description ##
 A full-stack ToDo app using a React.js front-end and an Express REST API back-end. UI inspired by the TickTick app.
 ### Previous Versions:
