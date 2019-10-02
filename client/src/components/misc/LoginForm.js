@@ -12,13 +12,21 @@ class LoginForm extends React.Component {
       username: '',
       password: '',
       loggedIn: false,
+      errorMessage: '',
     };
     this.doLogin = this.doLogin.bind(this);
     this.changeLoggedInStatus = this.changeLoggedInStatus.bind(this);
+    this.changeErrorMessage = this.changeErrorMessage.bind(this);
   }
 
   componentDidMount(){
     Events.subscribe(MiscEvents.login, this.changeLoggedInStatus);
+    Events.subscribe(MiscEvents.loginFailed, this.changeErrorMessage);
+  }
+
+  componentWillUnmount(){
+    Events.unsubscribe(MiscEvents.login, this.changeLoggedInStatus);
+    Events.unsubscribe(MiscEvents.loginFailed, this.changeErrorMessage);
   }
 
   changeLoggedInStatus() {
@@ -33,6 +41,18 @@ class LoginForm extends React.Component {
 
     Events.publish(ApiEvents.login, credentials);
     e.preventDefault();
+  }
+
+  resetForm() {
+    this.setState({
+      username: '',
+      password: '',
+    });
+  }
+
+  changeErrorMessage(message) {
+    this.resetForm();
+    this.setState({errorMessage: message});
   }
 
   render() {
@@ -60,6 +80,9 @@ class LoginForm extends React.Component {
           />
           <input type="submit" value="Log In" />
         </form>
+        <span>
+          <h3>{this.state.errorMessage !== '' && this.state.errorMessage}</h3>
+        </span>
         <span>
           {"Don't have an account? "}
           <Link to="/signup">Sign Up</Link>

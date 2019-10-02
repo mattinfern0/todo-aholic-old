@@ -302,8 +302,11 @@ const ApiMessenger = (() => {
         Events.publish(MiscEvents.login);
       })
       .catch((err) => {
-        console.log('Error logging in: ', err);
-        alert('Sorry! Something went wrong while logging in!');
+        if (err.message === "401") {
+          Events.publish(MiscEvents.loginFailed, "Invalid username or password");
+        } else {
+          Events.publish(MiscEvents.loginFailed, "An error occured. Please try again.");
+        }
       });
   };
 
