@@ -1,4 +1,3 @@
-import Cookies from 'universal-cookie';
 import {Events} from './EventController';
 import {currentProject, CurrentProjectList} from './InterfaceModel';
 
@@ -6,8 +5,8 @@ import ApiEvents from '../event_types/apiEvents';
 import ProjectEvents from '../event_types/projectEvents';
 import TaskEvents from '../event_types/taskEvents';
 import MiscEvents from '../event_types/miscEvents';
+import { setToken, getToken, setCurrentUser, getCurrentUser } from './PersistentData';
 
-const cookies = new Cookies();
 const backEndURL = process.env.REACT_APP_BACKEND_URL;
 
 function processResponse(res){
@@ -42,7 +41,7 @@ const ApiMessenger = (() => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        authorization: `Bearer ${getToken()}`,
       },
       body: JSON.stringify(theBody),
     })
@@ -68,7 +67,7 @@ const ApiMessenger = (() => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        authorization: `Bearer ${getToken()}`,
       },
       body: JSON.stringify(theBody),
     })
@@ -98,7 +97,7 @@ const ApiMessenger = (() => {
     fetch(url, {
       method: 'DELETE',
       headers: {
-        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        authorization: `Bearer ${getToken()}`,
       },
     }).then((res) => {
       if (!res.ok){
@@ -128,7 +127,7 @@ const ApiMessenger = (() => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        authorization: `Bearer ${getToken()}`,
       },
       body: JSON.stringify(theBody),
     }).then((res) => processResponse(res))
@@ -147,13 +146,13 @@ const ApiMessenger = (() => {
   };
 
   const getProjectList = () => {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const currentUser = getCurrentUser();
     const url = `${backEndURL}/api/projects/user/${currentUser._id}`;
 
     fetch(url, {
       method: 'GET',
       headers: {
-        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        authorization: `Bearer ${getToken()}`,
       },
     }).then((res) => processResponse(res))
       .then((data) => {
@@ -174,7 +173,7 @@ const ApiMessenger = (() => {
     fetch(url, {
       method: 'GET',
       headers: {
-        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        authorization: `Bearer ${getToken()}`,
       },
     })
       .then((res) => processResponse(res))
@@ -194,13 +193,13 @@ const ApiMessenger = (() => {
   };
 
   const getUserInbox = () => {
-    const userId = JSON.parse(localStorage.getItem('currentUser'))._id;
+    const userId = getCurrentUser()._id;
 
     const url = `${backEndURL}/api/projects/user/${userId}/inbox`;
     fetch(url, {
       method: 'GET',
       headers: {
-        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        authorization: `Bearer ${getToken()}`,
       },
     })
       .then((res) => processResponse(res))
@@ -229,7 +228,7 @@ const ApiMessenger = (() => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        authorization: `Bearer ${getToken()}`,
       },
       body: JSON.stringify(theBody),
 
@@ -261,7 +260,7 @@ const ApiMessenger = (() => {
     fetch(url, {
       method: 'DELETE',
       headers: {
-        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        authorization: `Bearer ${getToken()}`,
       },
     }).then((res) => {
       if (!res.ok){
@@ -297,8 +296,8 @@ const ApiMessenger = (() => {
       .then((res) => processResponse(res))
       .then((resBody) => {
         // Store access token in local storage
-        localStorage.setItem('accessToken', resBody.token);
-        localStorage.setItem('currentUser', JSON.stringify(resBody.user));
+        setToken(resBody.token);
+        setCurrentUser(resBody.user);
         Events.publish(MiscEvents.login);
       })
       .catch((err) => {
@@ -329,7 +328,7 @@ const ApiMessenger = (() => {
   };
 
   const changePassword = (formData) => {
-    const currentUserId = JSON.parse(localStorage.getItem('currentUser'))._id;
+    const currentUserId = getCurrentUser()._id;
     const url = `${backEndURL}/api/users/${currentUserId}`;
     const theBody = {
       ...formData,
@@ -339,7 +338,7 @@ const ApiMessenger = (() => {
     return fetch(url, {
       method: 'PUT',
       headers: {
-        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        authorization: `Bearer ${getToken()}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(theBody),
@@ -355,7 +354,7 @@ const ApiMessenger = (() => {
                 Events.publish(MiscEvents.changePasswordAttempt, ['Unknown error']);
               }
             } else {
-              localStorage.setItem('accessToken', data.token);
+              setToken(data.token);
               Events.publish(MiscEvents.changePasswordAttempt, null);
             }
           });

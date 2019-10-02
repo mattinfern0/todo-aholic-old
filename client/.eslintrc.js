@@ -33,6 +33,7 @@ module.exports = {
     'no-plusplus': 'off',
     'import/prefer-default-export': 'warn',
     'no-trailing-spaces': 'warn',
+    'object-curly-newline': 'off',
 
     'react/jsx-filename-extension': 'off',
     'react/destructuring-assignment': 'off',
