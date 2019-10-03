@@ -61,33 +61,37 @@ class LoginForm extends React.Component {
     }
 
     return (
-      <div id="login-container" className="user-form-container">
-        <h2>Log In</h2>
-        <form onSubmit={this.doLogin}>
-          <input
-            type="text"
-            value={this.state.username}
-            name="username"
-            onChange={(e) => this.setState({username: e.target.value})}
-            placeholder="Username"
-          />
-          <input
-            type="password"
-            value={this.state.password}
-            name="password"
-            onChange={(e) => this.setState({password: e.target.value})}
-            placeholder="Password"
-          />
-          <input type="submit" value="Log In" />
-        </form>
-        <span>
-          <h3>{this.state.errorMessage !== '' && this.state.errorMessage}</h3>
-        </span>
-        <span>
-          {"Don't have an account? "}
-          <Link to="/signup">Sign Up</Link>
-        </span>
-      </div>
+      <span>
+        <h5>Todo-aholic</h5>
+        <div id="login-container" className="user-form-container">
+          <h2>Log In</h2>
+          <form onSubmit={this.doLogin}>
+            <input
+              type="text"
+              value={this.state.username}
+              name="username"
+              onChange={(e) => this.setState({username: e.target.value})}
+              placeholder="Username"
+            />
+            <input
+              type="password"
+              value={this.state.password}
+              name="password"
+              onChange={(e) => this.setState({password: e.target.value})}
+              placeholder="Password"
+            />
+            <input type="submit" value="Log In" />
+          </form>
+          <span>
+            <h3>{this.state.errorMessage !== '' && this.state.errorMessage}</h3>
+          </span>
+          <span>
+            {"Don't have an account? "}
+            <Link to="/signup">Sign Up</Link>
+          </span>
+        </div>
+      </span>
+      
     );
   }
 }

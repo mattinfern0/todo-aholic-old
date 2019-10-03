@@ -50,6 +50,7 @@ class NewPasswordForm extends React.Component {
   render(){
     return (
       <span>
+        <h2>Change Password</h2>
         <form onSubmit={this.updatePassword}>
           <input
             type="password"

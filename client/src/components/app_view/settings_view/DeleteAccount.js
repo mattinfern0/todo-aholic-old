@@ -40,6 +40,7 @@ class DeleteAccount extends React.Component {
   render(){
     return (
       <div>
+        <h2>Delete Account</h2>
         {this.state.confirming && (
           <span>
             <h3>Are You Sure?</h3>

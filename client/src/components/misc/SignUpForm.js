@@ -66,42 +66,45 @@ class SignUpForm extends React.Component {
     }
 
     return (
-      <div id="signin-container" className="user-form-container">
-        <h2>Sign Up</h2>
-        <form onSubmit={this.doSignUp}>
-          <input
-            type="text"
-            value={this.state.username}
-            name="username"
-            onChange={(e) => this.setState({username: e.target.value})}
-            placeholder="Username"
-          />
-          <input
-            type="password"
-            value={this.state.password}
-            name="password"
-            onChange={(e) => this.setState({password: e.target.value})}
-            placeholder="Password"
-          />
-          <input
-            type="password"
-            value={this.state.confirmPassword}
-            name="confirm-password"
-            onChange={(e) => this.setState({confirmPassword: e.target.value})}
-            placeholder="Confirm Password"
-          />
-          <input type="submit" value="Sign Up" />
-        </form>
+      <span>
+        <h5>Todo-aholic</h5>
+        <div id="signin-container" className="user-form-container">
+          <h2>Sign Up</h2>
+          <form onSubmit={this.doSignUp}>
+            <input
+              type="text"
+              value={this.state.username}
+              name="username"
+              onChange={(e) => this.setState({username: e.target.value})}
+              placeholder="Username"
+            />
+            <input
+              type="password"
+              value={this.state.password}
+              name="password"
+              onChange={(e) => this.setState({password: e.target.value})}
+              placeholder="Password"
+            />
+            <input
+              type="password"
+              value={this.state.confirmPassword}
+              name="confirm-password"
+              onChange={(e) => this.setState({confirmPassword: e.target.value})}
+              placeholder="Confirm Password"
+            />
+            <input type="submit" value="Sign Up" />
+          </form>
 
-        <span>
-          <h3>{this.state.errorMessages.length > 0 && this.state.errorMessages[0].msg}</h3>
-        </span>
+          <span>
+            <h3>{this.state.errorMessages.length > 0 && this.state.errorMessages[0].msg}</h3>
+          </span>
 
-        <span>
-          {'Already have an account? '}
-          <Link to="/login">Log In</Link>
-        </span>
-      </div>
+          <span>
+            {'Already have an account? '}
+            <Link to="/login">Log In</Link>
+          </span>
+        </div>
+      </span>
     );
   }
 }

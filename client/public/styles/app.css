@@ -1,5 +1,5 @@
 /* Accent color for the app */
-.user-form-container h2, .project-element:hover, #ongoing .important, .button-add, .app-drop-down-button {
+.user-form-container h2, .project-element:hover, #ongoing .important, .button-add, .app-drop-down-button, .accent-color {
     color: rgb(255, 86, 86);
 }
 
@@ -93,6 +93,20 @@ h2 {
 
 h3 {
     font-weight: bolder;
+}
+
+h5 {
+    font-family: 'Raleway', sans-serif;
+    text-align: center;
+    font-size: 4em;
+    color: white;
+}
+
+h5 span {
+    display: inline-block;
+    font: inherit;
+    align-items: center;
+    height: 100%;
 }
 
 /* Input and Buttons */
@@ -282,7 +296,7 @@ input[type="checkbox"]{
 
 /* Login/Signin Pages */
 .user-form-container {
-    margin-top: 10%;
+    margin-top: 3%;
     background-color: white;
     display: block;
     width: 30%;
@@ -303,4 +317,49 @@ input[type="checkbox"]{
 
 .user-form-container h2 {
     margin-bottom: 10px;
+}
+
+/* Settings Page */
+#settings-container, #settings-content {
+    height: 100%;
+}
+
+#settings-container {
+    background-color: rgb(94, 94, 94); 
+}
+
+#settings-content, #settings-content form {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    text-align: center;
+}
+
+#settings-content {
+    padding: 10px;
+}
+
+#settings-content h2 {
+    box-sizing: content-box;
+    margin-bottom: 10px;
+    color: rgb(255, 86, 86);
+}
+
+#settings-content input {
+    display: block;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+}
+
+#settings-content h2 {
+    display: block;
+}
+
+.settings-back-link {
+    display: block;
+    text-align: left;
+    font-size: 18pt;
 }
