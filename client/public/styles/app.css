@@ -54,6 +54,8 @@ button.app-drop-down-button {
     top: 0;
     right: 0;
     width: 100px;
+    box-sizing: content-box;
+    margin-top: 5px;
 }
 
 .drop-down ul {
