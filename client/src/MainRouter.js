@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { HashRouter as Router, Route } from 'react-router-dom';
 
 import PrivateRoute from './components/misc/PrivateRoute';
 import LoginForm from './components/misc/LoginForm';
@@ -32,7 +32,7 @@ class MainRouter extends React.Component {
       );
     }
     return (
-      <Router>
+      <Router basename="/">
         <PrivateRoute exact path="/" component={App} />
         <PrivateRoute path="/settings" component={SettingsView} />
         <Route path="/login" component={LoginForm} />
