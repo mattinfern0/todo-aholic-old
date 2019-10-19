@@ -29,7 +29,7 @@ async function processResponse(res) {
   const data = await parseBody(res);
   console.log('Data: ', data);
   if (!res.ok) {
-    if (res.status === 401) {
+    if (res.status === 401 && getToken()) {
       // Logout if unauthorized
       Events.publish(miscEvents.logout);
     }
@@ -45,6 +45,7 @@ async function processResponse(res) {
 }
 
 async function makeRequest(url, options) {
+  // handle payload like a middleware in node
   const payload = {err: null, data: null};
   try {
     const res = await fetch(url, options);
@@ -75,7 +76,7 @@ const ApiMessenger = (() => {
     const addUrl = `${backEndURL}/api/tasks`;
     const theBody = {task: newTask};
 
-    fetch(addUrl, {
+    makeRequest(addUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -83,16 +84,12 @@ const ApiMessenger = (() => {
       },
       body: JSON.stringify(theBody),
     })
-      .then((res) => processResponse(res))
-      .then((data) => {
-        Events.publish(taskEvents.addTask, data.task);
-      }).catch((err) => {
-        if (err.message === '401') {
-          alert('An error occured. Please log back in');
-          return Events.publish(miscEvents.logout);
+      .then((result) => {
+        if (result.err) {
+          alert(result.err.message);
+        } else {
+          Events.publish(taskEvents.addTask, result.data.task);
         }
-        console.log('Error creating task: ', err);
-        alert('Sorry! Something went wrong while creating your task!');
       });
   };
 
@@ -100,8 +97,8 @@ const ApiMessenger = (() => {
     const taskId = updatedTask._id;
     const url = `${backEndURL}/api/tasks/${taskId}`;
     const theBody = {task: updatedTask};
-    console.log("edit task body", theBody);
-    fetch(url, {
+
+    makeRequest(url, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -109,69 +106,51 @@ const ApiMessenger = (() => {
       },
       body: JSON.stringify(theBody),
     })
-      .then((res) => processResponse(res))
-      .then((data) => {
-        Events.publish(taskEvents.editTaskById, updatedTask);
-      }).catch((err) => {
-        if (err.message === '401') {
-          alert('An error occured. Please log back in');
-          return Events.publish(miscEvents.logout);
+      .then((result) => {
+        if (result.err) {
+          alert(result.err.message);
+        } else {
+          Events.publish(taskEvents.editTaskById, updatedTask);
         }
-        console.log('Error editing task: ', err);
-        alert('Sorry, something went wrong while modifying your task!');
       });
   };
 
   const deleteTask = (taskId) => {
     const url = `${backEndURL}/api/tasks/${taskId}`;
-    fetch(url, {
+    makeRequest(url, {
       method: 'DELETE',
       headers: {
         authorization: `Bearer ${getToken()}`,
       },
-    }).then((res) => {
-      if (!res.ok){
-        console.log('Response not ok: ', res);
-        throw new Error('Res not ok');
-      }
-      console.log('DELETE result: ', res);
-      const matchFunc = (thisTask) => thisTask._id === taskId;
-
-      Events.publish(taskEvents.deleteTaskById, matchFunc);
-    }).catch((err) => {
-      if (err.message === '401') {
-        alert('An error occured. Please log back in');
-        return Events.publish(miscEvents.logout);
-      }
-
-      console.log('delete task error: ', err);
-      alert('Sorry! Something went wrong while deleting this task!');
-    });
+    })
+      .then((result) => {
+        if (result.err) {
+          alert('Sorry! Something went wrong while deleting this task');
+        } else {
+          const matchFunc = (thisTask) => thisTask._id === taskId;
+          Events.publish(taskEvents.removeTaskById, matchFunc);
+        }
+      });
   };
 
   const createProject = (newProject) => {
     const addUrl = `${backEndURL}/api/projects`;
     const theBody = {project: newProject};
 
-    fetch(addUrl, {
+    makeRequest(addUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         authorization: `Bearer ${getToken()}`,
       },
       body: JSON.stringify(theBody),
-    }).then((res) => processResponse(res))
-      .then((data) => {
-        console.log('Create project res:', data);
-        Events.publish(projectEvents.addProject, data.project);
-      }).catch((err) => {
-        if (err.message === '401') {
-          alert('An error occured. Please log back in');
-          return Events.publish(miscEvents.logout);
+    })
+      .then((result) => {
+        if (result.err) {
+          alert('Sorry! Something went wrong while creating your project!');
+        } else {
+          Events.publish(projectEvents.addProject, result.data.project);
         }
-
-        console.log('create project error: ', err);
-        alert('Sorry! Something went wrong while creating your project!');
       });
   };
 
@@ -179,44 +158,36 @@ const ApiMessenger = (() => {
     const currentUser = getCurrentUser();
     const url = `${backEndURL}/api/projects/user/${currentUser._id}`;
 
-    fetch(url, {
-      method: 'GET',
-      headers: {
-        authorization: `Bearer ${getToken()}`,
-      },
-    }).then((res) => processResponse(res))
-      .then((data) => {
-        Events.publish(projectEvents.changeProjectList, data.projects);
-      }).catch((err) => {
-        if (err.message === '401') {
-          alert('An error occured. Please log back in');
-          return Events.publish(miscEvents.logout);
-        }
-
-        console.log('get all projects error: ', err);
-        alert('Sorry! Something went wrong while getting your projects!');
-      });
-  };
-
-  const getProjectTasks = (projectId) => {
-    const url = `${backEndURL}/api/projects/${projectId}`;
-    fetch(url, {
+    makeRequest(url, {
       method: 'GET',
       headers: {
         authorization: `Bearer ${getToken()}`,
       },
     })
-      .then((res) => processResponse(res))
-      .then((data) => {
-        Events.publish(projectEvents.changeProject, data);
-      }).catch((err) => {
-        if (err.message === '401') {
-          alert('An error occured. Please log back in');
-          return Events.publish(miscEvents.logout);
+      .then((result) => {
+        if (result.err) {
+          alert('Sorry! Something went wrong while getting your projects');
+        } else {
+          Events.publish(projectEvents.changeProjectList, result.data.projects);
         }
+      });
+  };
 
-        console.log('get project\'s tasks error: ', err);
-        alert('Sorry! Something went wrong while getting this project\'s tasks!');
+  const getProjectTasks = (projectId) => {
+    const url = `${backEndURL}/api/projects/${projectId}`;
+
+    makeRequest(url, {
+      method: 'GET',
+      headers: {
+        authorization: `Bearer ${getToken()}`,
+      },
+    })
+      .then((result) => {
+        if (result.err) {
+          alert('Sorry! Something went wrong while getting this project\'s tasks!');
+        } else {
+          Events.publish(projectEvents.changeProject, result.data);
+        }
       });
   };
 
@@ -224,24 +195,19 @@ const ApiMessenger = (() => {
     const userId = getCurrentUser()._id;
 
     const url = `${backEndURL}/api/projects/user/${userId}/inbox`;
-    fetch(url, {
+
+    makeRequest(url, {
       method: 'GET',
       headers: {
         authorization: `Bearer ${getToken()}`,
       },
     })
-      .then((res) => processResponse(res))
-      .then((data) => {
-        console.log('Sending change project to inbox event');
-        Events.publish(projectEvents.changeProject, data);
-      }).catch((err) => {
-        if (err.message === '401') {
-          alert('An error occured. Please log back in');
-          return Events.publish(miscEvents.logout);
+      .then((result) => {
+        if (result.err) {
+          alert('Sorry, something went wrong while getting your inbox!');
+        } else {
+          Events.publish(projectEvents.changeProject, result.data);
         }
-        
-        console.log('Error getting user inbox');
-        alert('Sorry, something went wrong while getting your inbox!');
       });
   };
 
@@ -250,79 +216,67 @@ const ApiMessenger = (() => {
     const theBody = {
       project: newProjectInfo,
     };
-    fetch(url, {
+
+    makeRequest(url, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         authorization: `Bearer ${getToken()}`,
       },
       body: JSON.stringify(theBody),
-
-    }).then((res) => {
-      if (!res.ok){
-        console.log('Response not ok: ', res);
-        throw new Error(res.status);
-      }
-
-      Events.publish(projectEvents.editProjectById, newProjectInfo);
-    }).catch((err) => {
-      if (err.message === '401') {
-        alert('An error occured. Please log back in');
-        return Events.publish(miscEvents.logout);
-      }
-      console.log('Error editing project', err);
-      alert('Sorry! Something went wrong while editing this project!');
-    });
+    })
+      .then((result) => {
+        if (result.err) {
+          alert('Sorry! Something went wrong while editing this project!');
+        } else {
+          Events.publish(projectEvents.editProjectById, newProjectInfo);
+        }
+      });
   };
 
   const deleteProject = (projectId) => {
     const url = `${backEndURL}/api/projects/${projectId}`;
-    fetch(url, {
+
+    makeRequest(url, {
       method: 'DELETE',
       headers: {
         authorization: `Bearer ${getToken()}`,
       },
-    }).then((res) => {
-      if (!res.ok){
-        console.log('Response not ok: ', res);
-        throw new Error('Response not ok!');
-      }
-      const matchFunc = (thisProject) => thisProject._id === projectId;
-
-      Events.publish(projectEvents.deleteProjectById, matchFunc);
-      getUserInbox('testUser');
-    }).catch((err) => {
-      if (err.message === '401') {
-        alert('An error occured. Please log back in');
-        return Events.publish(miscEvents.logout);
-      }
-      console.log('Error deleting project', err);
-      alert('Sorry! Something went wrong while deleting this project!');
-    });
+    })
+      .then((result) => {
+        if (result.err) {
+          alert('Sorry! Something went wrong while deleting this project!');
+        } else {
+          const matchFunc = (thisProject) => thisProject._id === projectId;
+          Events.publish(projectEvents.deleteProjectById, matchFunc);
+          getUserInbox();
+        }
+      });
   };
 
   const login = (credentials) => {
     const url = `${backEndURL}/api/users/login`;
     const theBody = { username: credentials.username, password: credentials.password };
-    fetch(url, {
+
+    makeRequest(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(theBody),
     })
-      .then((res) => processResponse(res))
-      .then((resBody) => {
-        // Store access token in local storage
-        setToken(resBody.token);
-        setCurrentUser(resBody.user);
-        Events.publish(miscEvents.login);
-      })
-      .catch((err) => {
-        if (err.message === "401") {
-          Events.publish(miscEvents.loginFailed, "Invalid username or password");
+      .then((result) => {
+        if (result.err) {
+          if (result.err.status === 401) {
+            Events.publish(miscEvents.loginFailed, "Invalid username or password");
+          } else {
+            Events.publish(miscEvents.loginFailed, "An error occured. Please try again.");
+          }
         } else {
-          Events.publish(miscEvents.loginFailed, "An error occured. Please try again.");
+          // Store access token in local storage
+          setToken(result.data.token);
+          setCurrentUser(result.data.user);
+          Events.publish(miscEvents.login);
         }
       });
   };

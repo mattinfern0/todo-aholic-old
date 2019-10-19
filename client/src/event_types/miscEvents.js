@@ -4,6 +4,8 @@ const MiscEvents = Object.freeze({
   checkServerStatus: 'checkServerStatus',
   logout: 'logout',
 
+  signupSuccess: 'signupSuccess',
+  signupFailed: 'signupFailed',
   changePasswordAttempt: 'changePasswordAttempt',
   deleteAccountAttempt: 'deleteAccountAttempt',
 });
