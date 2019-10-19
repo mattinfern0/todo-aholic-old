@@ -1,21 +1,60 @@
 import {Events} from './EventController';
-import {currentProject, CurrentProjectList} from './InterfaceModel';
-
-import ApiEvents from '../event_types/apiEvents';
-import ProjectEvents from '../event_types/projectEvents';
-import TaskEvents from '../event_types/taskEvents';
-import MiscEvents from '../event_types/miscEvents';
+import { apiEvents, projectEvents, taskEvents, miscEvents} from '../event_types';
 import { setToken, getToken, setCurrentUser, getCurrentUser } from './PersistentData';
 
 const backEndURL = process.env.REACT_APP_BACKEND_URL;
 
-function processResponse(res){
+function processResponseOLD(res){
   if (!res.ok){
     console.log('Bad response: ', res);
 
     throw new Error(res.status);
   }
   return res.json();
+}
+
+async function parseBody(res) {
+  const text = await res.text();
+  let data = null;
+
+  // Check if body is not empty before parsing
+  if (text && text.length > 0) {
+    data = JSON.parse(text);
+  }
+  return data;
+}
+
+async function processResponse(res) {
+  console.log('Response: ', res);
+  const data = await parseBody(res);
+  console.log('Data: ', data);
+  if (!res.ok) {
+    if (res.status === 401) {
+      // Logout if unauthorized
+      Events.publish(miscEvents.logout);
+    }
+    const message = (data.message ? data.message : null);
+    const errorObject = { 
+      status: res.status,
+      message,
+    };
+    throw errorObject;
+  }
+
+  return data;
+}
+
+async function makeRequest(url, options) {
+  const payload = {err: null, data: null};
+  try {
+    const res = await fetch(url, options);
+    payload.data = await processResponse(res);
+  } catch (err) {
+    console.log(err);
+    payload.err = err;
+  }
+
+  return payload;
 }
 
 const ApiMessenger = (() => {
@@ -33,7 +72,6 @@ const ApiMessenger = (() => {
 
   const createTask = (taskObject) => {
     const newTask = taskObject;
-    newTask.project = currentProject.id;
     const addUrl = `${backEndURL}/api/tasks`;
     const theBody = {task: newTask};
 
@@ -47,11 +85,11 @@ const ApiMessenger = (() => {
     })
       .then((res) => processResponse(res))
       .then((data) => {
-        Events.publish(TaskEvents.addTask, data.task);
+        Events.publish(taskEvents.addTask, data.task);
       }).catch((err) => {
         if (err.message === '401') {
           alert('An error occured. Please log back in');
-          return Events.publish(MiscEvents.logout);
+          return Events.publish(miscEvents.logout);
         }
         console.log('Error creating task: ', err);
         alert('Sorry! Something went wrong while creating your task!');
@@ -73,19 +111,11 @@ const ApiMessenger = (() => {
     })
       .then((res) => processResponse(res))
       .then((data) => {
-        console.log('edit task response: ', data);
-        const matchFunc = (thisTask) => thisTask._id === updatedTask._id;
-
-        const modifyFunc = (task) => {
-          const newTask = JSON.parse(JSON.stringify(updatedTask));
-          return newTask;
-        };
-
-        Events.publish(TaskEvents.editTaskById, updatedTask);
+        Events.publish(taskEvents.editTaskById, updatedTask);
       }).catch((err) => {
         if (err.message === '401') {
           alert('An error occured. Please log back in');
-          return Events.publish(MiscEvents.logout);
+          return Events.publish(miscEvents.logout);
         }
         console.log('Error editing task: ', err);
         alert('Sorry, something went wrong while modifying your task!');
@@ -107,11 +137,11 @@ const ApiMessenger = (() => {
       console.log('DELETE result: ', res);
       const matchFunc = (thisTask) => thisTask._id === taskId;
 
-      Events.publish(TaskEvents.deleteTaskById, matchFunc);
+      Events.publish(taskEvents.deleteTaskById, matchFunc);
     }).catch((err) => {
       if (err.message === '401') {
         alert('An error occured. Please log back in');
-        return Events.publish(MiscEvents.logout);
+        return Events.publish(miscEvents.logout);
       }
 
       console.log('delete task error: ', err);
@@ -133,11 +163,11 @@ const ApiMessenger = (() => {
     }).then((res) => processResponse(res))
       .then((data) => {
         console.log('Create project res:', data);
-        Events.publish(ProjectEvents.addProject, data.project);
+        Events.publish(projectEvents.addProject, data.project);
       }).catch((err) => {
         if (err.message === '401') {
           alert('An error occured. Please log back in');
-          return Events.publish(MiscEvents.logout);
+          return Events.publish(miscEvents.logout);
         }
 
         console.log('create project error: ', err);
@@ -156,11 +186,11 @@ const ApiMessenger = (() => {
       },
     }).then((res) => processResponse(res))
       .then((data) => {
-        Events.publish(ProjectEvents.changeProjectList, data.projects);
+        Events.publish(projectEvents.changeProjectList, data.projects);
       }).catch((err) => {
         if (err.message === '401') {
           alert('An error occured. Please log back in');
-          return Events.publish(MiscEvents.logout);
+          return Events.publish(miscEvents.logout);
         }
 
         console.log('get all projects error: ', err);
@@ -178,13 +208,11 @@ const ApiMessenger = (() => {
     })
       .then((res) => processResponse(res))
       .then((data) => {
-        currentProject.id = projectId;
-        currentProject.project = data.info;
-        Events.publish(ProjectEvents.changeProject, data);
+        Events.publish(projectEvents.changeProject, data);
       }).catch((err) => {
         if (err.message === '401') {
           alert('An error occured. Please log back in');
-          return Events.publish(MiscEvents.logout);
+          return Events.publish(miscEvents.logout);
         }
 
         console.log('get project\'s tasks error: ', err);
@@ -205,11 +233,11 @@ const ApiMessenger = (() => {
       .then((res) => processResponse(res))
       .then((data) => {
         console.log('Sending change project to inbox event');
-        Events.publish(ProjectEvents.changeProject, data);
+        Events.publish(projectEvents.changeProject, data);
       }).catch((err) => {
         if (err.message === '401') {
           alert('An error occured. Please log back in');
-          return Events.publish(MiscEvents.logout);
+          return Events.publish(miscEvents.logout);
         }
         
         console.log('Error getting user inbox');
@@ -236,11 +264,11 @@ const ApiMessenger = (() => {
         throw new Error(res.status);
       }
 
-      Events.publish(ProjectEvents.editProjectById, newProjectInfo);
+      Events.publish(projectEvents.editProjectById, newProjectInfo);
     }).catch((err) => {
       if (err.message === '401') {
         alert('An error occured. Please log back in');
-        return Events.publish(MiscEvents.logout);
+        return Events.publish(miscEvents.logout);
       }
       console.log('Error editing project', err);
       alert('Sorry! Something went wrong while editing this project!');
@@ -261,14 +289,12 @@ const ApiMessenger = (() => {
       }
       const matchFunc = (thisProject) => thisProject._id === projectId;
 
-      CurrentProjectList.removeFirst(matchFunc);
-
-      Events.publish(ProjectEvents.deleteProjectById, matchFunc);
+      Events.publish(projectEvents.deleteProjectById, matchFunc);
       getUserInbox('testUser');
     }).catch((err) => {
       if (err.message === '401') {
         alert('An error occured. Please log back in');
-        return Events.publish(MiscEvents.logout);
+        return Events.publish(miscEvents.logout);
       }
       console.log('Error deleting project', err);
       alert('Sorry! Something went wrong while deleting this project!');
@@ -290,13 +316,13 @@ const ApiMessenger = (() => {
         // Store access token in local storage
         setToken(resBody.token);
         setCurrentUser(resBody.user);
-        Events.publish(MiscEvents.login);
+        Events.publish(miscEvents.login);
       })
       .catch((err) => {
         if (err.message === "401") {
-          Events.publish(MiscEvents.loginFailed, "Invalid username or password");
+          Events.publish(miscEvents.loginFailed, "Invalid username or password");
         } else {
-          Events.publish(MiscEvents.loginFailed, "An error occured. Please try again.");
+          Events.publish(miscEvents.loginFailed, "An error occured. Please try again.");
         }
       });
   };
@@ -341,13 +367,13 @@ const ApiMessenger = (() => {
             if (!res.ok){
               if (data.errors){
                 const errorMessages = data.errors.map((v) => v.msg);
-                Events.publish(MiscEvents.changePasswordAttempt, errorMessages);
+                Events.publish(miscEvents.changePasswordAttempt, errorMessages);
               } else {
-                Events.publish(MiscEvents.changePasswordAttempt, ['Unknown error']);
+                Events.publish(miscEvents.changePasswordAttempt, ['Unknown error']);
               }
             } else {
               setToken(data.token);
-              Events.publish(MiscEvents.changePasswordAttempt, null);
+              Events.publish(miscEvents.changePasswordAttempt, null);
             }
           });
       });
@@ -365,24 +391,24 @@ const ApiMessenger = (() => {
     })
       .then((res) => {
         console.log(res);
-        Events.publish(MiscEvents.deleteAccountAttempt, !res.ok);
+        Events.publish(miscEvents.deleteAccountAttempt, !res.ok);
       });
   };
 
-  Events.subscribe(ApiEvents.addTask, createTask.bind(this));
-  Events.subscribe(ApiEvents.editTask, editTask.bind(this));
-  Events.subscribe(ApiEvents.deleteTask, deleteTask.bind(this));
+  Events.subscribe(apiEvents.addTask, createTask.bind(this));
+  Events.subscribe(apiEvents.editTask, editTask.bind(this));
+  Events.subscribe(apiEvents.deleteTask, deleteTask.bind(this));
 
-  Events.subscribe(ApiEvents.addProject, createProject.bind(this));
-  Events.subscribe(ApiEvents.editProject, editProject.bind(this));
-  Events.subscribe(ApiEvents.changeProjectList, getProjectList.bind(this));
-  Events.subscribe(ApiEvents.changeProject, getProjectTasks.bind(this));
-  Events.subscribe(ApiEvents.removeProject, deleteProject.bind(this));
-  Events.subscribe(ApiEvents.getInbox, getUserInbox.bind(this));
+  Events.subscribe(apiEvents.addProject, createProject.bind(this));
+  Events.subscribe(apiEvents.editProject, editProject.bind(this));
+  Events.subscribe(apiEvents.changeProjectList, getProjectList.bind(this));
+  Events.subscribe(apiEvents.changeProject, getProjectTasks.bind(this));
+  Events.subscribe(apiEvents.removeProject, deleteProject.bind(this));
+  Events.subscribe(apiEvents.getInbox, getUserInbox.bind(this));
 
-  Events.subscribe(ApiEvents.login, login.bind(this));
-  Events.subscribe(ApiEvents.changePassword, changePassword);
-  Events.subscribe(ApiEvents.deleteAccount, deleteAccount.bind(this));
+  Events.subscribe(apiEvents.login, login.bind(this));
+  Events.subscribe(apiEvents.changePassword, changePassword);
+  Events.subscribe(apiEvents.deleteAccount, deleteAccount.bind(this));
 
   return {
     checkServerStatus,
