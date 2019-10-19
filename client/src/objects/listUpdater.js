@@ -4,7 +4,7 @@ class ListUpdater {
   constructor(listRef, listenEvents) {
     this.list = listRef;
 
-    Events.subscribe(listenEvents.add, this.add.bind(this));
+    // Events.subscribe(listenEvents.add, this.add.bind(this));
     Events.subscribe(listenEvents.removeFirst, this.removeFirst.bind(this));
     Events.subscribe(listenEvents.editFirst, this.editFirst.bind(this));
     Events.subscribe(listenEvents.changeList, this.changeList.bind(this));

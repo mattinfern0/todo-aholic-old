@@ -5,6 +5,7 @@ const ProjectEvents = Object.freeze({
   deleteProjectById: 'removeProjectById',
   changeProject: 'changeProject',
   changeProjectList: 'changeProjectList',
+  selectProject: 'selectProject',
 
   projectChanged: 'projectChanged',
   projectListChanged: 'projectListChanged',

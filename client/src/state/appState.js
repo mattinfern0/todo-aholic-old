@@ -3,8 +3,8 @@ import {projectEvents, taskEvents } from '../event_types';
 import ListUpdater from '../objects/listUpdater';
 
 const appState = {
-  currentTaskList: null,
-  currentProjectList: null,
+  currentTaskList: [],
+  currentProjectList: [],
   selectedTask: null,
 };
 
@@ -25,8 +25,5 @@ const projectListListeners = {
 Events.subscribe(taskEvents.selectTask, (task) => {
   appState.selectedTask = task;
 });
-
-const taskListUpdater = ListUpdater(appState.currentTaskList, taskListListeners);
-const projectListUpdater = ListUpdater(appState.currentProjectList, projectListListeners);
 
 export default appState;

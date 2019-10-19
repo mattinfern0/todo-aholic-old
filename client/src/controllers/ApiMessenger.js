@@ -204,8 +204,7 @@ const ApiMessenger = (() => {
     })
       .then((res) => processResponse(res))
       .then((data) => {
-        currentProject.id = data.info._id;
-        currentProject.project = data.info;
+        Events.publish(ProjectEvents.selectProject, data.info);
         console.log('Sending change project to inbox event');
         Events.publish(ProjectEvents.changeProject, data.tasks);
       }).catch((err) => {

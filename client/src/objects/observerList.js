@@ -14,7 +14,7 @@ class ObserverList{
     this.itemChangedEvent = eventArgs.itemChangedEvent;
     /* Have to use .bind(this) to bind 'this' keyword
         to the instance or else it'll be undefined */
-    Events.subscribe(eventArgs.addEvent, this.add.bind(this));
+    // Events.subscribe(eventArgs.addEvent, this.add.bind(this));
 
     if (eventArgs.editFirstEvent){
       Events.subscribe(eventArgs.editFirstEvent, this.editFirst.bind(this));

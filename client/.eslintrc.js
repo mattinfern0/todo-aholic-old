@@ -34,6 +34,7 @@ module.exports = {
     'import/prefer-default-export': 'warn',
     'no-trailing-spaces': 'warn',
     'object-curly-newline': 'off',
+    'import/prefer-default-export': 'off',
 
     'react/jsx-filename-extension': 'off',
     'react/destructuring-assignment': 'off',

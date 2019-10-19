@@ -14,16 +14,23 @@ class ProjectHeader extends React.Component {
       project: (currentProject.project),
     };
     this.refresh = this.refresh.bind(this);
+    this.setCurrentProject = this.setCurrentProject.bind(this);
   }
 
   componentDidMount(){
-    Events.subscribe(ProjectEvents.projectChanged, this.refresh);
-    Events.subscribe(ProjectEvents.changeProject, this.refresh);
+    // Events.subscribe(ProjectEvents.projectChanged, this.refresh);
+    // Events.subscribe(ProjectEvents.changeProject, this.refresh);
+    Events.subscribe(ProjectEvents.selectProject, this.setCurrentProject);
   }
 
   componentWillUnmount() {
-    Events.unsubscribe(ProjectEvents.changeProject, this.refresh);
-    Events.unsubscribe(ProjectEvents.projectChanged, this.refresh);
+    Events.unsubscribe(ProjectEvents.selectProject, this.setCurrentProject);
+    // Events.unsubscribe(ProjectEvents.changeProject, this.refresh);
+    // Events.unsubscribe(ProjectEvents.projectChanged, this.refresh);
+  }
+
+  setCurrentProject(newProject) {
+    this.setState({ project: newProject });
   }
 
   refresh(){
@@ -33,7 +40,7 @@ class ProjectHeader extends React.Component {
   render() {
     if (this.state.editing) {
       return (
-        <EditProjectForm 
+        <EditProjectForm
           revertFunc={() => this.setState({ editing: false})}
           initialProjectInfo={this.state.project}
         />
