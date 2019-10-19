@@ -28,6 +28,7 @@ class NewTaskForm extends React.Component {
     const newTaskInfo = {
       name: this.state.name,
       dueDate,
+      project: this.props.projectInfo._id,
     };
 
     Events.publish(ApiEvents.addTask, newTaskInfo);

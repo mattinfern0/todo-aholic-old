@@ -6,3 +6,13 @@ export function removeFirst(array, testFunc){
     }
   }
 }
+
+export function editFirst(array, testFunc, modifyFunc) {
+  console.log('editFirst testFunc: ',testFunc);
+  for (let i = 0; i < array.length; i++) {
+    if (testFunc(array[i])) {
+      array[i] = modifyFunc(array[i]);
+      return;
+    }
+  }
+}

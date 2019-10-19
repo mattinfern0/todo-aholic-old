@@ -3,12 +3,10 @@
 import React from 'react';
 
 import AppHeader from './components/app_view/AppHeader';
-import TaskListView from './components/app_view/tasks_view/TaskListView';
-import NewTaskForm from './components/app_view/tasks_view/NewTaskForm';
 import ProjectListView from './components/app_view/projects_view/ProjectListView';
 import TaskDetailsView from './components/app_view/details_view/TaskDetailsView';
-import ProjectHeader from './components/app_view/tasks_view/ProjectHeader';
 import UnauthorizedListener from './components/misc/UnauthorizedListener';
+import TaskView from './components/app_view/tasks_view/TasksView';
 
 import {Events} from './controllers/EventController';
 import ApiEvents from './event_types/apiEvents';
@@ -33,11 +31,7 @@ class App extends React.Component {
           <aside id="project-container">
             <ProjectListView />
           </aside>
-          <section id="task-container">
-            <ProjectHeader />
-            <NewTaskForm />
-            <TaskListView />
-          </section>
+          <TaskView />
           <aside id="details-container">
             <TaskDetailsView />
           </aside>

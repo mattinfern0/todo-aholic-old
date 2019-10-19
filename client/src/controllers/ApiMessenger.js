@@ -180,7 +180,7 @@ const ApiMessenger = (() => {
       .then((data) => {
         currentProject.id = projectId;
         currentProject.project = data.info;
-        Events.publish(ProjectEvents.changeProject, data.tasks);
+        Events.publish(ProjectEvents.changeProject, data);
       }).catch((err) => {
         if (err.message === '401') {
           alert('An error occured. Please log back in');
@@ -204,9 +204,8 @@ const ApiMessenger = (() => {
     })
       .then((res) => processResponse(res))
       .then((data) => {
-        Events.publish(ProjectEvents.selectProject, data.info);
         console.log('Sending change project to inbox event');
-        Events.publish(ProjectEvents.changeProject, data.tasks);
+        Events.publish(ProjectEvents.changeProject, data);
       }).catch((err) => {
         if (err.message === '401') {
           alert('An error occured. Please log back in');

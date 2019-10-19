@@ -21,7 +21,7 @@ class ObserverList{
     }
 
     if (eventArgs.changeListEvent){
-      Events.subscribe(eventArgs.changeListEvent, this.setList.bind(this));
+      // Events.subscribe(eventArgs.changeListEvent, this.setList.bind(this));
     }
 
     if (eventArgs.removeFirstEvent){
