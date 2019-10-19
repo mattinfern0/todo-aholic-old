@@ -47,9 +47,10 @@ class ProjectListView extends React.Component{
     Events.unsubscribe(projectEvents.changeProjectList, this.changeProjectList);
   }
 
-  addProject(item){
-    console.log('adding');
-    console.log('after', this.state.projectList);
+  addProject(newProject){
+    this.setState((prevState) => (
+      { projectList: prevState.projectList.concat([newProject])}
+    ));
   }
 
   editTargetProject(newInfo) {

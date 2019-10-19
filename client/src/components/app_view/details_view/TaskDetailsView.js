@@ -25,7 +25,7 @@ class TaskDetailsView extends React.Component {
   componentDidMount() {
     Events.subscribe(TaskEvents.selectTask, this.setTaskInfo);
     Events.subscribe(TaskEvents.editTaskById, this.updateTaskInfo);
-    Events.subscribe(TaskEvents.deleteTaskById, this.onDelete);
+    Events.subscribe(TaskEvents.removeTaskById, this.onDelete);
 
     Events.subscribe(ProjectEvents.changeProject, this.clearInfo);
   }
@@ -33,7 +33,7 @@ class TaskDetailsView extends React.Component {
   componentWillUnmount() {
     Events.unsubscribe(TaskEvents.selectTask, this.setTaskInfo);
     Events.unsubscribe(TaskEvents.editTaskById, this.updateTaskInfo);
-    Events.unsubscribe(TaskEvents.deleteTaskById, this.onDelete);
+    Events.unsubscribe(TaskEvents.removeTaskById, this.onDelete);
 
     Events.unsubscribe(ProjectEvents.changeProject, this.clearInfo);
   }
@@ -49,7 +49,7 @@ class TaskDetailsView extends React.Component {
   }
 
   onDelete(matchFunc) {
-    if (matchFunc(this.state.currentTask)) {
+    if (this.state.taskInfo && matchFunc(this.state.taskInfo)) {
       this.clearInfo();
     }
   }
