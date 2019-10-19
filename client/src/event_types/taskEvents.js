@@ -4,6 +4,7 @@ const TaskEvents = Object.freeze({
   editTaskById: 'editTaskById',
   deleteTaskById: 'deleteTaskById',
   getTaskDetail: 'getTaskDetail',
+  selectTask: 'selectTask',
 
   taskChanged: 'taskChanged',
   taskListChanged: 'taskListChanged',
