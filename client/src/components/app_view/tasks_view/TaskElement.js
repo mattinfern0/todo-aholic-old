@@ -31,7 +31,7 @@ class TaskElement extends React.Component{
   }
 
   onElementClick(e){
-    Events.publish(TaskEvents.getTaskDetail, this.props.task);
+    Events.publish(TaskEvents.selectTask, this.props.task);
   }
 
   onDelete(e){

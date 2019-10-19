@@ -18,6 +18,7 @@ class TasksView extends React.Component {
     this.editTargetTask = this.editTargetTask.bind(this);
     this.removeTargetTask = this.removeTargetTask.bind(this);
     this.changeProject = this.changeProject.bind(this);
+    this.editProjectInfo = this.editProjectInfo.bind(this);
   }
 
   componentDidMount() {
@@ -25,6 +26,7 @@ class TasksView extends React.Component {
     Events.subscribe(taskEvents.editTaskById, this.editTargetTask);
     Events.subscribe(taskEvents.removeTaskById, this.removeTargetTask);
     Events.subscribe(projectEvents.changeProject, this.changeProject);
+    Events.subscribe(projectEvents.editProjectById, this.editProjectInfo);
   }
 
   componentWillUnmount() {
@@ -55,13 +57,19 @@ class TasksView extends React.Component {
     });
   }
 
-  editTargetTask(args) {
-    const {matchFunc: targetFunc, modifyFunc} = args;
+  editTargetTask(newInfo) {
+    const targetFunc = (task) => newInfo._id === task._id;
+    const modifyFunc = () => newInfo;
     this.setState((prevState) => {
       const tasks = JSON.parse(JSON.stringify(prevState.projectTasks));
+      console.log('editTasks: ', tasks);
       editFirst(tasks, targetFunc, modifyFunc);
       return { projectTasks: tasks };
     });
+  }
+
+  editProjectInfo(newInfo) {
+    this.setState({ projectInfo: newInfo });
   }
 
   render() {

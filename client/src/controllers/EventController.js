@@ -18,9 +18,9 @@ class Event{
   }
 
   runHandlers(args){
-    console.log(this.name);
-    console.log(this._handlers);
-    console.log(args);
+    console.log('Event name: ', this.name);
+    console.log('Event Handlers: ', this._handlers);
+    console.log('Publish args: ', args);
     this._handlers.forEach((handler) => {
       handler(args);
     });

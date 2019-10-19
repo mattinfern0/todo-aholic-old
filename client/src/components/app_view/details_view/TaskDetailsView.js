@@ -16,60 +16,46 @@ class TaskDetailsView extends React.Component {
       currentTask: null, // Reference to the currentTask to watch
       taskInfo: null,
     };
-    this.refresh = this.refresh.bind(this);
-    this.setCurrentTask = this.setCurrentTask.bind(this);
-    this.onProjectChange = this.onProjectChange.bind(this);
+    this.setTaskInfo = this.setTaskInfo.bind(this);
+    this.updateTaskInfo = this.updateTaskInfo.bind(this);
+    this.clearInfo = this.clearInfo.bind(this);
     this.onDelete = this.onDelete.bind(this);
   }
 
   componentDidMount() {
-    Events.subscribe(TaskEvents.getTaskDetail, this.setCurrentTask);
+    Events.subscribe(TaskEvents.selectTask, this.setTaskInfo);
+    Events.subscribe(TaskEvents.editTaskById, this.updateTaskInfo);
     Events.subscribe(TaskEvents.deleteTaskById, this.onDelete);
 
-    Events.subscribe(TaskEvents.taskChanged, this.refresh);
-    Events.subscribe(ProjectEvents.projectChanged, this.onProjectChange);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.currentTask !== prevState.currentTask) {
-      this.refresh();
-    }
+    Events.subscribe(ProjectEvents.changeProject, this.clearInfo);
   }
 
   componentWillUnmount() {
-    Events.unsubscribe(TaskEvents.getTaskDetail, this.setCurrentTask);
+    Events.unsubscribe(TaskEvents.selectTask, this.setTaskInfo);
+    Events.unsubscribe(TaskEvents.editTaskById, this.updateTaskInfo);
     Events.unsubscribe(TaskEvents.deleteTaskById, this.onDelete);
 
-    Events.unsubscribe(TaskEvents.taskChanged, this.refresh);
-    Events.unsubscribe(ProjectEvents.projectChanged, this.onProjectChange);
+    Events.unsubscribe(ProjectEvents.changeProject, this.clearInfo);
   }
 
-  setCurrentTask(task) {
+  setTaskInfo(task) {
     if (!this.state.editing) {
-      this.setState({ currentTask: task });
+      this.setState({ taskInfo: task });
     }
+  }
+
+  updateTaskInfo(newInfo) {
+    this.setState({ taskInfo: newInfo });
   }
 
   onDelete(matchFunc) {
     if (matchFunc(this.state.currentTask)) {
-      this.setState({ currentTask: null });
-      this.refresh();
+      this.clearInfo();
     }
   }
 
-  refresh() {
-    if (this.state.currentTask != null) {
-      // Clones the object using json
-      this.setState((prevState) => ({
-        taskInfo: JSON.parse(JSON.stringify(prevState.currentTask)),
-      }));
-    } else {
-      this.setState({ taskInfo: null });
-    }
-  }
-
-  onProjectChange() {
-    this.setState({ currentTask: null });
+  clearInfo() {
+    this.setState({ taskInfo: null });
   }
 
   render() {

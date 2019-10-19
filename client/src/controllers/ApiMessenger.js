@@ -81,7 +81,7 @@ const ApiMessenger = (() => {
           return newTask;
         };
 
-        Events.publish(TaskEvents.editTaskById, {matchFunc, modifyFunc});
+        Events.publish(TaskEvents.editTaskById, updatedTask);
       }).catch((err) => {
         if (err.message === '401') {
           alert('An error occured. Please log back in');
@@ -236,13 +236,7 @@ const ApiMessenger = (() => {
         throw new Error(res.status);
       }
 
-      const matchFunc = (thisProject) => thisProject._id === newProjectInfo._id;
-      const modifyFunc = (project) => {
-        const newProject = JSON.parse(JSON.stringify(newProjectInfo));
-        return newProject;
-      };
-
-      Events.publish(ProjectEvents.editProjectById, {matchFunc, modifyFunc});
+      Events.publish(ProjectEvents.editProjectById, newProjectInfo);
     }).catch((err) => {
       if (err.message === '401') {
         alert('An error occured. Please log back in');

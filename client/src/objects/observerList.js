@@ -17,7 +17,7 @@ class ObserverList{
     // Events.subscribe(eventArgs.addEvent, this.add.bind(this));
 
     if (eventArgs.editFirstEvent){
-      Events.subscribe(eventArgs.editFirstEvent, this.editFirst.bind(this));
+      // Events.subscribe(eventArgs.editFirstEvent, this.editFirst.bind(this));
     }
 
     if (eventArgs.changeListEvent){

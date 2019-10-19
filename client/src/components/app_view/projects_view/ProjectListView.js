@@ -1,16 +1,14 @@
 import React from 'react';
 import {Events} from '../../../controllers/EventController';
 import NewProjectForm from './NewProjectForm';
-import ApiEvents from '../../../event_types/apiEvents';
-import ProjectEvents from '../../../event_types/projectEvents';
-import { removeFirst } from '../../../utils';
-import { projectEvents } from '../../../event_types';
+import { removeFirst, editFirst } from '../../../utils';
+import { projectEvents, apiEvents } from '../../../event_types';
 
 
 function ProjectElement(props){
   const onProjectClick = (e) => {
-    Events.publish(ApiEvents.changeProject, props.project._id);
-    Events.publish(ProjectEvents.selectProject, props.project);
+    Events.publish(apiEvents.changeProject, props.project._id);
+    Events.publish(projectEvents.selectProject, props.project);
   };
 
   return (
@@ -30,25 +28,38 @@ class ProjectListView extends React.Component{
     };
 
     this.addProject = this.addProject.bind(this);
+    this.editTargetProject = this.editTargetProject.bind(this);
     this.removeFirst = this.removeFirst.bind(this);
     this.changeProjectList = this.changeProjectList.bind(this);
   }
 
   componentDidMount(){
-    Events.subscribe(ProjectEvents.addProject, this.addProject);
-    Events.subscribe(ProjectEvents.deleteProjectById, this.removeFirst);
+    Events.subscribe(projectEvents.addProject, this.addProject);
+    Events.subscribe(projectEvents.editProjectById, this.editTargetProject);
+    Events.subscribe(projectEvents.deleteProjectById, this.removeFirst);
     Events.subscribe(projectEvents.changeProjectList, this.changeProjectList);
   }
 
   componentWillUnmount(){
-    Events.unsubscribe(ProjectEvents.addProject, this.addProject);
-    Events.unsubscribe(ProjectEvents.deleteProjectById, this.removeFirst);
+    Events.unsubscribe(projectEvents.addProject, this.addProject);
+    Events.unsubscribe(projectEvents.editProjectById, this.editTargetProject);
+    Events.unsubscribe(projectEvents.deleteProjectById, this.removeFirst);
     Events.unsubscribe(projectEvents.changeProjectList, this.changeProjectList);
   }
 
   addProject(item){
     console.log('adding');
     console.log('after', this.state.projectList);
+  }
+
+  editTargetProject(newInfo) {
+    const targetFunc = (project) => project._id === newInfo._id;
+    const modifyFunc = () => newInfo;
+    this.setState((prevState) => {
+      const projects = JSON.parse(JSON.stringify(prevState.projectList));
+      editFirst(projects, targetFunc, modifyFunc);
+      return { projectList: projects };
+    });
   }
 
   removeFirst(testFunc) {
@@ -76,7 +87,7 @@ class ProjectListView extends React.Component{
         <div
           id="inbox-project"
           className="project-element"
-          onClick={() => Events.publish(ApiEvents.getInbox)}
+          onClick={() => Events.publish(apiEvents.getInbox)}
         >
           Inbox
         </div>
