@@ -1,26 +1,11 @@
 import React from 'react';
 import {Events} from '../../../controllers/EventController';
 import NewProjectForm from './NewProjectForm';
+import ProjectList from './ProjectList';
 import { removeFirst, editFirst } from '../../../utils';
 import { projectEvents, apiEvents } from '../../../event_types';
 
-
-function ProjectElement(props){
-  const onProjectClick = (e) => {
-    Events.publish(apiEvents.changeProject, props.project._id);
-    Events.publish(projectEvents.selectProject, props.project);
-  };
-
-  return (
-    <span>
-      <span className="project-element" onClick={onProjectClick}>
-        {props.project.name}
-      </span>
-    </span>
-  );
-}
-
-class ProjectListView extends React.Component{
+class ProjectsContainer extends React.Component{
   constructor(props){
     super(props);
     this.state = {
@@ -75,15 +60,9 @@ class ProjectListView extends React.Component{
     this.setState({ projectList: newList });
   }
 
-  render(){
-    const projectElements = this.state.projectList.map((project) => (
-      <li key={project._id}>
-        <ProjectElement project={project} showDelete={this.state.editing} />
-      </li>
-    ));
-
+  render() {
     return (
-      <div>
+      <aside id="project-container">
         <h2>Projects</h2>
         <div
           id="inbox-project"
@@ -93,12 +72,12 @@ class ProjectListView extends React.Component{
           Inbox
         </div>
         <hr />
-        <ul id="project-list">{projectElements}</ul>
+        <ProjectList projectList={this.state.projectList} />
         <hr />
         <NewProjectForm />
-      </div>
+      </aside>
     );
   }
 }
 
-export default ProjectListView;
+export default ProjectsContainer;

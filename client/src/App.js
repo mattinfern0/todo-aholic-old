@@ -1,21 +1,15 @@
-/* eslint-disable no-useless-constructor */
-/* eslint-disable import/first */
 import React from 'react';
 
 import AppHeader from './components/app_view/AppHeader';
-import ProjectListView from './components/app_view/projects_view/ProjectListView';
-import TaskDetailsView from './components/app_view/details_view/TaskDetailsView';
+import ProjectsContainer from './components/app_view/projects_view/ProjectsContainer';
+import DetailsContainer from './components/app_view/details_view/DetailsContainer';
 import UnauthorizedListener from './components/misc/UnauthorizedListener';
-import TaskView from './components/app_view/tasks_view/TasksView';
+import TasksContainer from './components/app_view/tasks_view/TasksContainer';
 
 import {Events} from './controllers/EventController';
 import ApiEvents from './event_types/apiEvents';
 
 class App extends React.Component {
-  constructor(props){
-    super(props);
-  }
-
   componentDidMount(){
     Events.publish(ApiEvents.getInbox);
     Events.publish(ApiEvents.changeProjectList);
@@ -25,16 +19,12 @@ class App extends React.Component {
     return (
       <div id="app-container">
         <UnauthorizedListener />
-        
+
         <AppHeader />
         <section id="content">
-          <aside id="project-container">
-            <ProjectListView />
-          </aside>
-          <TaskView />
-          <aside id="details-container">
-            <TaskDetailsView />
-          </aside>
+          <ProjectsContainer />
+          <TasksContainer />
+          <DetailsContainer />
         </section>
       </div>
     );

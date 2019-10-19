@@ -6,7 +6,7 @@ import { removeFirst, editFirst } from '../../../utils';
 import { Events } from '../../../controllers/EventController';
 import { projectEvents, taskEvents } from '../../../event_types';
 
-class TasksView extends React.Component {
+class TasksContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -34,6 +34,7 @@ class TasksView extends React.Component {
     Events.unsubscribe(taskEvents.editTaskById, this.editTargetTask);
     Events.unsubscribe(taskEvents.removeTaskById, this.removeTargetTask);
     Events.unsubscribe(projectEvents.changeProject, this.changeProject);
+    Events.unsubscribe(projectEvents.editProjectById, this.editProjectInfo);
   }
 
   changeProject(newProject) {
@@ -62,7 +63,6 @@ class TasksView extends React.Component {
     const modifyFunc = () => newInfo;
     this.setState((prevState) => {
       const tasks = JSON.parse(JSON.stringify(prevState.projectTasks));
-      console.log('editTasks: ', tasks);
       editFirst(tasks, targetFunc, modifyFunc);
       return { projectTasks: tasks };
     });
@@ -83,4 +83,4 @@ class TasksView extends React.Component {
   }
 }
 
-export default TasksView;
+export default TasksContainer;

@@ -36,6 +36,7 @@ module.exports = {
     'object-curly-newline': 'off',
     'import/prefer-default-export': 'off',
     'no-param-reassign': 'off',
+    'import/named': 'off',
 
     'react/jsx-filename-extension': 'off',
     'react/destructuring-assignment': 'off',
@@ -46,5 +47,6 @@ module.exports = {
     'jsx-a11y/no-static-element-interactions': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/control-has-associated-label': 'off',
+    'jsx-a11y/no-noninteractive-element-interactions': 'off',
   },
 };
