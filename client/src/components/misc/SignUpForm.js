@@ -1,6 +1,8 @@
 import React from 'react';
 import {Redirect, Link} from 'react-router-dom';
 import ApiMessenger from '../../controllers/ApiMessenger';
+import { Events } from '../../controllers/EventController';
+import { apiEvents, miscEvents } from '../../event_types';
 
 
 class SignUpForm extends React.Component {
@@ -14,20 +16,29 @@ class SignUpForm extends React.Component {
       success: false,
     };
     this.doSignUp = this.doSignUp.bind(this);
+    this.onError = this.onError.bind(this);
+    this.onSucess = this.onSucess.bind(this);
   }
 
   componentDidMount(){
-    // Events.subscribe(EventTypes.login, this.changeLoggedInStatus);
+    Events.subscribe(miscEvents.signupFailed, this.onError);
+    Events.subscribe(miscEvents.signupSuccess, this.onSucess);
+  }
+
+  componentWillUnmount(){
+    Events.unsubscribe(miscEvents.signupFailed, this.onError);
+    Events.unsubscribe(miscEvents.signupSuccess, this.onSucess);
   }
 
   doSignUp(e) {
+    e.preventDefault();
     const username = this.state.username;
     const password = this.state.password;
     const password2 = this.state.confirmPassword;
 
     if (password2 !== password) {
       this.setState({ errorMessages: [{msg: 'Passwords don\'t match'}] });
-      return e.preventDefault();
+      return;
     }
 
     const credentials = {
@@ -35,29 +46,15 @@ class SignUpForm extends React.Component {
       password,
     };
 
-    ApiMessenger.signup(credentials)
-      .then(() => {
-        console.log('Successfully signed up');
-        this.setState({
-          success: true,
-        });
-      })
-      .catch((err) => {
-        console.log('Error signing up', err);
-        if (err instanceof Response){
-          return err.json();
-        }
-      })
-      .then((data) => {
-        if (!data){
-          return;
-        }
-        this.setState({errorMessages: []});
-        if (data.errors) {
-          this.setState({errorMessages: data.errors });
-        }
-      });
-    e.preventDefault();
+    Events.publish(apiEvents.signup, credentials);
+  }
+
+  onError(errors){
+    this.setState({ errorMessages: errors });
+  }
+
+  onSucess(){
+    this.setState({ success: true });
   }
 
   render() {

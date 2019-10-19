@@ -1,62 +1,9 @@
 import {Events} from './EventController';
 import { apiEvents, projectEvents, taskEvents, miscEvents} from '../event_types';
 import { setToken, getToken, setCurrentUser, getCurrentUser } from './PersistentData';
+import { makeRequest } from '../utils';
 
 const backEndURL = process.env.REACT_APP_BACKEND_URL;
-
-function processResponseOLD(res){
-  if (!res.ok){
-    console.log('Bad response: ', res);
-
-    throw new Error(res.status);
-  }
-  return res.json();
-}
-
-async function parseBody(res) {
-  const text = await res.text();
-  let data = null;
-
-  // Check if body is not empty before parsing
-  if (text && text.length > 0) {
-    data = JSON.parse(text);
-  }
-  return data;
-}
-
-async function processResponse(res) {
-  console.log('Response: ', res);
-  const data = await parseBody(res);
-  console.log('Data: ', data);
-  if (!res.ok) {
-    if (res.status === 401 && getToken()) {
-      // Logout if unauthorized
-      Events.publish(miscEvents.logout);
-    }
-    const message = (data.message ? data.message : null);
-    const errorObject = { 
-      status: res.status,
-      message,
-    };
-    throw errorObject;
-  }
-
-  return data;
-}
-
-async function makeRequest(url, options) {
-  // handle payload like a middleware in node
-  const payload = {err: null, data: null};
-  try {
-    const res = await fetch(url, options);
-    payload.data = await processResponse(res);
-  } catch (err) {
-    console.log(err);
-    payload.err = err;
-  }
-
-  return payload;
-}
 
 const ApiMessenger = (() => {
   const checkServerStatus = () => {
@@ -283,20 +230,20 @@ const ApiMessenger = (() => {
 
   const signup = (credentials) => {
     const url = `${backEndURL}/api/users`;
-    return (
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      })
-        .then((res) => {
-          if (!res.ok){
-            throw (res);
-          }
-        })
-    );
+    makeRequest(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
+    })
+      .then((result) => {
+        if (result.err) {
+          Events.publish(miscEvents.signupFailed, result.data.errors);
+        } else {
+          Events.publish(miscEvents.signupSuccess);
+        }
+      });
   };
 
   const changePassword = (formData) => {
@@ -307,7 +254,7 @@ const ApiMessenger = (() => {
       _id: currentUserId,
     };
 
-    return fetch(url, {
+    makeRequest(url, {
       method: 'PUT',
       headers: {
         authorization: `Bearer ${getToken()}`,
@@ -315,21 +262,18 @@ const ApiMessenger = (() => {
       },
       body: JSON.stringify(theBody),
     })
-      .then((res) => {
-        res.json()
-          .then((data) => {
-            if (!res.ok){
-              if (data.errors){
-                const errorMessages = data.errors.map((v) => v.msg);
-                Events.publish(miscEvents.changePasswordAttempt, errorMessages);
-              } else {
-                Events.publish(miscEvents.changePasswordAttempt, ['Unknown error']);
-              }
-            } else {
-              setToken(data.token);
-              Events.publish(miscEvents.changePasswordAttempt, null);
-            }
-          });
+      .then((result) => {
+        if (result.err) {
+          if (result.data && result.data.errors) {
+            const errorMessages = result.data.errors.map((v) => v.msg);
+            Events.publish(miscEvents.changePasswordAttempt, errorMessages);
+          } else {
+            Events.publish(miscEvents.changePasswordAttempt, ['Unknown error']);
+          }
+        } else {
+          setToken(result.data.token);
+          Events.publish(miscEvents.changePasswordAttempt, null);
+        }
       });
   };
 
@@ -337,15 +281,14 @@ const ApiMessenger = (() => {
     const userId = getCurrentUser()._id;
     const url = `${backEndURL}/api/users/${userId}`;
 
-    fetch(url, {
+    makeRequest(url, {
       method: 'DELETE',
       headers: {
         authorization: `Bearer ${getToken()}`,
       },
     })
-      .then((res) => {
-        console.log(res);
-        Events.publish(miscEvents.deleteAccountAttempt, !res.ok);
+      .then((result) => {
+        Events.publish(miscEvents.deleteAccountAttempt, result.err);
       });
   };
 
@@ -361,6 +304,7 @@ const ApiMessenger = (() => {
   Events.subscribe(apiEvents.getInbox, getUserInbox.bind(this));
 
   Events.subscribe(apiEvents.login, login.bind(this));
+  Events.subscribe(apiEvents.signup, signup.bind(this));
   Events.subscribe(apiEvents.changePassword, changePassword);
   Events.subscribe(apiEvents.deleteAccount, deleteAccount.bind(this));
 

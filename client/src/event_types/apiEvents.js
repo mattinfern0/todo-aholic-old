@@ -12,6 +12,7 @@ const ApiEvents = Object.freeze({
   getInbox: 'apiGetInbox',
 
   login: 'apiLogin',
+  signup: 'apiSignup',
   checkServerStatus: 'apiCheckServerStatus',
   changePassword: 'apiChangePassword',
   deleteAccount: 'apiDeleteAccount',
