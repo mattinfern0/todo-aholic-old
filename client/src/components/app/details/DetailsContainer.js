@@ -8,7 +8,7 @@ import TaskDetails from './TaskDetails';
 
 import EditTaskForm from './EditTaskForm';
 
-class TaskDetailsView extends React.Component {
+class DetailsContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -88,4 +88,4 @@ class TaskDetailsView extends React.Component {
   }
 }
 
-export default TaskDetailsView;
+export default DetailsContainer;

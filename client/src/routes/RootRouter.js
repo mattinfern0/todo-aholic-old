@@ -1,15 +1,11 @@
 import React from 'react';
 import { HashRouter as Router, Route } from 'react-router-dom';
 
-import PrivateRoute from './components/misc/PrivateRoute';
-import LoginForm from './components/misc/LoginForm';
-import SignUpForm from './components/misc/SignUpForm';
-import App from './App';
-import Logout from './components/misc/Logout';
-import ApiMessenger from './controllers/ApiMessenger';
-import SettingsView from './components/app_view/settings_view/SettingsView';
+import {App, LoginContainer, SettingsContainer, SignUpContainer, Logout} from '../components';
+import PrivateRoute from '../components/misc/PrivateRoute';
+import {ApiMessenger} from '../controllers';
 
-class MainRouter extends React.Component {
+class RootRouter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -34,14 +30,13 @@ class MainRouter extends React.Component {
     return (
       <Router basename="/">
         <PrivateRoute exact path="/" component={App} />
-        <PrivateRoute path="/settings" component={SettingsView} />
-        <Route path="/login" component={LoginForm} />
-        <Route path="/signup" component={SignUpForm} />
+        <PrivateRoute path="/settings" component={SettingsContainer} />
+        <Route path="/login" component={LoginContainer} />
+        <Route path="/signup" component={SignUpContainer} />
         <Route path="/logout" component={Logout} />
-        
       </Router>
     );
   }
 }
 
-export default MainRouter;
+export default RootRouter;

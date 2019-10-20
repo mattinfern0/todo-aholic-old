@@ -1,8 +1,7 @@
-/* eslint-disable class-methods-use-this */
 import React from 'react';
-import {Events} from '../../../controllers/EventController';
-import MiscEvents from '../../../event_types/miscEvents';
-import ApiEvents from '../../../event_types/apiEvents';
+import {Events} from '../../controllers/EventController';
+import MiscEvents from '../../event_types/miscEvents';
+import ApiEvents from '../../event_types/apiEvents';
 
 const ERROR_MESSAGE = 'Something went wrong. Please try again.';
 

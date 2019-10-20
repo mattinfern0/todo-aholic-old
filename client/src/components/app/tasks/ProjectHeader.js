@@ -1,7 +1,6 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import {Events} from '../../../controllers/EventController';
-import EditProjectForm from '../projects_view/EditProjectForm';
+import EditProjectForm from '../projects/EditProjectForm';
 import ApiEvents from '../../../event_types/apiEvents';
 
 class ProjectHeader extends React.Component {
