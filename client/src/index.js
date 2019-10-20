@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import './index.css';
+import './meyer_reset.css';
+import './index.css'; //
+
 import {RootRouter} from './routes';
 
 // Need to import it here or else it won't be included
