@@ -211,8 +211,9 @@ input[type="checkbox"]{
   margin-bottom: 10px;
 }
 
-.project-element, #project-container span {
-  font-size: 16pt;
+.project-element {
+  font-size: 14pt;
+  font-weight: normal;
 }
 
 #inbox-project {

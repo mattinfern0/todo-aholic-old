@@ -1,9 +1,7 @@
 /* eslint-disable react/sort-comp */
 import React from 'react';
-import moment from 'moment';
 import { Events } from '../../../controllers/EventController';
 import { taskEvents, projectEvents} from '../../../event_types';
-import ApiEvents from '../../../event_types/apiEvents';
 import TaskDetails from './TaskDetails';
 
 import EditTaskForm from './EditTaskForm';
