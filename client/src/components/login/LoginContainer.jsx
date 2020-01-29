@@ -31,7 +31,7 @@ class LoginContainer extends React.Component {
   }
 
   changeErrorMessage(message) {
-    this.resetForm();
+    // this.resetForm();
     this.setState({errorMessage: message});
   }
 

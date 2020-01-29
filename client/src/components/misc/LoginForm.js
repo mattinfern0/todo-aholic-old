@@ -20,6 +20,7 @@ class LoginForm extends React.Component {
     };
 
     Events.publish(apiEvents.login, credentials);
+    this.resetForm();
     e.preventDefault();
   }
 
