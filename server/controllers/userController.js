@@ -23,6 +23,7 @@ exports.loginUser = (req, res, next) => {
     if (err) {
       return next(err);
     } else if (!user) {
+      console.log("Hi");
       return res.status(401).json({
         message: 'This user was not found.',
       });
